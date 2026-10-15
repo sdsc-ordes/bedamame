@@ -1,30 +1,93 @@
 # bedamame
 
-An example metadata store for the Bedretto Underground Laboratory. Data is held
-in RDF named graphs, one per survey, plan, installation campaign or register that
-asserted it, validated with SHACL over the union of all graphs, and exported as an
-RO-Crate.
+The semantic layer for the Bedretto Underground Laboratory's openBIS. openBIS is
+where the lab records boreholes, sensors, installations, cores and logging runs.
+This repository holds the ontology, vocabulary and shapes that say what those
+records mean. It also prepares the openBIS changes that make the records fit
+them, and converts openBIS exports to RDF named graphs. The RDF is validated
+with SHACL, queried with SPARQL and packaged as an RO-Crate.
+
+## How it fits together
+
+```
+openBIS ── annotations: each object type and field names its ontology term
+   │
+   │  V3 API dump            scripts/openbis_api.py --dump
+   ▼
+dump.json ── convert ──▶ out/bedretto.trig ── validate (SHACL) ──▶ query (SPARQL), crate
+             scripts/openbis_to_rdf.py, terms from mapping/openbis-annotations.csv
+```
+
+1. **Annotations.** Every Bedretto object type and field in openBIS carries a
+   semantic annotation (Ontology Id, Version, Annotation Id) that names a term:
+   a standard one where it means the same, such as `schema:name` or
+   `sosa:Sensor`, otherwise a `bed:` term aligned to the nearest standard.
+   `mapping/openbis-annotations.csv` is the source; `annotate_masterdata.py`
+   writes it into a master-data export for import.
+2. **Master-data changes.** Seven changes make the openBIS records fit the
+   ontology: people, organisations and test beds as objects; borehole mouth
+   surveys and sensor positions with their history; links instead of names
+   typed as text; vocabularies instead of free text
+   (`scripts/openbis_changes.py`, see `openbis/README.md`).
+3. **Export and conversion.** The converter reads a dump made through the
+   openBIS V3 API (openBIS 7.0's RO-Crate export fails on the lab's types).
+   It takes each field's term from the mapping, turns vocabulary terms into
+   SKOS concepts and numbers with units into QUDT quantity values, and writes
+   one named graph per openBIS collection.
+4. **Validation and queries** run on that RDF, with the ontology, vocabulary
+   and shapes alongside.
 
 ## Usage
 
 ```bash
 uv sync
-uv run scripts/validate.py                  # Bedretto shapes over all graphs, SKOS shapes over the vocabulary
-uv run scripts/validate.py --demo-failure   # remove one survey's CRS, expect a violation
-uv run scripts/queries.py --all             # example SPARQL queries
-uv run scripts/make_crate.py                # write and validate out/ro-crate-metadata.json
-uv run pytest                               # shape, vocabulary and ontology tests
+just convert       # tests/fixtures/openbis-export.json → out/bedretto.trig, validate, run the queries
+just test          # shapes, ontology, mapping, converter
+just crate         # out/ro-crate-metadata.json, checked against the crate shapes and RO-Crate 1.2
+just docs          # HTML documentation of the ontology and vocabularies in site/
 ```
 
-`just docs` writes HTML documentation of the ontology and each vocabulary to
-`site/` with pyLODE. `just set-base URL` replaces the placeholder base IRI
-`https://example.org/bedretto/` in the ontology, data and test fixtures, and in
-`scripts/config.py`, which the scripts take their namespaces from.
+`just convert` needs no openBIS: it converts the committed fixture, a dump of
+the local openBIS with people's names replaced. With the local openBIS
+(`openbis/README.md`):
 
-`just all` runs validation, the queries and the crate build in order. `just crate`
-also checks the crate against the REQUIRED rules of the RO-Crate 1.2 base profile
-with [rocrate-validator](https://github.com/crs4/rocrate-validator); `just crate-lint`
-reports its RECOMMENDED rules as well, without failing.
+```bash
+just openbis-up openbis-masterdata openbis-seed   # openBIS 7.0 with the lab's types and objects
+just openbis-changes                              # rehearse the master-data changes 01-07
+just openbis-annotate                             # annotate from mapping/ and check
+just export                                       # dump → convert → validate → queries
+just load                                         # SPARQL endpoint at http://localhost:7878
+```
+
+`uv run scripts/queries.py --endpoint --all` runs the queries against the
+endpoint instead of in memory; Oxigraph writes numbers and times in canonical
+form (`19` for `19.0`), otherwise the results are the same.
+
+## Working with the openBIS administrator
+
+Nothing here writes to the production openBIS; scripts refuse any host but
+`local.openbis.ch`. A collaborator reviews and applies every change:
+
+1. They send a fresh master-data export (and, for changes that move data, an
+   export of the objects).
+2. We build the change from it, rehearse it on the local openBIS, and send
+   `out/openbis/changes/NN-name.xlsx` (or `.zip`) with `NN-name.md`, a note in
+   plain language. Changes that create people come with a review sheet of the
+   names as written, which stays in the git-ignored `out/`.
+3. They import it in the admin UI with "Update if exists".
+
+Annotations go the same way: `annotated.zip` and `annotations-changes.md`.
+openBIS will not let an import annotate its built-in PERSON and ORGANIZATION
+fields, so the note lists those few for the collaborator to add by hand. What
+we need from them is in `openbis/collaborator-requests.md`.
+
+## Base IRI
+
+Everything Bedretto publishes lives under one base IRI, still the placeholder
+`https://example.org/bedretto/`. `just set-base URL` replaces it in the
+ontology, vocabulary, shapes, fixtures and `scripts/config.py`, which the
+scripts take their namespaces from. Production annotations wait for the final
+URL, because an import cannot change or remove an annotation once it is there.
 
 ## Layout
 
@@ -32,11 +95,16 @@ reports its RECOMMENDED rules as well, without failing.
 |---|---|
 | `ontology/bedretto/bedretto-ontology.ttl` | Classes and properties |
 | `ontology/bedretto/bedretto-vocab.ttl` | SKOS concept schemes for controlled values |
-| `ontology/bedretto/bedretto-shapes.ttl` | SHACL shapes for the store |
+| `ontology/bedretto/bedretto-shapes.ttl` | SHACL shapes for the converted data |
 | `ontology/crate/crate-shapes.ttl` | SHACL shapes for the exported crate |
 | `ontology/skos/skos-shapes.ttl` | SHACL shapes for any SKOS vocabulary |
-| `data/bedretto.trig` | Instance data |
-| `scripts/` | `validate.py`, `queries.py`, `make_crate.py` |
+| `mapping/openbis-annotations.csv` | openBIS type and field → term, unit, scheme |
+| `mapping/openbis-terms.csv` | openBIS vocabulary term → SKOS concept |
+| `mapping/collections.csv` | openBIS project or collection → experiment, campaign |
+| `openbis/` | The local openBIS 7.0, its seed, notes and requests for the collaborator |
+| `scripts/` | Annotation, changes, dump, conversion, validation, queries, crate |
+| `endpoint/` | A local Oxigraph SPARQL endpoint |
+| `tests/fixtures/` | The openBIS dump and master-data export the tests use; `handwritten.trig`, the hand-written prototype data, for the shape tests |
 
 ## Ontology
 
@@ -49,8 +117,9 @@ Here they are split three ways:
   PROV-O, GeoSPARQL, OWL-Time and QUDT where they fit, for example a core is a
   `sosa:Sample`.
 - The vocabulary holds every controlled value as a SKOS concept. Hidden labels
-  record the spellings found in the spreadsheet exports, e.g. `Campled` for
-  `Clamped`.
+  record the spellings found in the lab's exports, e.g. `Campled` for
+  `Clamped`. openBIS vocabulary terms map to concepts through
+  `mapping/openbis-terms.csv`.
 - The shapes say which properties each class takes and how often. A property
   with a controlled value must point to a concept in a named scheme, so a new
   value is added to the vocabulary only.
@@ -63,43 +132,30 @@ files, as the crate shapes do.
 
 | Graph | Holds |
 |---|---|
-| `gr:register-boreholes`, `gr:register-sensors`, `gr:register-testbeds`, `gr:register-agents` | The lab's lists of boreholes, sensors, test beds and people |
-| `gr:survey-…`, `gr:campaign-…` | What one survey, plan or installation campaign asserted |
-| `gr:provenance` | One record per survey, plan or campaign graph |
+| `gr:<space>/<project>/<collection>` | The objects of one openBIS collection, e.g. `gr:09_FEAR/06_FEAR2/F2_INSTALLATION` |
+| `gr:experiments` | Experiments, from `mapping/collections.csv`; openBIS has no experiment object |
+| `gr:provenance` | One record per collection graph, and the openBIS users |
 
-The default graph is empty. Every query pattern names the graph it reads, so
-the queries give the same results on any SPARQL store. Controlled values, the
-coordinate system included, are vocabulary terms rather than data. `queries.py`
+Every object is `bdr:<permId>`, so links between collections are shared IRIs.
+openBIS users are `bdr:user/<userId>`. The default graph is empty. Collection
+paths differ between instances, so queries find records by class
+(`GRAPH ?g { ?b a bed:Borehole }`) rather than by graph name. `queries.py`
 loads the ontology, vocabulary and shapes as graphs of their own, `gr:ontology`,
 `gr:vocab` and `gr:shapes`, so queries can join records with labels, concept
 hierarchies and constraints.
 
 ## Provenance
 
-Each survey, plan or campaign graph is described once, in `gr:provenance`, as a
-`prov:Bundle`:
+Each collection graph is described once, in `gr:provenance`, as a `prov:Bundle`:
 
 | Property | Meaning | Required |
 |---|---|---|
-| `schema:name` | What the graph holds | no |
-| `prov:generatedAtTime` | When the record was made | exactly one |
-| `prov:wasAttributedTo` | Who is responsible for the record | at least one |
-| `dcterms:contributor` | Who took part in the fieldwork, when that differs | no |
-| `dcterms:temporal` | When the fieldwork happened, as a `time:Interval`, when that differs | at most one |
+| `schema:name` | The campaign from `mapping/collections.csv`, or the collection's name | no |
+| `prov:generatedAtTime` | When an object in it was last modified | exactly one |
+| `prov:wasAttributedTo` | The openBIS users who registered its objects | at least one |
 
-There is no separate activity for the survey or campaign: the graph record carries
-its name, dates and people. The register graphs have no record yet.
+A collection can hold many surveys, so a survey carries its own date
+(`bed:surveyDate`) and surveyors (`bed:surveyedBy`); openBIS keeps the history
+of every value.
 
-## Data
-
-Values in `data/bedretto.trig` come from the BedrettoLab spreadsheet exports in
-`drive-files/`, which is git-ignored. These parts do not:
-
-- Entity IRIs: UUIDs under the placeholder base `https://example.org/bedretto/`.
-- The coordinate reference system: a placeholder concept in the vocabulary, since
-  the exports record none.
-- The names of surveys, deployments and graphs, which are composed from source
-  values.
-
-The crate's profile IRI and licence in `scripts/make_crate.py` are placeholders
-too.
+The crate's profile IRI and licence in `scripts/make_crate.py` are placeholders.

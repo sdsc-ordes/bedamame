@@ -10,7 +10,7 @@ import config
 ROOT = Path(__file__).resolve().parent.parent
 # converted from openBIS by openbis_to_rdf.py; the hand-written prototype data is kept for the shape tests
 DATA = ROOT / "out" / "bedretto.trig"
-HANDWRITTEN = ROOT / "data" / "bedretto.trig"
+HANDWRITTEN = ROOT / "tests" / "fixtures" / "handwritten.trig"
 BEDRETTO = ROOT / "ontology" / "bedretto"
 ONTOLOGY = BEDRETTO / "bedretto-ontology.ttl"
 VOCAB = BEDRETTO / "bedretto-vocab.ttl"

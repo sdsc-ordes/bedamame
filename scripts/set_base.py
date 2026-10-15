@@ -7,7 +7,7 @@ import config
 
 ROOT = Path(__file__).resolve().parent.parent
 # every file that spells out the base, in prefixes and in literals (sh:namespace, STRSTARTS, WKT)
-FOLDERS = ["ontology", "data", "tests/fixtures"]
+FOLDERS = ["ontology", "tests/fixtures"]
 SUFFIXES = {".ttl", ".trig", ".json", ".jsonld"}
 
 

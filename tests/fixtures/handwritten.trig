@@ -58,11 +58,11 @@ gr:provenance {
 
 gr:register-agents {
 
-    bdr:xvjsy5qorfduvbpla7ntwiajfu a schema:Person ; schema:name "Simon Kinglele" .
-    bdr:dv3mpsfsfnftll6asnosnrwjam a schema:Person ; schema:name "Men-Andrin Meier" .
-    bdr:ffpsexkqjzepdick47nvjp5lrq a schema:Person ; schema:name "Fiona" .
-    bdr:oqio7hpc75goplavdagpvtm33y a schema:Person ; schema:name "Mathilde" .
-    bdr:4zmptncecvaopjermr62rpe65i a schema:Person ; schema:name "Aurora" .
+    bdr:xvjsy5qorfduvbpla7ntwiajfu a schema:Person ; schema:name "Person 1" .
+    bdr:dv3mpsfsfnftll6asnosnrwjam a schema:Person ; schema:name "Person 2" .
+    bdr:ffpsexkqjzepdick47nvjp5lrq a schema:Person ; schema:name "Person 3" .
+    bdr:oqio7hpc75goplavdagpvtm33y a schema:Person ; schema:name "Person 4" .
+    bdr:4zmptncecvaopjermr62rpe65i a schema:Person ; schema:name "Person 5" .
     bdr:2buzlf2k25ft3fyx773xwwpodm a schema:Organization ; schema:name "Flotron" .
 }
 
