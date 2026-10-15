@@ -177,8 +177,10 @@ def stubs(installs: dict[str, list[list]]) -> dict[str, tuple[str, list[dict]]]:
         }
     )
     return {
+        # the installations name the model GS100-600, Geospace's GS-100 geophone
         "SEIS_SENSOR": ("/EQUIPMENT/SENSOR_CATALOG/SEISMIC_SENSORS",
-                        [{"code": c, "SERIAL_NUMBER": s, "NOTES": STUB} for c, s in sorted(sensors.items())]),
+                        [{"code": c, "SERIAL_NUMBER": s, "SENSOR_CAT": "P: Geophone", "NOTES": STUB}
+                         for c, s in sorted(sensors.items())]),
         "DEVICE": ("/EQUIPMENT/SENSOR_CATALOG/DEVICES",
                    [{"code": c, "NAME": c, "PRODUCT.DESCRIPTION": STUB} for c in computers]),
         "SENSORS": ("/EQUIPMENT/SENSOR_CATALOG/TILTMETERS",

@@ -8,7 +8,9 @@ from rdflib import Dataset, Graph, URIRef
 import config
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data" / "bedretto.trig"
+# converted from openBIS by openbis_to_rdf.py; the hand-written prototype data is kept for the shape tests
+DATA = ROOT / "out" / "bedretto.trig"
+HANDWRITTEN = ROOT / "data" / "bedretto.trig"
 BEDRETTO = ROOT / "ontology" / "bedretto"
 ONTOLOGY = BEDRETTO / "bedretto-ontology.ttl"
 VOCAB = BEDRETTO / "bedretto-vocab.ttl"
@@ -16,9 +18,9 @@ SHAPES = BEDRETTO / "bedretto-shapes.ttl"
 VOCAB_SHAPES = ROOT / "ontology" / "skos" / "skos-shapes.ttl"
 
 
-def load_dataset() -> Dataset:
+def load_dataset(path: Path = DATA) -> Dataset:
     ds = Dataset()
-    ds.parse(DATA, format="trig")
+    ds.parse(path, format="trig")
     return ds
 
 
@@ -52,6 +54,7 @@ def run(data: Graph, shapes_path: Path) -> tuple[bool, str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--data", type=Path, default=DATA)
     ap.add_argument(
         "--demo-failure",
         action="store_true",
@@ -59,7 +62,7 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    data = union_graph(load_dataset())
+    data = union_graph(load_dataset(args.data))
     if args.demo_failure:
         print(f"removed bed:coordinateSystem from <{break_one_crs(data)}>")
 

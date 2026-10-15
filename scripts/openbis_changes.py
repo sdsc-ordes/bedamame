@@ -485,12 +485,15 @@ def mouth_surveys(export: Export, csv_dir: Path = CSV_DIR, **_) -> Change:
     )
     boreholes = borehole_ids(export)
     agents = Agents(export)
-    objects, unresolved = [], []
+    objects, unresolved, empty = [], [], []
     with (csv_dir / "borehole_mouth_coord.csv").open(encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
     for r in rows:
         if r["borehole_name"] not in boreholes:
             unresolved.append(r["borehole_name"])
+            continue
+        if not all(r[c].strip() for c in ("easting", "northing", "elevation")):
+            empty.append(r["borehole_name"])
             continue
         kind = survey_type(r["type"])
         objects.append({
@@ -532,6 +535,13 @@ def mouth_surveys(export: Export, csv_dir: Path = CSV_DIR, **_) -> Change:
             "",
             "Rows whose borehole is not in openBIS, left out: "
             + ", ".join(unresolved)
+            + ".",
+        ]
+    if empty:
+        note += [
+            "",
+            "Rows without easting, northing or elevation, left out: "
+            + ", ".join(empty)
             + ".",
         ]
     note += ["", "## Compared with the position fields on BOREHOLES", ""]

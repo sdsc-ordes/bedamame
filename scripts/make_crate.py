@@ -12,7 +12,7 @@ from rdflib.namespace import RDF
 import config
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data" / "bedretto.trig"
+DATA = ROOT / "out" / "bedretto.trig"
 CRATE_SHAPES = ROOT / "ontology" / "crate" / "crate-shapes.ttl"
 OUT_DIR = ROOT / "out"
 
@@ -25,9 +25,10 @@ PROFILE = "https://w3id.org/bedretto/profile/experiment/0.1"
 LICENCE = "https://creativecommons.org/licenses/by/4.0/"
 CRATE_BASE = config.BASE + "crate/"
 
+# openBIS collections, as named by the local instance; production paths may differ (--graph)
 SELECTED = [
-    GRAPH_NS + "campaign-fear2-install",
-    GRAPH_NS + "survey-flotron-2024-09-08",
+    GRAPH_NS + "09_FEAR/06_FEAR2/F2_INSTALLATION",
+    GRAPH_NS + "INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
 ]
 
 STUB_PROPS = {
@@ -41,7 +42,7 @@ STUB_PROPS = {
 
 NAMESPACES = {
     p: config.NAMESPACES[p]
-    for p in ("bed", "sosa", "ssn", "prov", "geo", "qudt", "skos", "time")
+    for p in ("bed", "sosa", "ssn", "prov", "geo", "qudt", "skos", "time", "dcterms", "rdfs")
 }
 
 CONTEXT = ["https://w3id.org/ro/crate/1.2/context", NAMESPACES]
@@ -52,24 +53,18 @@ VALIDATION_CONTEXT = {
     **NAMESPACES,
 }
 
-COMPACT = {
-    URIRef(SCHEMA + "name"): "name",
-    URIRef(SCHEMA + "manufacturer"): "manufacturer",
-    URIRef(SCHEMA + "serialNumber"): "serialNumber",
-}
 
-
-def load() -> Dataset:
+def load(path: Path = DATA) -> Dataset:
     ds = Dataset()
-    ds.parse(DATA, format="trig")
+    ds.parse(path, format="trig")
     return ds
 
 
-def select_and_close(ds: Dataset) -> tuple[Graph, dict[str, int]]:
+def select_and_close(ds: Dataset, selected: list[str]) -> tuple[Graph, dict[str, int]]:
     out = Graph()
     counts: dict[str, int] = {}
 
-    for uri in SELECTED:
+    for uri in selected:
         ctx = ds.graph(URIRef(uri))
         for triple in ctx:
             out.add(triple)
@@ -109,8 +104,9 @@ def select_and_close(ds: Dataset) -> tuple[Graph, dict[str, int]]:
 
 
 def term(p: URIRef) -> str:
-    if p in COMPACT:
-        return COMPACT[p]
+    # the RO-Crate context maps schema.org's bare names to http://schema.org/; the data uses https
+    if str(p).startswith(SCHEMA):
+        return str(p)[len(SCHEMA) :]
     for prefix, ns in NAMESPACES.items():
         if str(p).startswith(ns):
             return f"{prefix}:{str(p)[len(ns):]}"
@@ -157,7 +153,7 @@ def to_jsonld(g: Graph) -> list[dict]:
     return [by_subject[sid] for sid in sorted(by_subject)]
 
 
-def build_crate(entities: list[dict], today: str) -> dict:
+def build_crate(entities: list[dict], today: str, selected: list[str]) -> dict:
     descriptor = {
         "@id": "ro-crate-metadata.json",
         "@type": "CreativeWork",
@@ -171,11 +167,12 @@ def build_crate(entities: list[dict], today: str) -> dict:
         "name": "FEAR-2 tiltmeter array, BedrettoLab",
         "description": (
             "Tiltmeter deployments for the FEAR-2 experiment at the Bedretto "
-            "Underground Laboratory, with the collar survey of a host borehole."
+            "Underground Laboratory, with the collar surveys of the boreholes, "
+            "converted from the laboratory's openBIS."
         ),
         "license": {"@id": LICENCE},
         "datePublished": today,
-        "bed:builtFromGraph": [{"@id": g} for g in SELECTED],
+        "bed:builtFromGraph": [{"@id": g} for g in selected],
     }
     profile = {
         "@id": PROFILE,
@@ -202,15 +199,22 @@ def check(crate: dict) -> tuple[bool, str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--data", type=Path, default=DATA)
+    ap.add_argument(
+        "--graph",
+        nargs="+",
+        default=SELECTED,
+        help="the named graphs (openBIS collections) to put in the crate",
+    )
     ap.add_argument("--out", type=Path, default=OUT_DIR / "ro-crate-metadata.json")
     ap.add_argument("--skip-validation", action="store_true")
     args = ap.parse_args()
 
-    g, counts = select_and_close(load())
+    g, counts = select_and_close(load(args.data), args.graph)
     for name, n in counts.items():
         print(f"{name.replace(GRAPH_NS, 'gr:'):<32} {n}")
 
-    crate = build_crate(to_jsonld(g), datetime.date.today().isoformat())
+    crate = build_crate(to_jsonld(g), datetime.date.today().isoformat(), args.graph)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(crate, indent=2, ensure_ascii=False) + "\n")
     print(f"wrote {args.out}: {len(crate['@graph'])} entities")

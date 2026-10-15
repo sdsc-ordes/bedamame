@@ -1,5 +1,7 @@
 # The lab's openBIS export (git-ignored)
 lab := "drive-files/openBIS-20261006T123341Z-1-001/openBIS"
+# What tests/fixtures/openbis-export.json holds, with what these link to and the surveys of their boreholes
+fixture := "/09_FEAR/06_FEAR2/F2_INSTALLATION /09_FEAR/06_FEAR2/F2_INSTALLATION_SEIS /EQUIPMENT/SENSOR_CATALOG/TILTMETERS /REGISTERS/TESTBEDS/TESTBEDS_COLLECTION /INFRASTRUCTURE/BOREHOLES/BFE_A_01"
 
 # List the available recipes
 default:
@@ -9,7 +11,7 @@ default:
 sync:
     uv sync
 
-# Validate the data against the Bedretto shapes and the vocabulary against the SKOS shapes
+# Validate out/bedretto.trig against the Bedretto shapes and the vocabulary against the SKOS shapes
 validate:
     uv run scripts/validate.py
 
@@ -51,8 +53,30 @@ crate:
 crate-lint: crate
     -uv run rocrate-validator -y --disable-color validate -p ro-crate-1.2 -l recommended -v --no-paging out/
 
-# Validate, run the queries, build the crate
-all: validate queries crate
+# Convert the committed openBIS dump to out/bedretto.trig, validate it and run the queries; needs no Docker
+convert:
+    uv run scripts/openbis_to_rdf.py
+    uv run scripts/validate.py
+    uv run scripts/queries.py --all
+
+# Dump the local openBIS, convert, validate and run the queries
+export:
+    uv run scripts/openbis_api.py --dump out/openbis/dump.json
+    uv run scripts/openbis_to_rdf.py --export out/openbis/dump.json
+    uv run scripts/validate.py
+    uv run scripts/queries.py --all
+
+# Start the local SPARQL endpoint and load out/bedretto.trig with the ontology, vocabulary and shapes
+load:
+    docker compose -f endpoint/compose.yaml up -d --wait
+    uv run scripts/queries.py --endpoint --load
+
+# Stop the local SPARQL endpoint and keep its data
+endpoint-down:
+    docker compose -f endpoint/compose.yaml down
+
+# Convert, validate, run the queries, build the crate
+all: convert crate
 
 # Start the local openBIS 7.0.0 at https://local.openbis.ch; the first start takes a few minutes
 openbis-up:
@@ -71,6 +95,10 @@ openbis-seed:
 # Rehearse the master-data changes 01-07 on the local openBIS: for each, a fresh export, generate, import
 openbis-changes:
     uv run scripts/openbis_changes.py --local
+
+# Write tests/fixtures/openbis-export.json from the local openBIS, with people's names replaced
+openbis-fixture:
+    uv run scripts/openbis_api.py --dump tests/fixtures/openbis-export.json --anonymise --select {{fixture}}
 
 # Annotate the local openBIS from mapping/: fresh master-data export, annotate, import, check
 openbis-annotate:

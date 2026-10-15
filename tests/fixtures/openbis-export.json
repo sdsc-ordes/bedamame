@@ -1,0 +1,2717 @@
+{
+ "types": {
+  "BOREHOLES": {
+   "annotations": [
+    "https://example.org/bedretto/terms#Borehole"
+   ],
+   "properties": {
+    "BARCODE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_NAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/name"
+     ]
+    },
+    "BOREHOLE_NICKNAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#nickname"
+     ]
+    },
+    "BOREHOLE_PURPOSE": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#purpose"
+     ]
+    },
+    "BOREHOLE_CODE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#fdsnCode"
+     ]
+    },
+    "PROJECT": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#project"
+     ]
+    },
+    "TESTBED": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "TESTBED",
+     "multiValue": false,
+     "annotations": []
+    },
+    "TUNNEL_SECTION": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "LOCATION_TM": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#tunnelMeter"
+     ]
+    },
+    "BOREHOLE_MOUTH_E": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_MOUTH_N": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_MOUTH_H": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "AZIMUTH": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_DIP": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "COORDSYS": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_GEOMETRY": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_DIAMETER": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#boreholeDiameter"
+     ]
+    },
+    "BOREHOLE_LENGTH": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#totalLength"
+     ]
+    },
+    "DRILLSTYLE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "CORE_DIAMETER": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#coreDiameter"
+     ]
+    },
+    "CORE_LENGTH": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#coreLength"
+     ]
+    },
+    "DRILLING_START": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#drillingStart"
+     ]
+    },
+    "DRILLING_PERIOD": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#drillingEnd"
+     ]
+    },
+    "BOREHOLE_COMPLETION": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "NOTES": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/2000/01/rdf-schema#comment"
+     ]
+    },
+    "TEST_BED": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#hasTestBed"
+     ]
+    },
+    "TUNNEL_SECTION_TERM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "TUNNEL_SECTION",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#tunnelSection"
+     ]
+    },
+    "BOREHOLE_GEOMETRY_TERM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "BOREHOLE_GEOMETRY",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#boreholeGeometry"
+     ]
+    },
+    "DRILLSTYLE_TERM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "DRILLING_STYLE",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#drillingStyle"
+     ]
+    },
+    "BOREHOLE_COMPLETION_TERM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "BOREHOLE_STATUS",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#boreholeStatus"
+     ]
+    }
+   }
+  },
+  "BOREHOLE_MOUTH_SURVEY": {
+   "annotations": [
+    "https://example.org/bedretto/terms#CollarSurvey"
+   ],
+   "properties": {
+    "BOREHOLE": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#ofBorehole"
+     ]
+    },
+    "SURVEY_TYPE": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SURVEY_TYPE",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#surveyType"
+     ]
+    },
+    "SURVEY_DATE": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#surveyDate"
+     ]
+    },
+    "SURVEY_SOURCE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://purl.org/dc/terms/source"
+     ]
+    },
+    "SURVEYED_BY": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://example.org/bedretto/terms#surveyedBy"
+     ]
+    },
+    "COORDINATE_SYSTEM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "COORDINATE_SYSTEM",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#coordinateSystem"
+     ]
+    },
+    "BOREHOLE_MOUTH_E": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#easting"
+     ]
+    },
+    "BOREHOLE_MOUTH_N": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#northing"
+     ]
+    },
+    "BOREHOLE_MOUTH_H": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#elevation"
+     ]
+    },
+    "SURVEY_AZIMUTH": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#azimuth"
+     ]
+    },
+    "SURVEY_DIP": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#dip"
+     ]
+    },
+    "DIP_CONVENTION": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#dipConvention"
+     ]
+    },
+    "NOTES": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/2000/01/rdf-schema#comment"
+     ]
+    }
+   }
+  },
+  "DEVICE": {
+   "annotations": [
+    "https://example.org/bedretto/terms#Equipment"
+   ],
+   "properties": {
+    "DEVICE_TYPE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/category"
+     ]
+    },
+    "NAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/name"
+     ]
+    },
+    "SERIAL_NUMBER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/serialNumber"
+     ]
+    },
+    "MANUFACTURER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/manufacturer"
+     ]
+    },
+    "DEVICE_LABEL": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#inventoryLabel"
+     ]
+    },
+    "BARCODE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "PRODUCT.DESCRIPTION": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/description"
+     ]
+    },
+    "OWNER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "EMAIL_CONTACT": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "DEVICE_LOC": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "TUNNEL_SECTION",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#tunnelSection"
+     ]
+    },
+    "LOCATION_TM": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#tunnelMeter"
+     ]
+    },
+    "DEVICE_STORAGE": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "ETH_BUILDINGS",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#storageLocation"
+     ]
+    },
+    "COMPUTER_NUMBER": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "MAC_ADDRESS": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "IP_ADDRESS": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "FDQN": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "DOCUMENT": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "RESPONSIBLE": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://example.org/bedretto/terms#responsible"
+     ]
+    }
+   }
+  },
+  "PERSON": {
+   "annotations": [
+    "https://schema.org/Person"
+   ],
+   "properties": {
+    "NAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/name"
+     ]
+    },
+    "PERSON.GIVEN_NAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/givenName"
+     ]
+    },
+    "PERSON.FAMILY_NAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/familyName"
+     ]
+    },
+    "PERSON.IDENTIFIER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/identifier"
+     ]
+    },
+    "PERSON.EMAIL": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/email"
+     ]
+    },
+    "PERSON.AFFILIATION": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://schema.org/affiliation"
+     ]
+    }
+   }
+  },
+  "SEIS_SENSOR": {
+   "annotations": [
+    "http://www.w3.org/ns/sosa/Sensor"
+   ],
+   "properties": {
+    "SENSOR_CAT": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_CATEGORY",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorKind"
+     ]
+    },
+    "SENSOR_MODEL": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_MODEL",
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/model"
+     ]
+    },
+    "MANUFACTURER_SEIS": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "MANUFACTURER",
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/manufacturer"
+     ]
+    },
+    "SERIAL_NUMBER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/serialNumber"
+     ]
+    },
+    "SENSOR_LABELQR": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#inventoryLabel"
+     ]
+    },
+    "BAND-CODE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#fdsnBandCode"
+     ]
+    },
+    "SOURCE_CODE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#fdsnSourceCode"
+     ]
+    },
+    "ORIENTATION_CODE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#fdsnOrientationCode"
+     ]
+    },
+    "CHANNEL_CODE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#fdsnChannelCode"
+     ]
+    },
+    "SENSOR_COUPLING": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "COUPLING",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#coupling"
+     ]
+    },
+    "RETRIVABLE": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#retrievable"
+     ]
+    },
+    "SEIS_INGRESS": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_FEATURE",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorFeature"
+     ]
+    },
+    "SEIS_CURVATURE": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "FREQ_MIN": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#minimumFrequency"
+     ]
+    },
+    "FREQ_MAX": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#maximumFrequency"
+     ]
+    },
+    "BOREHOLE_DIAMETER": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_DATASHEET_LINK": {
+     "dataType": "HYPERLINK",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+     ]
+    },
+    "XMLCOMMENTS": {
+     "dataType": "XML",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_AVAILABILITY": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "AVAILABILITY",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#availability"
+     ]
+    },
+    "NOTES": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/2000/01/rdf-schema#comment"
+     ]
+    },
+    "PURCHASE_DATE": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#purchasedOn"
+     ]
+    },
+    "DOCUMENT": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "PURCHASED_BY": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "EMAIL_CONTACT": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "OWNER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "RESPONSIBLE": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://example.org/bedretto/terms#responsible"
+     ]
+    }
+   }
+  },
+  "SEIS_SENSOR_INSTAL": {
+   "annotations": [
+    "http://www.w3.org/ns/ssn/Deployment"
+   ],
+   "properties": {
+    "DEPLOYMENT_START": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#deployedOn"
+     ]
+    },
+    "PROJECT": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#project"
+     ]
+    },
+    "EXPERIMENT": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "DEPLOYMENT_TYPE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "DEPLOYMENT_USER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_BOREHOLE": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_NAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_NICKNAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_TUNNEL": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "TUNNEL_SECTION": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "TUNNEL_METER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#tunnelMeter"
+     ]
+    },
+    "SENSOR_SURFACE": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_COUPLING": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "COUPLING",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#coupling"
+     ]
+    },
+    "SENSOR_MODEL": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_MODEL",
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_LABELQR": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SERIAL_NUMBER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_STATUS": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_STATUS",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorStatus"
+     ]
+    },
+    "SENSOR_EPOCH": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#fdsnCode"
+     ]
+    },
+    "BOREHOLE_METER": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#measuredDepth"
+     ]
+    },
+    "SENSOR_AZIMUTH": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorAzimuth"
+     ]
+    },
+    "SENSOR_DIP": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorDip"
+     ]
+    },
+    "TRUE_NORTH": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_TEST_DATE": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#testedOn"
+     ]
+    },
+    "WIRING_DESCRIPTION": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "CABLE_LENGTH": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#cableLength"
+     ]
+    },
+    "CABLE_LABEL": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#cableLabel"
+     ]
+    },
+    "TAPE_COLOR": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "TAPE_COLOR",
+     "multiValue": false,
+     "annotations": []
+    },
+    "CONTI": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SEIS_CONTI",
+     "multiValue": false,
+     "annotations": []
+    },
+    "CHANNEL": {
+     "dataType": "INTEGER",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SPV_CARD": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "HIGHPASS_FILTER": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SPV_GAIN": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "PREAMP_GAIN": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "XMLCOMMENTS": {
+     "dataType": "XML",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "FINISHED_FLAG": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "DOCUMENT": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "GENERAL_PROTOCOL.SPREADSHEET": {
+     "dataType": "XML",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "EASTING": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "NORTHING": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "ELEVATION": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "LAT": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "LONG": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "COORDSYS": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "COORD_DATE": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "COORD_USER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "DEPLOYMENT_END": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#removedOn"
+     ]
+    },
+    "REMOVAL_USER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "NOTES": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/2000/01/rdf-schema#comment"
+     ]
+    },
+    "DEPLOYED_BY": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://example.org/bedretto/terms#deployedBy"
+     ]
+    },
+    "REMOVED_BY": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://example.org/bedretto/terms#removedBy"
+     ]
+    },
+    "BOREHOLE": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/ns/ssn/deployedOnPlatform"
+     ]
+    },
+    "SENSOR": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/ns/ssn/deployedSystem"
+     ]
+    },
+    "TUNNEL_SECTION_TERM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "TUNNEL_SECTION",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#tunnelSection"
+     ]
+    },
+    "DEPLOYMENT_TYPE_TERM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "DEPLOYMENT_TYPE",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#deploymentType"
+     ]
+    },
+    "INSTALLATION_ENVIRONMENT": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "INSTALLATION_ENVIRONMENT",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#environment"
+     ]
+    }
+   }
+  },
+  "SENSORS": {
+   "annotations": [
+    "http://www.w3.org/ns/sosa/Sensor"
+   ],
+   "properties": {
+    "DOMAIN": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "DOMAIN",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#domain"
+     ]
+    },
+    "SENSOR_TYPE": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_TYPE",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorKind"
+     ]
+    },
+    "SENSOR_PRECISE_TYPE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "MANUFACTURER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/manufacturer"
+     ]
+    },
+    "SERIAL_NUMBER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/serialNumber"
+     ]
+    },
+    "SENSOR_LABELQR": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#inventoryLabel"
+     ]
+    },
+    "SENSR_FEATURE": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_FEATURE",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorFeature"
+     ]
+    },
+    "SENSOR_SAMPLING": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#samplingRate"
+     ]
+    },
+    "SENSOR_COUPLING": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "COUPLING",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#coupling"
+     ]
+    },
+    "RETRIVABLE": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#retrievable"
+     ]
+    },
+    "DOCUMENT": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_DATASHEET_LINK": {
+     "dataType": "HYPERLINK",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+     ]
+    },
+    "NOTES": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/2000/01/rdf-schema#comment"
+     ]
+    },
+    "PURCHASE_DATE": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#purchasedOn"
+     ]
+    },
+    "PURCHASED_BY": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "OWNER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "MAIN_CONTACT": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_AVAILABILITY": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "AVAILABILITY",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#availability"
+     ]
+    },
+    "XMLCOMMENTS": {
+     "dataType": "XML",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "RESPONSIBLE": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://example.org/bedretto/terms#responsible"
+     ]
+    }
+   }
+  },
+  "SENSOR_INSTAL": {
+   "annotations": [
+    "http://www.w3.org/ns/ssn/Deployment"
+   ],
+   "properties": {
+    "DEPLOYMENT_TYPE": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "DEPLOYMENT_START": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#deployedOn"
+     ]
+    },
+    "DEPLOYMENT_USER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "PROJECT": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#project"
+     ]
+    },
+    "EXPERIMENT": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_BOREHOLE": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_NAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "BOREHOLE_NICKNAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_WALL": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_TUNNEL": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_TRENCH": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "TUNNEL_SECTION": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "TUNNEL_METER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#tunnelMeter"
+     ]
+    },
+    "SENSOR_SURFACE": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_COUPLING": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "COUPLING",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#coupling"
+     ]
+    },
+    "SENSOR_TYPE": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_TYPE",
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_LABELQR": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SERIAL_NUMBER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_EPOCH": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#fdsnCode"
+     ]
+    },
+    "BOREHOLE_METER": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#measuredDepth"
+     ]
+    },
+    "BOREHOLE_METER_TOP": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorTopDepth"
+     ]
+    },
+    "BOREHOLE_METER_CENTER": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorCentreDepth"
+     ]
+    },
+    "BOREHOLE_METER_BOTTOM": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorBottomDepth"
+     ]
+    },
+    "SENSOR_ORIENTATION": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_DIP": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorDip"
+     ]
+    },
+    "SENSOR_AZIMUTH": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorAzimuth"
+     ]
+    },
+    "SENSOR_TEST_DATE": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#testedOn"
+     ]
+    },
+    "WIRING_DESCRIPTION": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "CABLE_LENGTH": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#cableLength"
+     ]
+    },
+    "CABLE_LABEL": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#cableLabel"
+     ]
+    },
+    "FINISHED_FLAG": {
+     "dataType": "BOOLEAN",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "XMLCOMMENTS": {
+     "dataType": "XML",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "DOCUMENT": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "SENSOR_STATUS": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "SENSOR_STATUS",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#sensorStatus"
+     ]
+    },
+    "DEPLOYMENT_END": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#removedOn"
+     ]
+    },
+    "REMOVAL_USER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "EASTING": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "NORTHING": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "ELEVATION": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "LAT": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "LONG": {
+     "dataType": "REAL",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "COORDSYS": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "COORD_USER": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "COORD_DATE": {
+     "dataType": "DATE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": []
+    },
+    "NOTES": {
+     "dataType": "MULTILINE_VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/2000/01/rdf-schema#comment"
+     ]
+    },
+    "COMPUTER": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#acquisitionDevice"
+     ]
+    },
+    "DEPLOYED_BY": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://example.org/bedretto/terms#deployedBy"
+     ]
+    },
+    "REMOVED_BY": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": true,
+     "annotations": [
+      "https://example.org/bedretto/terms#removedBy"
+     ]
+    },
+    "BOREHOLE": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/ns/ssn/deployedOnPlatform"
+     ]
+    },
+    "SENSOR": {
+     "dataType": "SAMPLE",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "http://www.w3.org/ns/ssn/deployedSystem"
+     ]
+    },
+    "TUNNEL_SECTION_TERM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "TUNNEL_SECTION",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#tunnelSection"
+     ]
+    },
+    "DEPLOYMENT_TYPE_TERM": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "DEPLOYMENT_TYPE",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#deploymentType"
+     ]
+    },
+    "INSTALLATION_ENVIRONMENT": {
+     "dataType": "CONTROLLEDVOCABULARY",
+     "vocabulary": "INSTALLATION_ENVIRONMENT",
+     "multiValue": false,
+     "annotations": [
+      "https://example.org/bedretto/terms#environment"
+     ]
+    }
+   }
+  },
+  "TESTBED": {
+   "annotations": [
+    "https://example.org/bedretto/terms#TestBed"
+   ],
+   "properties": {
+    "NAME": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/name"
+     ]
+    },
+    "TESTBED.ABBREVIATION": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/identifier"
+     ]
+    },
+    "TESTBED.DESCRIPTION": {
+     "dataType": "VARCHAR",
+     "vocabulary": null,
+     "multiValue": false,
+     "annotations": [
+      "https://schema.org/description"
+     ]
+    }
+   }
+  }
+ },
+ "collections": {
+  "/09_FEAR/06_FEAR2/F2_INSTALLATION_SEIS": {
+   "permId": "20261015142338008-54",
+   "name": "FEAR-2 seismic installation",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  "/09_FEAR/06_FEAR2/F2_INSTALLATION": {
+   "permId": "20261015142338008-53",
+   "name": "FEAR-2 installation",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  "/EQUIPMENT/SENSOR_CATALOG/DEVICES": {
+   "permId": "20261015142338008-57",
+   "name": "Devices",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  "/EQUIPMENT/SENSOR_CATALOG/SEISMIC_SENSORS": {
+   "permId": "20261015142338008-56",
+   "name": "Seismic sensors",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  "/EQUIPMENT/SENSOR_CATALOG/TILTMETERS": {
+   "permId": "20261015142338008-55",
+   "name": "Tilt meters",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  "/INFRASTRUCTURE/BOREHOLES/BOREHOLES": {
+   "permId": "20261015142338008-51",
+   "name": "Boreholes",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS": {
+   "permId": "20261015142523972-207",
+   "name": "Borehole mouth surveys",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  "/REGISTERS/PEOPLE/PEOPLE_COLLECTION": {
+   "permId": "20261015142437636-195",
+   "name": "People",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:24:37Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  "/REGISTERS/TESTBEDS/TESTBEDS_COLLECTION": {
+   "permId": "20261015142455627-203",
+   "name": "Test beds",
+   "registrator": "admin",
+   "registrationDate": "2026-10-15T14:24:55Z",
+   "modificationDate": "2026-10-15T14:24:55Z"
+  }
+ },
+ "users": {
+  "admin": {
+   "name": "admin"
+  }
+ },
+ "objects": [
+  {
+   "permId": "20261015142338008-187",
+   "identifier": "/09_FEAR/06_FEAR2/BFE41_GS100-600_1",
+   "code": "BFE41_GS100-600_1",
+   "type": "SEIS_SENSOR_INSTAL",
+   "space": "09_FEAR",
+   "project": "/09_FEAR/06_FEAR2",
+   "collection": "/09_FEAR/06_FEAR2/F2_INSTALLATION_SEIS",
+   "properties": {
+    "PROJECT": "FEAR",
+    "BOREHOLE_METER": "2.9",
+    "SENSOR": "20261015142338008-180",
+    "INSTALLATION_ENVIRONMENT": "BOREHOLE",
+    "DEPLOYED_BY": [
+     "20261015142437636-199",
+     "20261015142437636-197",
+     "20261015142437636-198"
+    ],
+    "SENSOR_AZIMUTH": "10.0",
+    "BOREHOLE": "20261015142338008-98",
+    "DEPLOYMENT_START": "2025-11-25",
+    "CABLE_LENGTH": "30.0",
+    "SENSOR_TEST_DATE": "2025-11-20",
+    "SENSOR_COUPLING": "SANDED-IN",
+    "SENSOR_STATUS": "DEPLOYED"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142338008-186",
+   "identifier": "/09_FEAR/06_FEAR2/BFE42_GS100-600_2",
+   "code": "BFE42_GS100-600_2",
+   "type": "SEIS_SENSOR_INSTAL",
+   "space": "09_FEAR",
+   "project": "/09_FEAR/06_FEAR2",
+   "collection": "/09_FEAR/06_FEAR2/F2_INSTALLATION_SEIS",
+   "properties": {
+    "CABLE_LABEL": "8R.F24201.JP",
+    "INSTALLATION_ENVIRONMENT": "BOREHOLE",
+    "SENSOR_AZIMUTH": "5.0",
+    "NOTES": "<p>The sensor was lowered in and put out to measure the exact depth.&nbsp;<br>The orientation was marked with tape and a marker to lower with a lot of attention on the twist of the cable.&nbsp;<br>The preparation involved unwrapping 10m of cables to lay it flat and avoid any disturbance from it.&nbsp;<br>We poured sand until the sensor was not moving in the borehole anymore (~2/3L)<br>The proximity to high voltage might make the station noisy to be determined once finished.</p>",
+    "CABLE_LENGTH": "30.0",
+    "SENSOR_COUPLING": "CEMENTED",
+    "PROJECT": "FEAR",
+    "BOREHOLE_METER": "2.85",
+    "SENSOR": "20261015142338008-181",
+    "DEPLOYED_BY": [
+     "20261015142437636-199",
+     "20261015142437636-197",
+     "20261015142437636-198"
+    ],
+    "SENSOR_EPOCH": "8R.F24201.JP",
+    "BOREHOLE": "20261015142338008-99",
+    "DEPLOYMENT_START": "2025-11-25",
+    "SENSOR_TEST_DATE": "2025-11-20",
+    "SENSOR_STATUS": "DEPLOYED"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142338008-185",
+   "identifier": "/09_FEAR/06_FEAR2/BFE_C_19_TILT1",
+   "code": "BFE_C_19_TILT1",
+   "type": "SENSOR_INSTAL",
+   "space": "09_FEAR",
+   "project": "/09_FEAR/06_FEAR2",
+   "collection": "/09_FEAR/06_FEAR2/F2_INSTALLATION",
+   "properties": {
+    "PROJECT": "FEAR",
+    "BOREHOLE_METER": "18.0",
+    "SENSOR": "20261015142338008-179",
+    "DEPLOYMENT_TYPE_TERM": "TEMPORARY",
+    "INSTALLATION_ENVIRONMENT": "BOREHOLE",
+    "DEPLOYED_BY": [
+     "20261015142437636-197",
+     "20261015142437636-198"
+    ],
+    "COMPUTER": "20261015142338008-190",
+    "BOREHOLE": "20261015142338008-76",
+    "DEPLOYMENT_START": "2025-11-26",
+    "CABLE_LENGTH": "30.0",
+    "SENSOR_TEST_DATE": "2025-11-25",
+    "SENSOR_COUPLING": "SANDED-IN",
+    "SENSOR_STATUS": "DEPLOYED"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142338008-184",
+   "identifier": "/09_FEAR/06_FEAR2/BFE_C_23_TILT_2",
+   "code": "BFE_C_23_TILT_2",
+   "type": "SENSOR_INSTAL",
+   "space": "09_FEAR",
+   "project": "/09_FEAR/06_FEAR2",
+   "collection": "/09_FEAR/06_FEAR2/F2_INSTALLATION",
+   "properties": {
+    "PROJECT": "FEAR",
+    "BOREHOLE_METER": "19.0",
+    "SENSOR": "20261015142338008-174",
+    "DEPLOYMENT_TYPE_TERM": "TEMPORARY",
+    "INSTALLATION_ENVIRONMENT": "BOREHOLE",
+    "DEPLOYED_BY": [
+     "20261015142437636-197",
+     "20261015142437636-199"
+    ],
+    "COMPUTER": "20261015142338008-191",
+    "BOREHOLE": "20261015142338008-80",
+    "DEPLOYMENT_START": "2025-11-26",
+    "CABLE_LENGTH": "20.0",
+    "SENSOR_TEST_DATE": "2025-11-25",
+    "SENSOR_COUPLING": "SANDED-IN",
+    "SENSOR_STATUS": "DEPLOYED"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142338008-183",
+   "identifier": "/09_FEAR/06_FEAR2/BFE_D_27_TILT_3",
+   "code": "BFE_D_27_TILT_3",
+   "type": "SENSOR_INSTAL",
+   "space": "09_FEAR",
+   "project": "/09_FEAR/06_FEAR2",
+   "collection": "/09_FEAR/06_FEAR2/F2_INSTALLATION",
+   "properties": {
+    "PROJECT": "FEAR",
+    "BOREHOLE_METER": "20.0",
+    "SENSOR": "20261015142338008-176",
+    "DEPLOYMENT_TYPE_TERM": "TEMPORARY",
+    "INSTALLATION_ENVIRONMENT": "BOREHOLE",
+    "DEPLOYED_BY": [
+     "20261015142437636-199",
+     "20261015142437636-197",
+     "20261015142437636-198"
+    ],
+    "COMPUTER": "20261015142338008-188",
+    "BOREHOLE": "20261015142338008-84",
+    "DEPLOYMENT_START": "2025-11-25",
+    "CABLE_LENGTH": "30.0",
+    "SENSOR_TEST_DATE": "2025-11-25",
+    "SENSOR_COUPLING": "SANDED-IN",
+    "SENSOR_STATUS": "DEPLOYED"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142338008-182",
+   "identifier": "/09_FEAR/06_FEAR2/BFE_D_31_TILT1_4",
+   "code": "BFE_D_31_TILT1_4",
+   "type": "SENSOR_INSTAL",
+   "space": "09_FEAR",
+   "project": "/09_FEAR/06_FEAR2",
+   "collection": "/09_FEAR/06_FEAR2/F2_INSTALLATION",
+   "properties": {
+    "PROJECT": "FEAR",
+    "BOREHOLE_METER": "14.0",
+    "SENSOR": "20261015142338008-177",
+    "DEPLOYMENT_TYPE_TERM": "TEMPORARY",
+    "INSTALLATION_ENVIRONMENT": "BOREHOLE",
+    "DEPLOYED_BY": [
+     "20261015142437636-197",
+     "20261015142437636-198"
+    ],
+    "COMPUTER": "20261015142338008-189",
+    "BOREHOLE": "20261015142338008-88",
+    "DEPLOYMENT_START": "2025-11-25",
+    "CABLE_LENGTH": "30.0",
+    "SENSOR_TEST_DATE": "2025-11-25",
+    "SENSOR_COUPLING": "SANDED-IN",
+    "SENSOR_STATUS": "DEPLOYED"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142338008-188",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/DEV10",
+   "code": "DEV10",
+   "type": "DEVICE",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/DEVICES",
+   "properties": {
+    "PRODUCT.DESCRIPTION": "stub: referenced by the lab export but not in it",
+    "NAME": "DEV10"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-189",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/DEV11",
+   "code": "DEV11",
+   "type": "DEVICE",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/DEVICES",
+   "properties": {
+    "PRODUCT.DESCRIPTION": "stub: referenced by the lab export but not in it",
+    "NAME": "DEV11"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-190",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/DEV8",
+   "code": "DEV8",
+   "type": "DEVICE",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/DEVICES",
+   "properties": {
+    "PRODUCT.DESCRIPTION": "stub: referenced by the lab export but not in it",
+    "NAME": "DEV8"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-191",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/DEV9",
+   "code": "DEV9",
+   "type": "DEVICE",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/DEVICES",
+   "properties": {
+    "PRODUCT.DESCRIPTION": "stub: referenced by the lab export but not in it",
+    "NAME": "DEV9"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-180",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/GS100-600-01",
+   "code": "GS100-600-01",
+   "type": "SEIS_SENSOR",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/SEISMIC_SENSORS",
+   "properties": {
+    "SERIAL_NUMBER": "250001_292",
+    "SENSOR_CAT": "BHG",
+    "NOTES": "stub: referenced by the lab export but not in it"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-181",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/GS100-600-02",
+   "code": "GS100-600-02",
+   "type": "SEIS_SENSOR",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/SEISMIC_SENSORS",
+   "properties": {
+    "SERIAL_NUMBER": "250002_292",
+    "SENSOR_CAT": "BHG",
+    "NOTES": "stub: referenced by the lab export but not in it"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-174",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/LY1066",
+   "code": "LY1066",
+   "type": "SENSORS",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/TILTMETERS",
+   "properties": {
+    "SERIAL_NUMBER": "LY1066",
+    "NOTES": "not in inventory export",
+    "SENSOR_TYPE": "TILT"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-179",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/TILT1",
+   "code": "TILT1",
+   "type": "SENSORS",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/TILTMETERS",
+   "properties": {
+    "SERIAL_NUMBER": "LY5020",
+    "DOMAIN": "GEOMECH",
+    "SENSOR_TYPE": "TILT",
+    "SENSOR_LABELQR": "tilt0537",
+    "MANUFACTURER": "Jewells Instruments / CSIRO",
+    "SENSOR_COUPLING": "SANDED-IN"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-178",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/TILT2",
+   "code": "TILT2",
+   "type": "SENSORS",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/TILTMETERS",
+   "properties": {
+    "SERIAL_NUMBER": "LY1166",
+    "DOMAIN": "GEOMECH",
+    "SENSOR_TYPE": "TILT",
+    "SENSOR_AVAILABILITY": "IN-USE",
+    "SENSOR_LABELQR": "tilt0536",
+    "MANUFACTURER": "Jewells Instruments / CSIRO",
+    "SENSOR_COUPLING": "SANDED-IN"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-176",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/TILT3",
+   "code": "TILT3",
+   "type": "SENSORS",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/TILTMETERS",
+   "properties": {
+    "SERIAL_NUMBER": "LY1127",
+    "DOMAIN": "GEOMECH",
+    "SENSOR_TYPE": "TILT",
+    "SENSOR_LABELQR": "tilt0536",
+    "MANUFACTURER": "Jewells Instruments / CSIRO",
+    "SENSOR_COUPLING": "SANDED-IN"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-177",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/TILT4",
+   "code": "TILT4",
+   "type": "SENSORS",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/TILTMETERS",
+   "properties": {
+    "SERIAL_NUMBER": "LY1123",
+    "DOMAIN": "GEOMECH",
+    "SENSOR_TYPE": "TILT",
+    "SENSOR_AVAILABILITY": "IN-USE",
+    "MANUFACTURER": "Jewells Instruments / CSIRO",
+    "SENSOR_COUPLING": "SANDED-IN"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-175",
+   "identifier": "/EQUIPMENT/SENSOR_CATALOG/TILT5",
+   "code": "TILT5",
+   "type": "SENSORS",
+   "space": "EQUIPMENT",
+   "project": "/EQUIPMENT/SENSOR_CATALOG",
+   "collection": "/EQUIPMENT/SENSOR_CATALOG/TILTMETERS",
+   "properties": {
+    "SERIAL_NUMBER": "DS1043",
+    "DOMAIN": "GEOMECH",
+    "SENSOR_TYPE": "TILT",
+    "SENSOR_AVAILABILITY": "IN-USE",
+    "SENSOR_LABELQR": "tilt0561",
+    "MANUFACTURER": "Jewells Instruments / CSIRO",
+    "SENSOR_COUPLING": "FREE-SURFACE"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:23:38Z"
+  },
+  {
+   "permId": "20261015142338008-58",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_A_01",
+   "code": "BFE_A_01",
+   "type": "BOREHOLES",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLES",
+   "properties": {
+    "BOREHOLE_GEOMETRY_TERM": "INCLINED_UPWARD",
+    "DRILLSTYLE_TERM": "CORED",
+    "NOTES": "Updates as Flotron data, dip reversed (LT)",
+    "BOREHOLE_PURPOSE": "Preliminary AE monitoring",
+    "TUNNEL_SECTION_TERM": "MAIN_TUNNEL",
+    "BOREHOLE_CODE": "F01",
+    "DRILLING_START": "2022-01-01",
+    "PROJECT": "FEAR",
+    "TEST_BED": "20261015142455627-205",
+    "BOREHOLE_LENGTH": "9.35",
+    "DRILLING_PERIOD": "2022-01-01",
+    "BOREHOLE_NICKNAME": "PrelimAE",
+    "BOREHOLE_NAME": "BFE_A_01",
+    "BOREHOLE_DIAMETER": "76.0",
+    "BOREHOLE_COMPLETION_TERM": "OPEN",
+    "LOCATION_TM": "2611.0"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142523972-210",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_A_01_PLANNED_20240105",
+   "code": "BFE_A_01_PLANNED_20240105",
+   "type": "BOREHOLE_MOUTH_SURVEY",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
+   "properties": {
+    "COORDINATE_SYSTEM": "BEDRETTO_LOCAL_V1",
+    "SURVEY_DATE": "2024-01-05",
+    "SURVEY_SOURCE": "FEAR implemetation plan v8",
+    "BOREHOLE": "20261015142338008-58",
+    "BOREHOLE_MOUTH_E": "-410.2",
+    "DIP_CONVENTION": "negative downward; positive upward",
+    "SURVEY_TYPE": "PLANNED",
+    "SURVEY_DIP": "-10.0",
+    "BOREHOLE_MOUTH_H": "1490.133",
+    "SURVEY_AZIMUTH": "30.0",
+    "SURVEYED_BY": "20261015142523972-208",
+    "BOREHOLE_MOUTH_N": "439.1"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142523972-211",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_A_01_STAKED_OUT_20240118",
+   "code": "BFE_A_01_STAKED_OUT_20240118",
+   "type": "BOREHOLE_MOUTH_SURVEY",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
+   "properties": {
+    "COORDINATE_SYSTEM": "BEDRETTO_LOCAL_V1",
+    "SURVEY_DATE": "2024-01-18",
+    "SURVEY_SOURCE": "Flotron survey",
+    "BOREHOLE": "20261015142338008-58",
+    "BOREHOLE_MOUTH_E": "-415.64",
+    "DIP_CONVENTION": "negative downward; positive upward",
+    "SURVEY_TYPE": "STAKED_OUT",
+    "SURVEY_DIP": "-10.6",
+    "BOREHOLE_MOUTH_H": "1490.133",
+    "SURVEY_AZIMUTH": "29.69",
+    "SURVEYED_BY": "20261015142523972-209",
+    "BOREHOLE_MOUTH_N": "447.7"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142338008-76",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_C_19",
+   "code": "BFE_C_19",
+   "type": "BOREHOLES",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLES",
+   "properties": {
+    "BOREHOLE_GEOMETRY_TERM": "INCLINED_DOWNWARD",
+    "DRILLSTYLE_TERM": "CORED",
+    "NOTES": "Dip reversed (LT); Location [TM] is marked as approximatif (RH)",
+    "BOREHOLE_PURPOSE": "tilt0537",
+    "TUNNEL_SECTION_TERM": "MAIN_TUNNEL",
+    "BOREHOLE_CODE": "F19",
+    "DRILLING_START": "2024-01-17",
+    "PROJECT": "FEAR",
+    "TEST_BED": "20261015142455627-205",
+    "BOREHOLE_LENGTH": "20.0",
+    "DRILLING_PERIOD": "2024-01-17",
+    "BOREHOLE_NICKNAME": "vertical 1",
+    "BOREHOLE_NAME": "BFE_C_19",
+    "BOREHOLE_DIAMETER": "96.0",
+    "BOREHOLE_COMPLETION_TERM": "OPEN",
+    "LOCATION_TM": "2332.0"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142523972-229",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_C_19_STAKED_OUT_20240522",
+   "code": "BFE_C_19_STAKED_OUT_20240522",
+   "type": "BOREHOLE_MOUTH_SURVEY",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
+   "properties": {
+    "COORDINATE_SYSTEM": "BEDRETTO_LOCAL_V1",
+    "SURVEY_DATE": "2024-05-22",
+    "SURVEY_SOURCE": "Flotron survey",
+    "BOREHOLE": "20261015142338008-76",
+    "BOREHOLE_MOUTH_E": "-248.047",
+    "DIP_CONVENTION": "negative downward; positive upward",
+    "SURVEY_TYPE": "STAKED_OUT",
+    "SURVEY_DIP": "89.32",
+    "BOREHOLE_MOUTH_H": "1487.857",
+    "SURVEY_AZIMUTH": "203.77",
+    "SURVEYED_BY": "20261015142523972-209",
+    "BOREHOLE_MOUTH_N": "260.307"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142338008-80",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_C_23",
+   "code": "BFE_C_23",
+   "type": "BOREHOLES",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLES",
+   "properties": {
+    "BOREHOLE_GEOMETRY_TERM": "INCLINED_DOWNWARD",
+    "DRILLSTYLE_TERM": "CORED",
+    "NOTES": "Dip reversed (LT); vertical boreholes from FEAR Nische 1b",
+    "BOREHOLE_PURPOSE": "tilt0538",
+    "TUNNEL_SECTION_TERM": "MAIN_TUNNEL",
+    "BOREHOLE_CODE": "F23",
+    "DRILLING_START": "2024-01-21",
+    "PROJECT": "FEAR",
+    "TEST_BED": "20261015142455627-205",
+    "BOREHOLE_LENGTH": "20.0",
+    "DRILLING_PERIOD": "2024-01-21",
+    "BOREHOLE_NICKNAME": "vertical 2",
+    "BOREHOLE_NAME": "BFE_C_23",
+    "BOREHOLE_DIAMETER": "96.0",
+    "LOCATION_TM": "2402.0"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142523972-233",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_C_23_STAKED_OUT_20240526",
+   "code": "BFE_C_23_STAKED_OUT_20240526",
+   "type": "BOREHOLE_MOUTH_SURVEY",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
+   "properties": {
+    "COORDINATE_SYSTEM": "BEDRETTO_LOCAL_V1",
+    "SURVEY_DATE": "2024-05-26",
+    "SURVEY_SOURCE": "Flotron survey",
+    "BOREHOLE": "20261015142338008-80",
+    "BOREHOLE_MOUTH_E": "-276.683",
+    "DIP_CONVENTION": "negative downward; positive upward",
+    "SURVEY_TYPE": "STAKED_OUT",
+    "SURVEY_DIP": "89.41",
+    "BOREHOLE_MOUTH_H": "1487.998",
+    "SURVEY_AZIMUTH": "182.23",
+    "SURVEYED_BY": "20261015142523972-209",
+    "BOREHOLE_MOUTH_N": "290.675"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142338008-84",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_D_27",
+   "code": "BFE_D_27",
+   "type": "BOREHOLES",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLES",
+   "properties": {
+    "BOREHOLE_GEOMETRY_TERM": "VERTICAL",
+    "DRILLSTYLE_TERM": "CORED",
+    "NOTES": "Easting, Northing, Elevation, Azimuth, and Dip from Flotron survey 20251104. Borehole length correspond to drilling length from drilling-diary.xlsx. Core length as reported in the core database.",
+    "BOREHOLE_PURPOSE": "tilt0536",
+    "TUNNEL_SECTION_TERM": "FEAR_TUNNEL",
+    "DRILLING_START": "2025-07-31",
+    "PROJECT": "FEAR",
+    "CORE_DIAMETER": "96.0",
+    "TEST_BED": "20261015142455627-205",
+    "BOREHOLE_LENGTH": "20.0",
+    "DRILLING_PERIOD": "2025-08-05",
+    "BOREHOLE_NICKNAME": "vertical4",
+    "BOREHOLE_NAME": "BFE_D_27",
+    "BOREHOLE_DIAMETER": "96.0",
+    "BOREHOLE_COMPLETION_TERM": "OPEN"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142523972-237",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_D_27_STAKED_OUT_20240904",
+   "code": "BFE_D_27_STAKED_OUT_20240904",
+   "type": "BOREHOLE_MOUTH_SURVEY",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
+   "properties": {
+    "COORDINATE_SYSTEM": "BEDRETTO_LOCAL_V1",
+    "SURVEY_DATE": "2024-09-04",
+    "SURVEY_SOURCE": "Flotron survey",
+    "BOREHOLE": "20261015142338008-84",
+    "BOREHOLE_MOUTH_E": "-361.578",
+    "DIP_CONVENTION": "negative downward; positive upward",
+    "SURVEY_TYPE": "STAKED_OUT",
+    "SURVEY_DIP": "90.0",
+    "BOREHOLE_MOUTH_H": "1489.011",
+    "SURVEY_AZIMUTH": "0.0",
+    "SURVEYED_BY": "20261015142523972-209",
+    "BOREHOLE_MOUTH_N": "271.732"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142338008-88",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_D_31",
+   "code": "BFE_D_31",
+   "type": "BOREHOLES",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLES",
+   "properties": {
+    "BOREHOLE_GEOMETRY_TERM": "VERTICAL",
+    "DRILLSTYLE_TERM": "NOT_CORED",
+    "NOTES": "Technical failure, abandoned. Easting, Northing, Elevation, Azimuth, and Dip from Flotron survey 20251104. Borehole length correspond to drilling length from drilling-diary.xlsx.",
+    "BOREHOLE_PURPOSE": "tilt0560",
+    "TUNNEL_SECTION_TERM": "FEAR_TUNNEL",
+    "DRILLING_START": "2025-09-01",
+    "PROJECT": "FEAR",
+    "TEST_BED": "20261015142455627-205",
+    "BOREHOLE_LENGTH": "12.0",
+    "DRILLING_PERIOD": "2025-09-01",
+    "BOREHOLE_NICKNAME": "vertical5a",
+    "BOREHOLE_NAME": "BFE_D_31",
+    "BOREHOLE_DIAMETER": "96.0",
+    "BOREHOLE_COMPLETION_TERM": "OPEN"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142523972-241",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_D_31_STAKED_OUT_20240908",
+   "code": "BFE_D_31_STAKED_OUT_20240908",
+   "type": "BOREHOLE_MOUTH_SURVEY",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
+   "properties": {
+    "COORDINATE_SYSTEM": "BEDRETTO_LOCAL_V1",
+    "SURVEY_DATE": "2024-09-08",
+    "SURVEY_SOURCE": "Flotron survey",
+    "BOREHOLE": "20261015142338008-88",
+    "BOREHOLE_MOUTH_E": "-386.154",
+    "DIP_CONVENTION": "negative downward; positive upward",
+    "SURVEY_TYPE": "STAKED_OUT",
+    "SURVEY_DIP": "90.0",
+    "BOREHOLE_MOUTH_H": "1489.46",
+    "SURVEY_AZIMUTH": "0.0",
+    "SURVEYED_BY": "20261015142523972-209",
+    "BOREHOLE_MOUTH_N": "247.251"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142338008-98",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_D_41",
+   "code": "BFE_D_41",
+   "type": "BOREHOLES",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLES",
+   "properties": {
+    "BOREHOLE_GEOMETRY_TERM": "VERTICAL",
+    "DRILLING_START": "2024-09-04",
+    "PROJECT": "FEAR",
+    "TEST_BED": "20261015142455627-205",
+    "DRILLSTYLE_TERM": "NOT_CORED",
+    "BOREHOLE_LENGTH": "3.0",
+    "DRILLING_PERIOD": "2024-09-04",
+    "NOTES": "Easting, Northing, Elevation, Azimuth, and Dip from Flotron survey 20251104.",
+    "BOREHOLE_NICKNAME": "B13 geophone1",
+    "BOREHOLE_PURPOSE": "Short borehole",
+    "BOREHOLE_NAME": "BFE_D_41",
+    "BOREHOLE_DIAMETER": "96.0",
+    "BOREHOLE_COMPLETION_TERM": "OPEN"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142523972-251",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_D_41_STAKED_OUT_20250211",
+   "code": "BFE_D_41_STAKED_OUT_20250211",
+   "type": "BOREHOLE_MOUTH_SURVEY",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
+   "properties": {
+    "COORDINATE_SYSTEM": "BEDRETTO_LOCAL_V1",
+    "SURVEY_DATE": "2025-02-11",
+    "SURVEY_SOURCE": "Flotron survey",
+    "BOREHOLE": "20261015142338008-98",
+    "BOREHOLE_MOUTH_E": "-343.32",
+    "DIP_CONVENTION": "negative downward; positive upward",
+    "SURVEY_TYPE": "STAKED_OUT",
+    "SURVEY_DIP": "90.0",
+    "BOREHOLE_MOUTH_H": "1488.717",
+    "SURVEY_AZIMUTH": "0.0",
+    "SURVEYED_BY": "20261015142523972-209",
+    "BOREHOLE_MOUTH_N": "362.219"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142338008-99",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_D_42",
+   "code": "BFE_D_42",
+   "type": "BOREHOLES",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLES",
+   "properties": {
+    "BOREHOLE_GEOMETRY_TERM": "VERTICAL",
+    "DRILLING_START": "2024-09-04",
+    "PROJECT": "FEAR",
+    "TEST_BED": "20261015142455627-205",
+    "DRILLSTYLE_TERM": "NOT_CORED",
+    "BOREHOLE_LENGTH": "3.0",
+    "DRILLING_PERIOD": "2024-09-04",
+    "NOTES": "Easting, Northing, Elevation, Azimuth, and Dip from Flotron survey 20251104.",
+    "BOREHOLE_NICKNAME": "B03 geophone2",
+    "BOREHOLE_PURPOSE": "Short borehole",
+    "BOREHOLE_NAME": "BFE_D_42",
+    "BOREHOLE_DIAMETER": "96.0",
+    "BOREHOLE_COMPLETION_TERM": "OPEN"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:23:38Z",
+   "modificationDate": "2026-10-15T14:26:20Z"
+  },
+  {
+   "permId": "20261015142523972-252",
+   "identifier": "/INFRASTRUCTURE/BOREHOLES/BFE_D_42_STAKED_OUT_20250212",
+   "code": "BFE_D_42_STAKED_OUT_20250212",
+   "type": "BOREHOLE_MOUTH_SURVEY",
+   "space": "INFRASTRUCTURE",
+   "project": "/INFRASTRUCTURE/BOREHOLES",
+   "collection": "/INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS",
+   "properties": {
+    "COORDINATE_SYSTEM": "BEDRETTO_LOCAL_V1",
+    "SURVEY_DATE": "2025-02-12",
+    "SURVEY_SOURCE": "Flotron survey",
+    "BOREHOLE": "20261015142338008-99",
+    "BOREHOLE_MOUTH_E": "-196.707",
+    "DIP_CONVENTION": "negative downward; positive upward",
+    "SURVEY_TYPE": "STAKED_OUT",
+    "SURVEY_DIP": "90.0",
+    "BOREHOLE_MOUTH_H": "1484.256",
+    "SURVEY_AZIMUTH": "0.0",
+    "SURVEYED_BY": "20261015142523972-209",
+    "BOREHOLE_MOUTH_N": "208.264"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142437636-199",
+   "identifier": "/REGISTERS/PEOPLE/PERSON_3",
+   "code": "PERSON_3",
+   "type": "PERSON",
+   "space": "REGISTERS",
+   "project": "/REGISTERS/PEOPLE",
+   "collection": "/REGISTERS/PEOPLE/PEOPLE_COLLECTION",
+   "properties": {
+    "NAME": "Person 3"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:24:37Z",
+   "modificationDate": "2026-10-15T14:24:37Z"
+  },
+  {
+   "permId": "20261015142437636-197",
+   "identifier": "/REGISTERS/PEOPLE/PERSON_1",
+   "code": "PERSON_1",
+   "type": "PERSON",
+   "space": "REGISTERS",
+   "project": "/REGISTERS/PEOPLE",
+   "collection": "/REGISTERS/PEOPLE/PEOPLE_COLLECTION",
+   "properties": {
+    "NAME": "Person 1"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:24:37Z",
+   "modificationDate": "2026-10-15T14:24:37Z"
+  },
+  {
+   "permId": "20261015142437636-198",
+   "identifier": "/REGISTERS/PEOPLE/PERSON_2",
+   "code": "PERSON_2",
+   "type": "PERSON",
+   "space": "REGISTERS",
+   "project": "/REGISTERS/PEOPLE",
+   "collection": "/REGISTERS/PEOPLE/PEOPLE_COLLECTION",
+   "properties": {
+    "NAME": "Person 2"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:24:37Z",
+   "modificationDate": "2026-10-15T14:24:37Z"
+  },
+  {
+   "permId": "20261015142523972-208",
+   "identifier": "/REGISTERS/PEOPLE/PERSON_4",
+   "code": "PERSON_4",
+   "type": "PERSON",
+   "space": "REGISTERS",
+   "project": "/REGISTERS/PEOPLE",
+   "collection": "/REGISTERS/PEOPLE/PEOPLE_COLLECTION",
+   "properties": {
+    "NAME": "Person 4"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142523972-209",
+   "identifier": "/REGISTERS/PEOPLE/PERSON_5",
+   "code": "PERSON_5",
+   "type": "PERSON",
+   "space": "REGISTERS",
+   "project": "/REGISTERS/PEOPLE",
+   "collection": "/REGISTERS/PEOPLE/PEOPLE_COLLECTION",
+   "properties": {
+    "NAME": "Person 5"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:25:23Z",
+   "modificationDate": "2026-10-15T14:25:23Z"
+  },
+  {
+   "permId": "20261015142455627-204",
+   "identifier": "/REGISTERS/TESTBEDS/DELOS",
+   "code": "DELOS",
+   "type": "TESTBED",
+   "space": "REGISTERS",
+   "project": "/REGISTERS/TESTBEDS",
+   "collection": "/REGISTERS/TESTBEDS/TESTBEDS_COLLECTION",
+   "properties": {
+    "TESTBED.ABBREVIATION": "DELOS",
+    "TESTBED.DESCRIPTION": "Deep Life Observatory",
+    "NAME": "DELOS"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:24:55Z",
+   "modificationDate": "2026-10-15T14:24:55Z"
+  },
+  {
+   "permId": "20261015142455627-205",
+   "identifier": "/REGISTERS/TESTBEDS/EARTHTB",
+   "code": "EARTHTB",
+   "type": "TESTBED",
+   "space": "REGISTERS",
+   "project": "/REGISTERS/TESTBEDS",
+   "collection": "/REGISTERS/TESTBEDS/TESTBEDS_COLLECTION",
+   "properties": {
+    "TESTBED.ABBREVIATION": "EARTHTB",
+    "TESTBED.DESCRIPTION": "Earthquake Physics Testbed",
+    "NAME": "Earthquake Physics"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:24:55Z",
+   "modificationDate": "2026-10-15T14:24:55Z"
+  },
+  {
+   "permId": "20261015142455627-206",
+   "identifier": "/REGISTERS/TESTBEDS/GEOTB",
+   "code": "GEOTB",
+   "type": "TESTBED",
+   "space": "REGISTERS",
+   "project": "/REGISTERS/TESTBEDS",
+   "collection": "/REGISTERS/TESTBEDS/TESTBEDS_COLLECTION",
+   "properties": {
+    "TESTBED.ABBREVIATION": "GEOTB",
+    "TESTBED.DESCRIPTION": "Geothermal Testbed",
+    "NAME": "Geothermal"
+   },
+   "registrator": "admin",
+   "modifier": "admin",
+   "registrationDate": "2026-10-15T14:24:55Z",
+   "modificationDate": "2026-10-15T14:24:55Z"
+  }
+ ]
+}

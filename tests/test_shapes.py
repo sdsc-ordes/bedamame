@@ -198,7 +198,7 @@ def components(found: set, focus: URIRef) -> list[str]:
 
 @pytest.fixture(scope="module")
 def store() -> Graph:
-    g = v.union_graph(v.load_dataset())
+    g = v.union_graph(v.load_dataset(v.HANDWRITTEN))
     g.parse(data=PREFIXES + VALID, format="turtle")
     return g
 

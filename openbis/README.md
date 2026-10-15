@@ -104,6 +104,9 @@ What the 7.0 import does (tested locally):
 - Responses send an object once, then refer to it by its `@id`; the client puts the objects back.
 - Searching collections by space fails server-side (`column t0.space_id does not exist`); search all and filter.
 - V3 returns DATE values as `yyyy-MM-dd` and TIMESTAMPs as `yyyy-MM-dd HH:mm:ss Z`; a year alone is rejected.
+- Object properties come back by code: links as permIds (a list when multi-valued), vocabulary values as term codes, booleans as `true`/`false`. Registration and modification dates are milliseconds since 1970.
+
+`uv run scripts/openbis_api.py --dump FILE` writes what the converter (`scripts/openbis_to_rdf.py`) reads: every object of the Bedretto types with its properties, registrator, modifier and dates; the types' data types and annotations; the collections' names. `--select IDENTIFIER...` keeps only those collections and objects, what they link to, and the surveys and sensor positions that describe them. `--anonymise` drops the fields without an annotation (the free-text names among them) and replaces people's and users' names. `just openbis-fixture` uses both to write `tests/fixtures/openbis-export.json`.
 
 ## RO-Crate export
 

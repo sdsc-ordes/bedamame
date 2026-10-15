@@ -59,7 +59,7 @@ def test_bed_terms_in_use_are_declared(ontology, vocab, shapes):
     used = (
         iris(vocab, config.TERMS)
         | iris(shapes, config.TERMS)
-        | iris(v.load_dataset(), config.TERMS)
+        | iris(v.load_dataset(v.HANDWRITTEN), config.TERMS)
     )
     assert used - declared == set()
 
@@ -71,7 +71,7 @@ def test_concepts_in_use_are_declared(ontology, vocab, shapes):
     used = (
         iris(ontology, config.VOCAB)
         | iris(shapes, config.VOCAB)
-        | iris(v.load_dataset(), config.VOCAB)
+        | iris(v.load_dataset(v.HANDWRITTEN), config.VOCAB)
     )
     assert used - declared - {URIRef(config.BASE + "vocab")} == set()
 
