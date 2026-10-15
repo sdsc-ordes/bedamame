@@ -110,12 +110,12 @@ bed:coreLength a rdf:Property, owl:ObjectProperty ;
 
 bed:drillingStart a rdf:Property, owl:DatatypeProperty ;
     rdfs:label "drilling start"@en ;
-    skos:definition "The date on which drilling of a borehole began."@en ;
+    skos:definition "The date on which drilling of a borehole, or of the run that recovered a core, began."@en ;
     rdfs:subPropertyOf dcterms:date .
 
 bed:drillingEnd a rdf:Property, owl:DatatypeProperty ;
     rdfs:label "drilling end"@en ;
-    skos:definition "The date on which drilling of a borehole ended."@en ;
+    skos:definition "The date on which drilling of a borehole, or of the run that recovered a core, ended."@en ;
     rdfs:subPropertyOf dcterms:date .
 
 bed:boreholeStatus a rdf:Property, owl:ObjectProperty ;
@@ -235,6 +235,11 @@ bed:storageLocation a rdf:Property, owl:DatatypeProperty ;
     rdfs:label "storage location"@en ;
     skos:definition "Where a core or sample is stored, such as a repository and a shelf position in it."@en ;
     skos:example "B5A3" .
+
+bed:storedOn a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "stored on"@en ;
+    skos:definition "The date on which a core was put into storage at its location."@en ;
+    rdfs:subPropertyOf dcterms:date .
 
 bed:coreBoxNumber a rdf:Property, owl:DatatypeProperty ;
     rdfs:label "core box number"@en ;
@@ -375,9 +380,53 @@ bed:FibreOpticConfiguration a rdfs:Class, owl:Class ;
     skos:definition "A deployment of a fibre-optic cable for distributed or point sensing, in a borehole or along the tunnel."@en ;
     rdfs:subClassOf ssn:Deployment .
 
+bed:Equipment a rdfs:Class, owl:Class ;
+    rdfs:label "Equipment"@en ;
+    skos:definition "A piece of laboratory equipment that is not itself a sensor, such as a computer, an antenna or a pump."@en ;
+    rdfs:subClassOf ssn:System .
+
+bed:DataLogger a rdfs:Class, owl:Class ;
+    rdfs:label "Data logger"@en ;
+    skos:altLabel "Digitizer"@en ;
+    skos:definition "A device that digitises and records the signals of one or more sensors."@en ;
+    rdfs:subClassOf ssn:System .
+
 bed:sensorKind a rdf:Property, owl:ObjectProperty ;
     rdfs:label "sensor kind"@en ;
     skos:definition "The kind of instrument a sensor is, as a concept from the sensor type scheme."@en .
+
+bed:retrievable a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "retrievable"@en ;
+    skos:definition "Whether a sensor can be recovered after it has been installed."@en .
+
+bed:availability a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "availability"@en ;
+    skos:definition "Whether an instrument in the inventory can be used, as a concept from the availability scheme."@en ;
+    skos:relatedMatch schema:availability .
+
+bed:sensorFeature a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "sensor feature"@en ;
+    skos:definition "A protective feature of a sensor, such as being waterproof, as a concept from the sensor feature scheme."@en .
+
+bed:samplingRate a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "sampling rate"@en ;
+    skos:definition "The number of samples a sensor or data logger records per second, as a quantity value."@en ;
+    qudt:hasQuantityKind quantitykind:Frequency .
+
+bed:minimumFrequency a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "minimum frequency"@en ;
+    skos:definition "The lowest frequency of ground motion that a sensor records within its specified response, as a quantity value."@en ;
+    qudt:hasQuantityKind quantitykind:Frequency .
+
+bed:maximumFrequency a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "maximum frequency"@en ;
+    skos:definition "The highest frequency of ground motion that a sensor records within its specified response, as a quantity value."@en ;
+    qudt:hasQuantityKind quantitykind:Frequency .
+
+bed:purchasedOn a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "purchased on"@en ;
+    skos:definition "The date on which an instrument was bought."@en ;
+    rdfs:subPropertyOf dcterms:date .
 
 bed:inventoryLabel a rdf:Property, owl:DatatypeProperty ;
     rdfs:label "inventory label"@en ;
@@ -452,6 +501,16 @@ bed:depthDatum a rdf:Property, owl:DatatypeProperty ;
     rdfs:label "depth datum"@en ;
     skos:definition "The point from which a measured depth is counted."@en ;
     skos:example "borehole collar" .
+
+bed:testedOn a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "tested on"@en ;
+    skos:definition "The date on which an installed sensor was proof-tested."@en ;
+    rdfs:subPropertyOf dcterms:date .
+
+bed:acquisitionDevice a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "acquisition device"@en ;
+    skos:definition "The computer or data logger that records the signals of a deployed sensor."@en ;
+    skos:broadMatch ssn:deployedSystem .
 
 bed:deploymentType a rdf:Property, owl:ObjectProperty ;
     rdfs:label "deployment type"@en ;

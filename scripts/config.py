@@ -11,6 +11,14 @@ GRAPH = BASE + "graph/"
 ONTOLOGY = BASE + "terms"
 ONTOLOGY_VERSION = f"{ONTOLOGY}/{VERSION}"
 
+# the lab's own openBIS object types; everything else is an ELN default
+BEDRETTO_TYPES = [
+    "BOREHOLES", "BOREHOLE_LOGGING",
+    "CORES", "CORE_REQUEST", "IGSN_CORE",
+    "SENSORS", "SEIS_SENSOR", "SENSOR_INSTAL", "SEIS_SENSOR_INSTAL",
+    "DATALOGGER", "DEVICE", "METHOD",
+]  # fmt: skip
+
 NAMESPACES = {
     "bed": TERMS,
     "bedv": VOCAB,
@@ -37,10 +45,14 @@ NAMESPACES = {
 }
 
 # openBIS semantic annotations: Ontology Id and Ontology Version per prefix; the Ontology Annotation Id
-# is the full term IRI. schema.org as on openBIS 7.0's own PUBLICATION type.
+# is the full term IRI. schema.org as on openBIS 7.0's own PUBLICATION type; RDFS, SOSA and SSN publish
+# no version IRI, so their version is the namespace.
 ANNOTATION_SOURCES = {
     "bed": (ONTOLOGY, ONTOLOGY_VERSION),
     "schema": ("https://schema.org/", "https://schema.org/version/28.1"),
+    "rdfs": (NAMESPACES["rdfs"], NAMESPACES["rdfs"]),
+    "sosa": (NAMESPACES["sosa"], NAMESPACES["sosa"]),
+    "ssn": (NAMESPACES["ssn"], NAMESPACES["ssn"]),
 }
 
 

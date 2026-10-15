@@ -68,6 +68,12 @@ openbis-masterdata:
 openbis-seed:
     uv run openbis/seed.py --import
 
+# Annotate the local openBIS from mapping/: fresh master-data export, annotate, import, check
+openbis-annotate:
+    uv run scripts/openbis_api.py --masterdata out/openbis/export
+    uv run scripts/annotate_masterdata.py out/openbis/export/object-types.xlsx --import
+    uv run scripts/annotate_masterdata.py --check
+
 # Stop the local openBIS and keep its data
 openbis-down:
     docker compose -f openbis/compose.yaml down

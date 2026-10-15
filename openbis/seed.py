@@ -9,6 +9,7 @@ from openpyxl import Workbook, load_workbook
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+import config  # noqa: E402
 import openbis_workbook as wb  # noqa: E402
 from openbis_api import Openbis  # noqa: E402
 
@@ -69,7 +70,7 @@ def assignment_codes(masterdata: Path) -> dict[str, list[str]]:
             s.children.get(row, "Code").removeprefix("$") for row in s.children.rows
         ]
         for s in wb.read(masterdata)
-        if s.kind == "SAMPLE_TYPE" and s.code in wb.BEDRETTO_TYPES
+        if s.kind == "SAMPLE_TYPE" and s.code in config.BEDRETTO_TYPES
     }
 
 
@@ -232,7 +233,7 @@ def build(lab: Path, csv_dir: Path) -> Workbook:
     for c, name in COLLECTIONS.items():
         ws.append([c, c.rsplit("/", 1)[1], c.rsplit("/", 1)[0], name])
     ws.append([])
-    for sample_type in wb.BEDRETTO_TYPES:
+    for sample_type in config.BEDRETTO_TYPES:
         rows = new.get(sample_type, []) + exported.get(sample_type, [])
         if rows:
             section(ws, sample_type, codes[sample_type], rows)

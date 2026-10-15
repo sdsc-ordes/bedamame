@@ -42,6 +42,19 @@ Observed while importing:
 - `START_DATE` and `END_DATE` are DATE in the lab's export and TIMESTAMP in 7.0. The import keeps TIMESTAMP **without an error**: an Excel import never changes an existing data type.
 - 7.0's own Excel export has `Internal`, `Multivalued`, `Unique`, `Pattern`, `Internal Assignment` columns, and its property rows carry the **assignment's** annotation in the three ontology columns (NAME is `schema:name` on PERSON, blank on ORGANIZATION).
 
+## Annotations
+
+`just openbis-annotate` does what the collaborator will do in production: a fresh master-data export of the 12 types (`scripts/openbis_api.py --masterdata`), annotated from `mapping/openbis-annotations.csv` (`scripts/annotate_masterdata.py`), imported with "Update if exists", then checked against the mapping (`--check`, read-only). `out/openbis/annotated/` holds the zip to import and `annotations-changes.md`, the note for the collaborator.
+
+What the 7.0 import does with the three ontology columns (tested locally):
+
+- On a type row they annotate the type; on a property row they annotate the **assignment**, even for a property only one type uses. The Excel import never annotates a property type, so the mapping has type and assignment rows only.
+- It fills the `predicate*` fields (Ontology Id, Version, Annotation Id), as the admin UI form and 7.0's own annotations do; `descriptor*` stay empty.
+- It only adds. Importing the same annotation again changes nothing; a different version or term adds a second annotation next to the first; clearing the cells removes nothing. The export lists every annotation of an item, one per line, so the generator reports unwanted ones for removal by hand in the admin UI.
+- A validation script `X.py` becomes plugin `TYPE.X`, and the export writes `TYPE.X.py`, so re-importing an export unchanged adds a plugin `TYPE.TYPE.X` each time. The generator drops one `TYPE.` prefix so the existing plugin is kept.
+
+Ontology Id and Version per prefix are in `scripts/config.py` (`ANNOTATION_SOURCES`). Because imports only add, a new ontology version gives every Bedretto item a second annotation that someone has to remove by hand; decide before the first production import whether the version should be part of the annotation.
+
 ## Seed
 
 `seed.py` writes `out/openbis/seed.xlsx` (object import format: SPACE, PROJECT, EXPERIMENT and SAMPLE sections) from:

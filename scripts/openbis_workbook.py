@@ -7,19 +7,14 @@ from pathlib import Path
 
 from openpyxl import Workbook, load_workbook
 
+import config
+
 from openbis_api import Openbis
 
 warnings.filterwarnings("ignore", module="openpyxl")
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "out" / "openbis" / "masterdata-import"
-
-BEDRETTO_TYPES = [
-    "BOREHOLES", "BOREHOLE_LOGGING",
-    "CORES", "CORE_REQUEST", "IGSN_CORE",
-    "SENSORS", "SEIS_SENSOR", "SENSOR_INSTAL", "SEIS_SENSOR_INSTAL",
-    "DATALOGGER", "DEVICE", "METHOD",
-]  # fmt: skip
 
 # sections with one entity row followed by a table of terms or property assignments
 WITH_CHILDREN = {"VOCABULARY_TYPE", "SAMPLE_TYPE", "EXPERIMENT_TYPE", "DATASET_TYPE"}
@@ -155,7 +150,9 @@ def internal_to_70(types: list[Section]) -> None:
 def import_subset(sections: list[Section]) -> list[Section]:
     # 7.0 ships the ELN defaults and the $ vocabularies; keep the Bedretto types and what they use
     types = [
-        s for s in sections if s.kind == "SAMPLE_TYPE" and s.code in BEDRETTO_TYPES
+        s
+        for s in sections
+        if s.kind == "SAMPLE_TYPE" and s.code in config.BEDRETTO_TYPES
     ]
     vocabs = used_vocabularies(types)
     keep = [
@@ -165,7 +162,7 @@ def import_subset(sections: list[Section]) -> list[Section]:
         and s.code in vocabs
         and not s.code.startswith("$")
     ]
-    keep += sorted(types, key=lambda t: BEDRETTO_TYPES.index(t.code))
+    keep += sorted(types, key=lambda t: config.BEDRETTO_TYPES.index(t.code))
     for s in keep:
         if s.entity.get(s.entity.rows[0], "Unique Subcodes") not in (None, "FALSE"):
             print(f"warning: {s.code} has Unique Subcodes set; the 7.0 import drops it")
@@ -192,7 +189,7 @@ def main() -> int:
     args = ap.parse_args()
 
     sections = import_subset(read(args.export))
-    missing = set(BEDRETTO_TYPES) - {s.code for s in sections}
+    missing = set(config.BEDRETTO_TYPES) - {s.code for s in sections}
     if missing:
         print("missing types:", ", ".join(sorted(missing)))
         return 1

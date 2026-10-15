@@ -673,3 +673,46 @@ bedv:deployment-type-temporary a skos:Concept ;
     skos:inScheme bedv:deployment-type ;
     skos:prefLabel "Temporary"@en ;
     skos:definition "Installed for an experiment or campaign and to be removed afterwards."@en .
+
+bedv:availability a skos:ConceptScheme ;
+    skos:prefLabel "Availability"@en ;
+    dcterms:description "Whether an instrument in the inventory can be used."@en .
+
+bedv:availability-available a skos:Concept ;
+    skos:inScheme bedv:availability ;
+    skos:prefLabel "Available"@en ;
+    skos:definition "In storage and ready for use."@en .
+
+bedv:availability-in-use a skos:Concept ;
+    skos:inScheme bedv:availability ;
+    skos:prefLabel "In use"@en ;
+    skos:definition "Installed or otherwise in use."@en .
+
+bedv:availability-reserved a skos:Concept ;
+    skos:inScheme bedv:availability ;
+    skos:prefLabel "Reserved"@en ;
+    skos:definition "Set aside for a planned use."@en .
+
+bedv:availability-damaged a skos:Concept ;
+    skos:inScheme bedv:availability ;
+    skos:prefLabel "Damaged"@en ;
+    skos:definition "Not usable until repaired."@en .
+
+bedv:sensor-feature a skos:ConceptScheme ;
+    skos:prefLabel "Sensor feature"@en ;
+    dcterms:description "Protective features of a sensor."@en .
+
+bedv:sensor-feature-waterproof a skos:Concept ;
+    skos:inScheme bedv:sensor-feature ;
+    skos:prefLabel "Waterproof"@en ;
+    skos:definition "Keeps working when submerged in water."@en .
+
+bedv:sensor-feature-splashproof a skos:Concept ;
+    skos:inScheme bedv:sensor-feature ;
+    skos:prefLabel "Splashproof"@en ;
+    skos:definition "Keeps working when splashed with water, but not when submerged."@en .
+
+bedv:sensor-feature-pressure-proof a skos:Concept ;
+    skos:inScheme bedv:sensor-feature ;
+    skos:prefLabel "Pressure proof"@en ;
+    skos:definition "Keeps working under the fluid pressure in a borehole."@en .

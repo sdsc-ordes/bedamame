@@ -1,4 +1,5 @@
 import argparse
+import io
 import itertools
 import json
 import os
@@ -7,8 +8,11 @@ import time
 import urllib.error
 import urllib.request
 import uuid
+import zipfile
 from pathlib import Path
 from urllib.parse import urlparse
+
+import config
 
 V3 = "/openbis/openbis/rmi-application-server-v3.json"
 RO_CRATE = "/ro-crate-server"
@@ -183,6 +187,45 @@ class Openbis:
             {"@type": "as.dto.importer.options.ImportOptions", "mode": mode},
         )
 
+    def export_masterdata(self, sample_types: list[str], out: Path) -> Path:
+        # the admin UI's import-compatible export: object-types.xlsx, with the vocabularies the types use,
+        # and the scripts/ folder of their validation scripts
+        data = {
+            "@type": "as.dto.exporter.data.ExportData",
+            "permIds": [
+                {
+                    "@type": "as.dto.exporter.data.ExportablePermId",
+                    "exportableKind": "SAMPLE_TYPE",
+                    "permId": t,
+                }
+                for t in sample_types
+            ],
+            "fields": {"@type": "as.dto.exporter.data.AllFields"},
+        }
+        options = {
+            "@type": "as.dto.exporter.options.ExportOptions",
+            "formats": ["XLSX"],
+            "xlsTextFormat": "PLAIN",
+            "withReferredTypes": True,
+            "withImportCompatibility": True,
+            "zipSingleFiles": False,
+        }
+        url = self.call("executeExport", data, options)["downloadURL"]
+        body = request(url, {})
+        out.mkdir(parents=True, exist_ok=True)
+        if url.endswith(".xlsx"):
+            (out / "object-types.xlsx").write_bytes(body)
+            return out / "object-types.xlsx"
+        with zipfile.ZipFile(io.BytesIO(body)) as z:
+            for name in z.namelist():
+                if name.endswith(".xlsx"):
+                    (out / "object-types.xlsx").write_bytes(z.read(name))
+                elif "/scripts/" in f"/{name}" and not name.endswith("/"):
+                    target = out / "scripts" / Path(name).name
+                    target.parent.mkdir(exist_ok=True)
+                    target.write_bytes(z.read(name))
+        return out / "object-types.xlsx"
+
     def export_crate(
         self, identifiers: list[str], fmt: str = "application/ld+json", **options: bool
     ) -> bytes:
@@ -229,9 +272,18 @@ def main() -> int:
     ap.add_argument(
         "--out", type=Path, help="where to write the export (default: stdout)"
     )
+    ap.add_argument(
+        "--masterdata",
+        type=Path,
+        metavar="DIR",
+        help="export the master data of the 12 Bedretto object types to DIR",
+    )
     args = ap.parse_args()
 
     o = Openbis()
+    if args.masterdata:
+        print(o.export_masterdata(config.BEDRETTO_TYPES, args.masterdata))
+        return 0
     if args.export:
         crate = o.export_crate(
             args.export, with_levels_below=True, with_objects_and_datasets_parents=True

@@ -166,6 +166,7 @@ bedsh:CollarSurveyShape a sh:NodeShape ;
         sh:minCount    1 ;
         sh:maxCount    1 ;
         sh:class       bed:CoordinateReferenceSystem ;
+        bedsh:inScheme bedv:crs ;
         sh:severity    sh:Violation ;
         sh:name        "coordinate system" ;
     ] ;
@@ -253,6 +254,7 @@ bedsh:CoreShape a sh:NodeShape ;
     sh:property [ sh:path bed:chargeNumber    ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
     sh:property [ sh:path bed:storageLocation ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
     sh:property [ sh:path bed:coreBoxNumber   ; sh:maxCount 1 ; sh:datatype xsd:integer ] ;
+    sh:property [ sh:path bed:storedOn        ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
     sh:property [ sh:path bed:forRequest      ; sh:class bed:CoreRequest ] ;
     sh:property [ sh:path bed:responsible     ; sh:class prov:Agent ] .
 
@@ -393,6 +395,14 @@ bedsh:SensorShape a sh:NodeShape ;
     ] ;
 
     sh:property [ sh:path bed:inventoryLabel      ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:retrievable         ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+    sh:property [ sh:path bed:purchasedOn         ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:samplingRate        ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:minimumFrequency    ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:maximumFrequency    ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:coupling            ; sh:maxCount 1 ; bedsh:inScheme bedv:coupling ] ;
+    sh:property [ sh:path bed:availability        ; sh:maxCount 1 ; bedsh:inScheme bedv:availability ] ;
+    sh:property [ sh:path bed:sensorFeature       ; bedsh:inScheme bedv:sensor-feature ] ;
     sh:property [ sh:path bed:responsible         ; sh:class prov:Agent ] ;
     sh:property [ sh:path bed:fdsnBandCode        ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z]$" ] ;
     sh:property [ sh:path bed:fdsnSourceCode      ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z]$" ] ;
@@ -433,6 +443,8 @@ bedsh:DeploymentShape a sh:NodeShape ;
     ] ;
 
     sh:property [ sh:path bed:deployedOn        ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:testedOn          ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:acquisitionDevice ; sh:or ( [ sh:class bed:Equipment ] [ sh:class bed:DataLogger ] ) ] ;
     sh:property [ sh:path bed:removedOn         ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
     sh:property [ sh:path bed:deployedBy        ; sh:class prov:Agent ] ;
     sh:property [ sh:path bed:removedBy         ; sh:class prov:Agent ] ;
@@ -477,6 +489,12 @@ bedsh:DeploymentShape a sh:NodeShape ;
         sh:class       bed:Experiment ;
     ] .
 
+bedsh:DataLoggerShape a sh:NodeShape ;
+    sh:targetClass bed:DataLogger ;
+    rdfs:label "Data logger" ;
+
+    sh:property [ sh:path bed:samplingRate ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] .
+
 bedsh:SensorPositionShape a sh:NodeShape ;
     sh:targetClass bed:SensorPosition ;
     rdfs:label "Sensor position" ;
@@ -488,7 +506,7 @@ bedsh:SensorPositionShape a sh:NodeShape ;
         sh:class       ssn:Deployment ;
     ] ;
 
-    sh:property [ sh:path bed:coordinateSystem ; sh:maxCount 1 ; sh:class bed:CoordinateReferenceSystem ] ;
+    sh:property [ sh:path bed:coordinateSystem ; sh:maxCount 1 ; sh:class bed:CoordinateReferenceSystem ; bedsh:inScheme bedv:crs ] ;
     sh:property [ sh:path bed:easting          ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
     sh:property [ sh:path bed:northing         ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
     sh:property [ sh:path bed:elevation        ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
