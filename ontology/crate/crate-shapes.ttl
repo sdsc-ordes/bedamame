@@ -1,0 +1,65 @@
+@prefix bedsh:   <https://example.org/bedretto/shapes#> .
+@prefix bed:     <https://example.org/bedretto/terms#> .
+
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema:  <http://schema.org/> .
+
+bedsh:RootDatasetShape a sh:NodeShape ;
+    sh:targetClass schema:Dataset ;
+    rdfs:label "RO-Crate root data entity" ;
+
+    sh:property [
+        sh:path        <http://purl.org/dc/terms/conformsTo> ;
+        sh:minCount    1 ;
+        sh:nodeKind    sh:IRI ;
+    ] ;
+
+    sh:property [
+        sh:path        schema:name ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+    ] ;
+
+    sh:property [
+        sh:path        schema:license ;
+        sh:minCount    1 ;
+        sh:nodeKind    sh:IRI ;
+    ] ;
+
+    sh:property [
+        sh:path        schema:datePublished ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:builtFromGraph ;
+        sh:minCount    1 ;
+        sh:nodeKind    sh:IRI ;
+    ] .
+
+bedsh:NoDanglingReference a sh:NodeShape ;
+    sh:targetClass schema:Dataset ;
+    rdfs:label "No dangling references" ;
+
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:prefixes [
+            sh:declare [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ;
+        ] ;
+        sh:select """
+            SELECT $this ?from ?ref
+            WHERE {
+                ?from ?p ?ref .
+                FILTER (isIRI(?ref))
+                FILTER NOT EXISTS { ?ref rdf:type ?anyType }
+
+                FILTER (
+                    STRSTARTS(STR(?ref), "https://example.org/bedretto/id/") ||
+                    ! CONTAINS(STR(?ref), ":")
+                )
+            }
+        """ ;
+    ] .

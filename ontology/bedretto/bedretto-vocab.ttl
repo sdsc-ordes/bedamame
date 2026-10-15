@@ -1,0 +1,551 @@
+@prefix bedv:    <https://example.org/bedretto/vocab/> .
+@prefix bed:     <https://example.org/bedretto/terms#> .
+
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://example.org/bedretto/vocab> a owl:Ontology ;
+    dcterms:title "Bedretto vocabularies"@en ;
+    dcterms:description "SKOS concept schemes for the controlled values in Bedretto Underground Laboratory metadata. Each scheme holds the values of one property of the Bedretto ontology. Hidden labels record spellings found in the laboratory's spreadsheet exports, so that source values can be mapped to concepts."@en ;
+    dcterms:creator "Robin Franken" ;
+    dcterms:source <https://github.com/sdsc-ordes/bedretto-ontology> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:created "2026-10-05"^^xsd:date ;
+    dcterms:modified "2026-10-06"^^xsd:date ;
+    owl:versionInfo "0.3.0" ;
+    rdfs:seeAlso <https://example.org/bedretto/terms> .
+
+bedv:tunnel-section a skos:ConceptScheme ;
+    skos:prefLabel "Tunnel section"@en ;
+    dcterms:description "Named sections of the laboratory tunnel."@en .
+
+bedv:tunnel-section-main-tunnel a skos:Concept ;
+    skos:inScheme bedv:tunnel-section ;
+    skos:prefLabel "Bedretto Main Tunnel"@en ;
+    skos:altLabel "Main Tunnel"@en .
+
+bedv:tunnel-section-main-lab a skos:Concept ;
+    skos:inScheme bedv:tunnel-section ;
+    skos:prefLabel "Main Lab"@en .
+
+bedv:tunnel-section-fear-tunnel a skos:Concept ;
+    skos:inScheme bedv:tunnel-section ;
+    skos:prefLabel "FEAR tunnel"@en ;
+    skos:hiddenLabel "FEAR Tunnel"@en, "Fear Tunnel"@en .
+
+bedv:tunnel-section-fear-niche-1 a skos:Concept ;
+    skos:inScheme bedv:tunnel-section ;
+    skos:prefLabel "FEAR niche 1"@en ;
+    skos:hiddenLabel "FEAR Nische 1"@en .
+
+bedv:tunnel-section-fear-end-niche a skos:Concept ;
+    skos:inScheme bedv:tunnel-section ;
+    skos:prefLabel "FEAR end niche"@en ;
+    skos:hiddenLabel "FEAR Endnische"@en .
+
+bedv:borehole-geometry a skos:ConceptScheme ;
+    skos:prefLabel "Borehole geometry"@en ;
+    dcterms:description "Overall orientation of a borehole axis."@en .
+
+bedv:borehole-geometry-vertical a skos:Concept ;
+    skos:inScheme bedv:borehole-geometry ;
+    skos:prefLabel "Vertical"@en .
+
+bedv:borehole-geometry-horizontal a skos:Concept ;
+    skos:inScheme bedv:borehole-geometry ;
+    skos:prefLabel "Horizontal"@en .
+
+bedv:borehole-geometry-subhorizontal a skos:Concept ;
+    skos:inScheme bedv:borehole-geometry ;
+    skos:prefLabel "Subhorizontal"@en ;
+    skos:definition "Within a few degrees of horizontal."@en .
+
+bedv:borehole-geometry-inclined a skos:Concept ;
+    skos:inScheme bedv:borehole-geometry ;
+    skos:prefLabel "Inclined"@en ;
+    skos:definition "At an angle between horizontal and vertical."@en .
+
+bedv:borehole-geometry-inclined-upward a skos:Concept ;
+    skos:inScheme bedv:borehole-geometry ;
+    skos:broader bedv:borehole-geometry-inclined ;
+    skos:prefLabel "Inclined upward"@en ;
+    skos:hiddenLabel "Inclined Upward"@en ;
+    skos:definition "Inclined, rising from the collar."@en .
+
+bedv:borehole-geometry-inclined-downward a skos:Concept ;
+    skos:inScheme bedv:borehole-geometry ;
+    skos:broader bedv:borehole-geometry-inclined ;
+    skos:prefLabel "Inclined downward"@en ;
+    skos:hiddenLabel "Inclined Downward"@en ;
+    skos:definition "Inclined, descending from the collar."@en .
+
+bedv:drilling-style a skos:ConceptScheme ;
+    skos:prefLabel "Drilling style"@en ;
+    dcterms:description "Method by which a borehole was drilled."@en .
+
+bedv:drilling-style-cored a skos:Concept ;
+    skos:inScheme bedv:drilling-style ;
+    skos:prefLabel "Cored"@en ;
+    skos:definition "Drilled so as to recover a continuous rock core."@en .
+
+bedv:drilling-style-not-cored a skos:Concept ;
+    skos:inScheme bedv:drilling-style ;
+    skos:prefLabel "Not cored"@en ;
+    skos:hiddenLabel "not cored"@en ;
+    skos:definition "Destructive drilling; no core recovered."@en .
+
+bedv:drilling-style-hammer a skos:Concept ;
+    skos:inScheme bedv:drilling-style ;
+    skos:broader bedv:drilling-style-not-cored ;
+    skos:prefLabel "Hammer"@en ;
+    skos:hiddenLabel "hammer"@en ;
+    skos:definition "Percussive drilling with a hammer bit."@en .
+
+bedv:drilling-style-rotary a skos:Concept ;
+    skos:inScheme bedv:drilling-style ;
+    skos:broader bedv:drilling-style-not-cored ;
+    skos:prefLabel "Rotary"@en ;
+    skos:hiddenLabel "rotational"@en ;
+    skos:definition "Rotary drilling with a full-face bit."@en .
+
+bedv:borehole-status a skos:ConceptScheme ;
+    skos:prefLabel "Borehole status"@en ;
+    dcterms:description "Current condition of a borehole."@en .
+
+bedv:borehole-status-open a skos:Concept ;
+    skos:inScheme bedv:borehole-status ;
+    skos:prefLabel "Open"@en .
+
+bedv:borehole-status-closed a skos:Concept ;
+    skos:inScheme bedv:borehole-status ;
+    skos:prefLabel "Closed"@en .
+
+bedv:borehole-status-cemented a skos:Concept ;
+    skos:inScheme bedv:borehole-status ;
+    skos:prefLabel "Cemented"@en ;
+    skos:definition "Filled with cement, for example to grout in instruments or to seal the borehole."@en .
+
+bedv:borehole-status-locked-with-packers a skos:Concept ;
+    skos:inScheme bedv:borehole-status ;
+    skos:prefLabel "Locked with packers"@en ;
+    skos:definition "Sealed in one or more intervals by packers."@en .
+
+bedv:borehole-status-collapsed a skos:Concept ;
+    skos:inScheme bedv:borehole-status ;
+    skos:prefLabel "Collapsed"@en ;
+    skos:definition "No longer accessible because the borehole wall has caved in."@en .
+
+bedv:borehole-status-abandoned a skos:Concept ;
+    skos:inScheme bedv:borehole-status ;
+    skos:prefLabel "Abandoned"@en ;
+    skos:definition "No longer used or maintained."@en .
+
+bedv:location-type a skos:ConceptScheme ;
+    skos:prefLabel "Survey type"@en ;
+    dcterms:description "How a collar position was obtained."@en .
+
+bedv:location-type-planned a skos:Concept ;
+    skos:inScheme bedv:location-type ;
+    skos:prefLabel "Planned"@en ;
+    skos:definition "Position as designed, before drilling. Not a measurement."@en .
+
+bedv:location-type-staked-out a skos:Concept ;
+    skos:inScheme bedv:location-type ;
+    skos:prefLabel "Staked out"@en ;
+    skos:hiddenLabel "staked out"@en ;
+    skos:definition "Position surveyed in the tunnel, typically by an external survey contractor."@en .
+
+bedv:location-type-as-built a skos:Concept ;
+    skos:inScheme bedv:location-type ;
+    skos:prefLabel "As built"@en ;
+    skos:definition "Position derived after drilling, e.g. from a deviation log."@en .
+
+bedv:crs a skos:ConceptScheme ;
+    skos:prefLabel "Coordinate reference system"@en ;
+    dcterms:description "Coordinate reference systems in which collar positions are given. A standard system would be reused by its official IRI instead."@en .
+
+bedv:crs-bedretto-local-v1 a skos:Concept, bed:CoordinateReferenceSystem ;
+    skos:inScheme bedv:crs ;
+    skos:prefLabel "Bedretto tunnel local grid v1"@en ;
+    skos:definition "Placeholder for the local grid of the collar surveys. The exports do not name their coordinate system."@en .
+
+bedv:rock-class a skos:ConceptScheme ;
+    skos:prefLabel "Rock class"@en ;
+    dcterms:description "Main classes of rock by origin."@en .
+
+bedv:rock-class-igneous a skos:Concept ;
+    skos:inScheme bedv:rock-class ;
+    skos:prefLabel "Igneous"@en ;
+    skos:definition "Formed by the cooling and solidification of magma, e.g. granite."@en .
+
+bedv:rock-class-sedimentary a skos:Concept ;
+    skos:inScheme bedv:rock-class ;
+    skos:prefLabel "Sedimentary"@en ;
+    skos:definition "Formed by the deposition and lithification of sediment."@en .
+
+bedv:rock-class-metamorphic a skos:Concept ;
+    skos:inScheme bedv:rock-class ;
+    skos:prefLabel "Metamorphic"@en ;
+    skos:definition "Formed by the transformation of existing rock under heat and pressure, e.g. gneiss."@en .
+
+bedv:subsample-type a skos:ConceptScheme ;
+    skos:prefLabel "Subsample type"@en ;
+    dcterms:description "Forms of sample taken from a core."@en .
+
+bedv:subsample-type-plug a skos:Concept ;
+    skos:inScheme bedv:subsample-type ;
+    skos:prefLabel "Plug"@en ;
+    skos:definition "A cylinder of rock a few centimetres long, drilled from a core."@en .
+
+bedv:subsample-type-thin-section a skos:Concept ;
+    skos:inScheme bedv:subsample-type ;
+    skos:prefLabel "Thin section"@en ;
+    skos:definition "A slice of rock mounted on glass and ground thin enough to examine under a microscope."@en .
+
+bedv:subsample-type-trim-end a skos:Concept ;
+    skos:inScheme bedv:subsample-type ;
+    skos:prefLabel "Trim end"@en ;
+    skos:definition "The offcut left when the end of a core piece or plug is trimmed square."@en .
+
+bedv:subsample-type-powder a skos:Concept ;
+    skos:inScheme bedv:subsample-type ;
+    skos:prefLabel "Powder"@en ;
+    skos:definition "Rock crushed to powder, e.g. for chemical or mineralogical analysis."@en .
+
+bedv:rock-property a skos:ConceptScheme ;
+    skos:prefLabel "Rock property"@en ;
+    dcterms:description "Properties of rock determined by laboratory analysis."@en .
+
+bedv:rock-property-density a skos:Concept ;
+    skos:inScheme bedv:rock-property ;
+    skos:prefLabel "Density"@en ;
+    skos:definition "Mass per unit volume."@en .
+
+bedv:rock-property-porosity a skos:Concept ;
+    skos:inScheme bedv:rock-property ;
+    skos:prefLabel "Porosity"@en ;
+    skos:definition "Fraction of the rock volume that is pore space."@en .
+
+bedv:rock-property-permeability a skos:Concept ;
+    skos:inScheme bedv:rock-property ;
+    skos:prefLabel "Permeability"@en ;
+    skos:definition "Ability of the rock to transmit fluid."@en .
+
+bedv:rock-property-electrical-conductivity a skos:Concept ;
+    skos:inScheme bedv:rock-property ;
+    skos:prefLabel "Electrical conductivity"@en ;
+    skos:hiddenLabel "electric conductivity"@en ;
+    skos:definition "Ability of the rock to conduct electric current."@en .
+
+bedv:rock-property-seismic-velocity a skos:Concept ;
+    skos:inScheme bedv:rock-property ;
+    skos:prefLabel "Seismic velocity"@en ;
+    skos:altLabel "Velocity"@en ;
+    skos:definition "Speed at which P- or S-waves travel through the rock."@en .
+
+bedv:rock-property-mineralogy a skos:Concept ;
+    skos:inScheme bedv:rock-property ;
+    skos:prefLabel "Mineralogy"@en ;
+    skos:definition "Mineral composition of the rock."@en .
+
+bedv:rock-property-stress a skos:Concept ;
+    skos:inScheme bedv:rock-property ;
+    skos:prefLabel "Stress"@en ;
+    skos:definition "Force per unit area acting within the rock."@en .
+
+bedv:rock-property-strain a skos:Concept ;
+    skos:inScheme bedv:rock-property ;
+    skos:prefLabel "Strain"@en ;
+    skos:definition "Deformation of the rock relative to its original dimensions."@en .
+
+bedv:analysis-method a skos:ConceptScheme ;
+    skos:prefLabel "Analysis method"@en ;
+    dcterms:description "Laboratory methods used to analyse cores and core samples."@en .
+
+bedv:analysis-method-sem a skos:Concept ;
+    skos:inScheme bedv:analysis-method ;
+    skos:prefLabel "Scanning electron microscopy"@en ;
+    skos:altLabel "SEM"@en ;
+    skos:definition "Imaging of a sample surface with a focused electron beam."@en .
+
+bedv:analysis-method-brazilian-test a skos:Concept ;
+    skos:inScheme bedv:analysis-method ;
+    skos:prefLabel "Brazilian test"@en ;
+    skos:hiddenLabel "Brazillian Test"@en ;
+    skos:definition "Indirect tensile strength test in which a rock disc is loaded across its diameter until it splits."@en .
+
+bedv:analysis-method-ultrasonic-test a skos:Concept ;
+    skos:inScheme bedv:analysis-method ;
+    skos:prefLabel "Ultrasonic test"@en ;
+    skos:definition "Measurement of the travel time of ultrasonic pulses through a sample, giving its elastic wave velocities."@en .
+
+bedv:analysis-method-xrf a skos:Concept ;
+    skos:inScheme bedv:analysis-method ;
+    skos:prefLabel "X-ray fluorescence"@en ;
+    skos:altLabel "XRF"@en ;
+    skos:definition "Determination of elemental composition from the X-rays a sample emits when irradiated."@en .
+
+bedv:analysis-method-mscl a skos:Concept ;
+    skos:inScheme bedv:analysis-method ;
+    skos:prefLabel "Multi-sensor core logging"@en ;
+    skos:altLabel "MSCL"@en ;
+    skos:definition "Continuous measurement of physical properties, such as density and magnetic susceptibility, along a whole core."@en .
+
+bedv:logging-tool a skos:ConceptScheme ;
+    skos:prefLabel "Logging tool"@en ;
+    dcterms:description "Downhole tools used in logging runs."@en .
+
+bedv:logging-tool-atv a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Acoustic televiewer"@en ;
+    skos:altLabel "ATV"@en ;
+    skos:definition "Images the borehole wall from the travel time and amplitude of reflected ultrasound."@en .
+
+bedv:logging-tool-otv a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Optical televiewer"@en ;
+    skos:altLabel "OTV"@en ;
+    skos:definition "Images the borehole wall with a downhole camera."@en .
+
+bedv:logging-tool-dev a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Deviation tool"@en ;
+    skos:altLabel "DEV"@en ;
+    skos:definition "Measures the azimuth and inclination of the borehole along its length."@en .
+
+bedv:logging-tool-sgr a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Spectral gamma ray"@en ;
+    skos:altLabel "SGR"@en ;
+    skos:hiddenLabel "Spectral Gamma"@en ;
+    skos:definition "Measures natural gamma radiation by energy, giving the potassium, uranium and thorium content of the rock."@en .
+
+bedv:logging-tool-ftc a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Fluid temperature and conductivity"@en ;
+    skos:altLabel "FTC"@en ;
+    skos:definition "Measures the temperature and electrical conductivity of the borehole fluid."@en .
+
+bedv:logging-tool-cal a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Caliper"@en ;
+    skos:altLabel "CAL"@en ;
+    skos:definition "Measures the diameter of the borehole."@en .
+
+bedv:logging-tool-three-arm-caliper a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:broader bedv:logging-tool-cal ;
+    skos:prefLabel "Three-arm caliper"@en ;
+    skos:definition "Caliper that measures the diameter with three mechanical arms."@en .
+
+bedv:logging-tool-fws a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Full waveform sonic"@en ;
+    skos:altLabel "FWS"@en ;
+    skos:definition "Records full acoustic waveforms, giving the P- and S-wave velocities of the rock."@en .
+
+bedv:logging-tool-magnetic-susceptibility a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Magnetic susceptibility"@en ;
+    skos:definition "Measures the magnetic susceptibility of the rock around the borehole."@en .
+
+bedv:logging-tool-sidewall-density a skos:Concept ;
+    skos:inScheme bedv:logging-tool ;
+    skos:prefLabel "Sidewall density"@en ;
+    skos:definition "Measures the bulk density of the rock from scattered gamma rays, with the tool pressed against the borehole wall."@en .
+
+bedv:logging-direction a skos:ConceptScheme ;
+    skos:prefLabel "Logging direction"@en ;
+    dcterms:description "Direction in which tools moved while recording a log."@en .
+
+bedv:logging-direction-upward a skos:Concept ;
+    skos:inScheme bedv:logging-direction ;
+    skos:prefLabel "Upward"@en ;
+    skos:hiddenLabel "UP"@en ;
+    skos:definition "Recorded while the tools were pulled up the borehole."@en .
+
+bedv:logging-direction-downward a skos:Concept ;
+    skos:inScheme bedv:logging-direction ;
+    skos:prefLabel "Downward"@en ;
+    skos:hiddenLabel "DOWN"@en ;
+    skos:definition "Recorded while the tools were lowered into the borehole."@en .
+
+bedv:sensor-type a skos:ConceptScheme ;
+    skos:prefLabel "Sensor type"@en ;
+    dcterms:description "Instrument class. The top concepts group sensors by the discipline of what they measure, for data selection."@en .
+
+bedv:sensor-type-seismic a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:prefLabel "Seismic sensor"@en ;
+    skos:definition "Records ground motion or elastic waves in the rock."@en .
+
+bedv:sensor-type-seismometer a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-seismic ;
+    skos:prefLabel "Seismometer"@en ;
+    skos:hiddenLabel "Seismiometer"@en .
+
+bedv:sensor-type-geophone a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-seismic ;
+    skos:prefLabel "Geophone"@en ;
+    skos:hiddenLabel "P: Geophone"@en .
+
+bedv:sensor-type-accelerometer a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-seismic ;
+    skos:prefLabel "Accelerometer"@en ;
+    skos:hiddenLabel "N: Accelerometer"@en .
+
+bedv:sensor-type-acoustic-emission a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-seismic ;
+    skos:prefLabel "Acoustic emission sensor"@en ;
+    skos:altLabel "AE sensor"@en ;
+    skos:hiddenLabel "D: Acoustic emission sensor"@en ;
+    skos:definition "Records high-frequency elastic waves from microfracturing in the rock."@en .
+
+bedv:sensor-type-hydromechanical a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:prefLabel "Hydromechanical sensor"@en ;
+    skos:definition "Records deformation of the rock mass, including deformation driven by fluid pressure. The sensor registers file these under geomechanics or hydromechanics."@en .
+
+bedv:sensor-type-tilt-meter a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-hydromechanical ;
+    skos:prefLabel "Tilt meter"@en ;
+    skos:altLabel "Tiltmeter"@en ;
+    skos:hiddenLabel "Tilt Meter"@en ;
+    skos:definition "Records changes in the inclination of the ground or of a borehole."@en .
+
+bedv:sensor-type-strain-meter a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-hydromechanical ;
+    skos:prefLabel "Strain meter"@en ;
+    skos:altLabel "Strainmeter"@en ;
+    skos:definition "Records deformation of the rock over a fixed baseline."@en .
+
+bedv:sensor-type-hydraulic a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:prefLabel "Hydraulic sensor"@en ;
+    skos:definition "Records fluid pressure or flow in boreholes and the rock mass."@en .
+
+bedv:sensor-type-pressure-sensor a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-hydraulic ;
+    skos:prefLabel "Pressure sensor"@en .
+
+bedv:sensor-type-piezometer a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-hydraulic ;
+    skos:prefLabel "Piezometer"@en ;
+    skos:definition "Records pore-fluid pressure at a point in the rock."@en .
+
+bedv:sensor-type-flow-meter a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-hydraulic ;
+    skos:prefLabel "Flow meter"@en ;
+    skos:altLabel "Flowmeter"@en .
+
+bedv:sensor-type-fibre-optic a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:prefLabel "Fibre-optic sensor"@en ;
+    skos:definition "Uses an optical fibre to record vibration, strain or temperature, at points or continuously along the fibre."@en .
+
+bedv:sensor-type-das a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-fibre-optic ;
+    skos:prefLabel "Distributed Acoustic Sensing"@en ;
+    skos:altLabel "DAS"@en .
+
+bedv:sensor-type-dss a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-fibre-optic ;
+    skos:prefLabel "Distributed Strain Sensing"@en ;
+    skos:altLabel "DSS"@en .
+
+bedv:sensor-type-dts a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-fibre-optic ;
+    skos:prefLabel "Distributed Temperature Sensing"@en ;
+    skos:altLabel "DTS"@en .
+
+bedv:sensor-type-fbg a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-fibre-optic ;
+    skos:prefLabel "Fibre Bragg Grating"@en ;
+    skos:altLabel "FBG"@en .
+
+bedv:coupling a skos:ConceptScheme ;
+    skos:prefLabel "Sensor coupling"@en ;
+    dcterms:description "How a sensor is mechanically coupled to the rock mass."@en .
+
+bedv:coupling-sanded a skos:Concept ;
+    skos:inScheme bedv:coupling ;
+    skos:prefLabel "Sanded"@en ;
+    skos:definition "Sensor lowered into a borehole and backfilled with sand until immobile."@en .
+
+bedv:coupling-glued a skos:Concept ;
+    skos:inScheme bedv:coupling ;
+    skos:prefLabel "Glued"@en ;
+    skos:definition "Sensor bonded to the rock with adhesive."@en .
+
+bedv:coupling-cemented a skos:Concept ;
+    skos:inScheme bedv:coupling ;
+    skos:prefLabel "Cemented"@en ;
+    skos:definition "Sensor grouted into a borehole or onto the rock with cement."@en .
+
+bedv:coupling-clamped a skos:Concept ;
+    skos:inScheme bedv:coupling ;
+    skos:prefLabel "Clamped"@en ;
+    skos:hiddenLabel "Campled"@en ;
+    skos:definition "Sensor pressed against the borehole wall or the rock by a mechanical clamp."@en .
+
+bedv:coupling-free-surface a skos:Concept ;
+    skos:inScheme bedv:coupling ;
+    skos:prefLabel "Free surface"@en ;
+    skos:definition "Instrument standing on a surface without fixed coupling, e.g. a surface tilt station."@en .
+
+bedv:environment a skos:ConceptScheme ;
+    skos:prefLabel "Installation environment"@en ;
+    dcterms:description "Where in the laboratory a sensor is installed."@en .
+
+bedv:environment-borehole a skos:Concept ;
+    skos:inScheme bedv:environment ;
+    skos:prefLabel "Borehole"@en .
+
+bedv:environment-tunnel-wall a skos:Concept ;
+    skos:inScheme bedv:environment ;
+    skos:prefLabel "Tunnel wall"@en .
+
+bedv:environment-tunnel-surface a skos:Concept ;
+    skos:inScheme bedv:environment ;
+    skos:prefLabel "Tunnel surface"@en .
+
+bedv:environment-tunnel-trench a skos:Concept ;
+    skos:inScheme bedv:environment ;
+    skos:prefLabel "Tunnel trench"@en .
+
+bedv:sensor-status a skos:ConceptScheme ;
+    skos:prefLabel "Sensor status"@en ;
+    dcterms:description "Operational state of a deployed sensor."@en .
+
+bedv:sensor-status-planned a skos:Concept ;
+    skos:inScheme bedv:sensor-status ;
+    skos:prefLabel "Planned"@en ;
+    skos:definition "Installation planned but not yet done."@en .
+
+bedv:sensor-status-functioning a skos:Concept ;
+    skos:inScheme bedv:sensor-status ;
+    skos:prefLabel "Functioning"@en .
+
+bedv:sensor-status-failed a skos:Concept ;
+    skos:inScheme bedv:sensor-status ;
+    skos:prefLabel "Failed"@en .
+
+bedv:sensor-status-removed a skos:Concept ;
+    skos:inScheme bedv:sensor-status ;
+    skos:prefLabel "Removed"@en .

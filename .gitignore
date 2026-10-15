@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+
+out/
+
+.direnv/
+
+drive-files/
+
+openbis/.env

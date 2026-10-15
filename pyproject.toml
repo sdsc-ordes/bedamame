@@ -1,0 +1,18 @@
+[project]
+name = "bedamame"
+version = "0.1.0"
+description = "Example metadata store for the Bedretto Underground Laboratory"
+authors = [{ name = "Robin Franken", email = "robin.franken@epfl.ch" }]
+readme = "README.md"
+requires-python = ">=3.13"
+
+dependencies = [
+    "rdflib==7.6.0",
+    "pyshacl==0.40.1",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.1.0",
+    "roc-validator==0.12.2",
+]

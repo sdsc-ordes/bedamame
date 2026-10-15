@@ -1,0 +1,389 @@
+@prefix bed:     <https://example.org/bedretto/terms#> .
+
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+
+@prefix sosa:    <http://www.w3.org/ns/sosa/> .
+@prefix ssn:     <http://www.w3.org/ns/ssn/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix geo:     <http://www.opengis.net/ont/geosparql#> .
+
+<https://example.org/bedretto/terms> a owl:Ontology ;
+    dcterms:title "Bedretto ontology"@en ;
+    dcterms:description "Classes and properties for the metadata of the Bedretto Underground Laboratory for Geosciences and Geoenergies: boreholes and their collar surveys, cores and core samples, downhole logging, sensors and their deployments, and experiments. Terms align to SOSA/SSN, PROV-O, GeoSPARQL, OWL-Time and QUDT. Controlled values are SKOS concepts in the Bedretto vocabularies; which properties a class takes, and how often, is set by the Bedretto shapes."@en ;
+    dcterms:creator "Robin Franken" ;
+    dcterms:source <https://github.com/sdsc-ordes/bedretto-ontology> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:created "2026-10-05"^^xsd:date ;
+    dcterms:modified "2026-10-06"^^xsd:date ;
+    owl:versionInfo "0.3.0" ;
+    vann:preferredNamespacePrefix "bed" ;
+    vann:preferredNamespaceUri "https://example.org/bedretto/terms#" ;
+    rdfs:seeAlso <https://example.org/bedretto/vocab>, <https://example.org/bedretto/shapes> .
+
+# Laboratory context
+
+bed:TestBed a rdfs:Class, owl:Class ;
+    rdfs:label "Test bed"@en ;
+    skos:definition "A platform for testing, experimentation and validation within the laboratory, comprising boreholes, instruments and other infrastructure."@en ;
+    skos:example "Earthquake Physics", "Geothermal" .
+
+bed:hasTestBed a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "has test bed"@en ;
+    skos:definition "The test bed that a borehole or experiment belongs to."@en .
+
+bed:project a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "project"@en ;
+    skos:definition "The research project under which something was drilled, installed or carried out."@en ;
+    skos:example "FEAR" .
+
+bed:purpose a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "purpose"@en ;
+    skos:definition "Why something was drilled, installed or sampled, in free text."@en ;
+    skos:example "Preliminary AE monitoring" .
+
+bed:nickname a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "nickname"@en ;
+    skos:definition "An informal name in local use, alongside the official name."@en ;
+    skos:example "PrelimAE" .
+
+bed:fdsnCode a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "FDSN code"@en ;
+    skos:definition "The station code under which a borehole or sensor location is registered with the International Federation of Digital Seismograph Networks."@en ;
+    skos:example "F01" .
+
+bed:fdsnNetwork a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "FDSN network code"@en ;
+    skos:definition "The code of the FDSN network that a station reports to."@en .
+
+bed:tunnelSection a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "tunnel section"@en ;
+    skos:definition "The section of the tunnel in which something is located, as a concept from the tunnel section scheme."@en .
+
+bed:tunnelMeter a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "tunnel meter"@en ;
+    skos:definition "Position along the tunnel, as a tunnel meter mark."@en ;
+    skos:example "TM2611" .
+
+# Boreholes
+
+bed:Borehole a rdfs:Class, owl:Class ;
+    rdfs:label "Borehole"@en ;
+    skos:definition "A narrow shaft drilled into the ground or rock mass; at Bedretto, mostly drilled from the tunnel."@en ;
+    rdfs:subClassOf geo:Feature .
+
+bed:ofBorehole a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "of borehole"@en ;
+    skos:definition "The borehole that a collar survey describes or a core was drilled from."@en .
+
+bed:boreholeGeometry a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "borehole geometry"@en ;
+    skos:definition "The overall orientation of the borehole axis, as a concept from the borehole geometry scheme."@en .
+
+bed:drillingStyle a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "drilling style"@en ;
+    skos:definition "The method by which a borehole was drilled, as a concept from the drilling style scheme."@en .
+
+bed:boreholeDiameter a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "borehole diameter"@en ;
+    skos:definition "The diameter of the borehole, usually that of the drill bit, as a quantity value."@en .
+
+bed:totalLength a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "total length"@en ;
+    skos:definition "The length of the borehole along its axis, from the collar to the end, as a quantity value."@en .
+
+bed:drilledBetween a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "drilled between"@en ;
+    skos:definition "The time interval from the start to the end of drilling."@en .
+
+bed:boreholeStatus a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "borehole status"@en ;
+    skos:definition "The current condition of the borehole, as a concept from the borehole status scheme."@en .
+
+# Collar surveys
+
+bed:CollarSurvey a rdfs:Class, owl:Class ;
+    rdfs:label "Collar survey"@en ;
+    skos:definition "A record of the position and orientation of a borehole collar, the point where the borehole leaves the tunnel wall or ground surface. The position may be planned, staked out or derived after drilling."@en ;
+    rdfs:subClassOf geo:Feature .
+
+bed:CoordinateReferenceSystem a rdfs:Class, owl:Class ;
+    rdfs:label "Coordinate reference system"@en ;
+    skos:definition "A system in which eastings, northings and elevations are expressed, such as a local tunnel grid. The systems in use are concepts in the coordinate reference system scheme."@en .
+
+bed:surveyType a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "survey type"@en ;
+    skos:definition "How a collar position was obtained, as a concept from the survey type scheme."@en .
+
+bed:coordinateSystem a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "coordinate system"@en ;
+    skos:definition "The coordinate reference system in which easting, northing and elevation are given, as a concept from the coordinate reference system scheme."@en .
+
+bed:easting a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "easting"@en ;
+    skos:definition "The easting of a point in its coordinate reference system, in metres."@en .
+
+bed:northing a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "northing"@en ;
+    skos:definition "The northing of a point in its coordinate reference system, in metres."@en .
+
+bed:elevation a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "elevation"@en ;
+    skos:definition "The height of a point above the datum of its coordinate reference system, in metres."@en .
+
+bed:azimuth a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "azimuth"@en ;
+    skos:definition "The horizontal direction of the borehole axis at the collar, measured clockwise from north, as a quantity value."@en .
+
+bed:azimuthReference a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "azimuth reference"@en ;
+    skos:definition "The north from which azimuth is measured."@en ;
+    skos:example "grid north" .
+
+bed:dip a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "dip"@en ;
+    skos:definition "The inclination of the borehole axis from the horizontal at the collar, signed as stated by the dip convention, as a quantity value."@en .
+
+bed:dipConvention a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "dip convention"@en ;
+    skos:definition "How the sign of a dip is to be read."@en ;
+    skos:example "negative downward; positive upward" .
+
+# Cores and samples
+
+bed:Core a rdfs:Class, owl:Class ;
+    rdfs:label "Core"@en ;
+    skos:definition "A continuous, cylindrical piece of rock recovered by a coring bit between two depths along a borehole."@en ;
+    rdfs:subClassOf sosa:Sample .
+
+bed:CoreLog a rdfs:Class, owl:Class ;
+    rdfs:label "Core log"@en ;
+    skos:definition "A geological description of a core, or of an interval of it, covering rock class, rock type and fabric."@en ;
+    rdfs:subClassOf prov:Entity .
+
+bed:CoreSample a rdfs:Class, owl:Class ;
+    rdfs:label "Core sample"@en ;
+    skos:definition "A piece taken from a core for laboratory testing and analysis, such as a plug a few centimetres long, a thin section, a trim end or powder."@en ;
+    rdfs:subClassOf sosa:Sample .
+
+bed:LabAnalysis a rdfs:Class, owl:Class ;
+    rdfs:label "Laboratory analysis"@en ;
+    skos:definition "A laboratory test or analysis of a core or core sample that determines one property, such as porosity or permeability."@en ;
+    rdfs:subClassOf sosa:Observation .
+
+bed:topDepth a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "top depth"@en ;
+    skos:definition "The measured depth along the borehole, from the collar, of the top of a core, core interval or sample, as a quantity value."@en .
+
+bed:bottomDepth a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "bottom depth"@en ;
+    skos:definition "The measured depth along the borehole, from the collar, of the bottom of a core, core interval or sample, as a quantity value."@en .
+
+bed:coreDiameter a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "core diameter"@en ;
+    skos:definition "The diameter of a core, as a quantity value."@en .
+
+bed:mass a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "mass"@en ;
+    skos:definition "The mass of a core or sample, recorded in the core registers as its weight, as a quantity value."@en .
+
+bed:chargeNumber a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "charge number"@en ;
+    skos:definition "The charge, or batch, number under which a core is registered."@en ;
+    skos:example "4697" .
+
+bed:storageLocation a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "storage location"@en ;
+    skos:definition "Where a core or sample is stored, such as a repository and a shelf position in it."@en ;
+    skos:example "B5A3" .
+
+bed:ofCore a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "of core"@en ;
+    skos:definition "The core that a core log describes."@en .
+
+bed:rockClass a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "rock class"@en ;
+    skos:definition "The main class of a rock by its origin, as a concept from the rock class scheme."@en .
+
+bed:rockType a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "rock type"@en ;
+    skos:definition "The name of a rock as identified in a geological description."@en ;
+    skos:example "granite", "gneiss" .
+
+bed:colour a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "colour"@en ;
+    skos:definition "The colour of a rock as described."@en .
+
+bed:texture a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "texture"@en ;
+    skos:definition "The texture of a rock as described: the size, shape and arrangement of its grains."@en .
+
+bed:grainSize a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "grain size"@en ;
+    skos:definition "The grain size of a rock as described."@en .
+
+bed:geologicalUnit a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "geological unit"@en ;
+    skos:definition "The geological unit or formation to which a rock belongs."@en ;
+    skos:example "Rotondo granite" .
+
+bed:subsampleType a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "subsample type"@en ;
+    skos:definition "The form of a core sample, as a concept from the subsample type scheme."@en .
+
+bed:requestedBy a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "requested by"@en ;
+    skos:definition "The person or laboratory that requested a sample."@en .
+
+# Downhole logging
+
+bed:LoggingRun a rdfs:Class, owl:Class ;
+    rdfs:label "Downhole logging run"@en ;
+    skos:definition "One pass of one or more downhole tools through a borehole, recording physical properties of the borehole and the surrounding rock."@en ;
+    rdfs:subClassOf prov:Activity .
+
+bed:loggedBorehole a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "logged borehole"@en ;
+    skos:definition "The borehole in which a logging run took place."@en .
+
+bed:tool a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "tool"@en ;
+    skos:definition "A downhole tool used in a logging run, as a concept from the logging tool scheme."@en .
+
+bed:loggingDirection a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "logging direction"@en ;
+    skos:definition "Whether the tools recorded while being lowered or raised, as a concept from the logging direction scheme."@en .
+
+bed:centralised a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "centralised"@en ;
+    skos:definition "Whether the tool was held at the centre of the borehole during logging."@en .
+
+bed:samplingInterval a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "sampling interval"@en ;
+    skos:definition "The depth or time between consecutive measurements of a log, as a quantity value."@en .
+
+bed:magneticInclination a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "magnetic inclination"@en ;
+    skos:definition "The inclination of the Earth's magnetic field at the site at the time of logging, used to orient the log, as a quantity value."@en .
+
+bed:magneticDeclination a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "magnetic declination"@en ;
+    skos:definition "The declination of the Earth's magnetic field at the site at the time of logging, used to orient the log, as a quantity value."@en .
+
+# Sensors and deployments
+
+bed:FibreOpticConfiguration a rdfs:Class, owl:Class ;
+    rdfs:label "Fibre-optic configuration"@en ;
+    skos:definition "A deployment of a fibre-optic cable for distributed or point sensing, in a borehole or along the tunnel."@en ;
+    rdfs:subClassOf ssn:Deployment .
+
+bed:sensorKind a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "sensor kind"@en ;
+    skos:definition "The kind of instrument a sensor is, as a concept from the sensor type scheme."@en .
+
+bed:serialNumber a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "serial number"@en ;
+    skos:definition "The serial number assigned by the manufacturer."@en ;
+    skos:example "LY1123" .
+
+bed:inventoryLabel a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "inventory label"@en ;
+    skos:definition "A label under which an instrument is kept in the laboratory inventory. An instrument may have been relabelled."@en ;
+    skos:example "tilt01" .
+
+bed:domain a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "domain"@en ;
+    skos:definition "The discipline under which a register files an instrument, as recorded there."@en ;
+    skos:example "Geomechanics" .
+
+bed:measuredDepth a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "measured depth"@en ;
+    skos:definition "The depth along the borehole, counted from the depth datum, at which a sensor is installed, as a quantity value."@en .
+
+bed:depthDatum a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "depth datum"@en ;
+    skos:definition "The point from which a measured depth is counted."@en ;
+    skos:example "borehole collar" .
+
+bed:coupling a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "coupling"@en ;
+    skos:definition "How a deployed sensor is mechanically coupled to the rock, as a concept from the coupling scheme."@en .
+
+bed:environment a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "installation environment"@en ;
+    skos:definition "Where a sensor is installed, as a concept from the installation environment scheme."@en .
+
+bed:cableLength a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "cable length"@en ;
+    skos:definition "The length of the cable connecting a deployed sensor to its acquisition system, as a quantity value."@en .
+
+bed:sensorStatus a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "sensor status"@en ;
+    skos:definition "The operational state of a deployed sensor, as a concept from the sensor status scheme."@en .
+
+bed:deploymentPosition a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "deployment position"@en ;
+    skos:definition "The computed position of a deployed sensor."@en .
+
+bed:servesExperiment a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "serves experiment"@en ;
+    skos:definition "The experiment that a deployment provides data for."@en .
+
+bed:fromDeployment a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "from deployment"@en ;
+    skos:definition "The deployment that a dataset or observation comes from."@en .
+
+# Experiments
+
+bed:Experiment a rdfs:Class, owl:Class ;
+    rdfs:label "Experiment"@en ;
+    skos:definition "A scientific experiment conducted at the laboratory, with its deployments, injection protocol and logbook."@en ;
+    skos:example "FEAR-2" ;
+    rdfs:subClassOf prov:Activity .
+
+bed:ExperimentStage a rdfs:Class, owl:Class ;
+    rdfs:label "Experiment stage"@en ;
+    skos:definition "A phase of an experiment with its own start and end."@en ;
+    rdfs:subClassOf prov:Activity .
+
+bed:InjectionProtocol a rdfs:Class, owl:Class ;
+    rdfs:label "Injection protocol"@en ;
+    skos:definition "The planned sequence of fluid injection steps for an experiment, in a given borehole and interval."@en ;
+    rdfs:subClassOf sosa:Procedure .
+
+bed:InjectionStep a rdfs:Class, owl:Class ;
+    rdfs:label "Injection step"@en ;
+    skos:definition "One step of an injection protocol as carried out, between a start and an end time."@en ;
+    rdfs:subClassOf prov:Activity .
+
+bed:LogbookEntry a rdfs:Class, owl:Class ;
+    rdfs:label "Logbook entry"@en ;
+    skos:definition "An entry in an experiment logbook, recording what was observed or done at a given time."@en ;
+    rdfs:subClassOf prov:Entity .
+
+bed:followsProtocol a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "follows protocol"@en ;
+    skos:definition "The injection protocol that an experiment or stage follows."@en .
+
+bed:injectionInterval a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "injection interval"@en ;
+    skos:definition "The borehole interval in which fluid is injected, as recorded in the protocol."@en .
+
+bed:observation a rdf:Property, owl:DatatypeProperty ;
+    rdfs:label "observation"@en ;
+    skos:definition "What was observed, as written in a logbook entry."@en .
+
+# Provenance
+
+bed:supersedes a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "supersedes"@en ;
+    skos:definition "A named graph whose assertions this graph corrects."@en .
+
+bed:builtFromGraph a rdf:Property, owl:ObjectProperty ;
+    rdfs:label "built from graph"@en ;
+    skos:definition "A named graph of the store from which an exported crate was built."@en .
