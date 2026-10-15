@@ -335,7 +335,7 @@ bed:loggingDirection a rdf:Property, owl:ObjectProperty ;
 
 bed:operatedBy a rdf:Property, owl:ObjectProperty ;
     rdfs:label "operated by"@en ;
-    skos:definition "A person or organisation that ran the tools during a logging run."@en ;
+    skos:definition "A person or organisation that operated the equipment: the tools of a logging run, or the drill that produced a core."@en ;
     rdfs:subPropertyOf prov:wasAssociatedWith .
 
 bed:fileFormat a rdf:Property, owl:DatatypeProperty ;

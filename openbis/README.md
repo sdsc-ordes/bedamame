@@ -8,6 +8,8 @@ A local copy of openBIS for rehearsing master-data changes before the collaborat
 just openbis-up            # https://local.openbis.ch, first start takes a few minutes
 just openbis-masterdata    # the lab's 12 object types, cleaned for 7.0
 just openbis-seed          # boreholes, sensors, installations, stubs
+just openbis-changes       # rehearse the master-data changes 01-07
+just openbis-annotate      # annotate from mapping/ and check
 just openbis-reset         # drop everything (volumes included)
 ```
 
@@ -44,16 +46,17 @@ Observed while importing:
 
 ## Annotations
 
-`just openbis-annotate` does what the collaborator will do in production: a fresh master-data export of the 12 types (`scripts/openbis_api.py --masterdata`), annotated from `mapping/openbis-annotations.csv` (`scripts/annotate_masterdata.py`), imported with "Update if exists", then checked against the mapping (`--check`, read-only). `out/openbis/annotated/` holds the zip to import and `annotations-changes.md`, the note for the collaborator.
+`just openbis-annotate` does what the collaborator will do in production: a fresh master-data export of the Bedretto types, including those changes 01–07 add (`scripts/openbis_api.py --masterdata`), annotated from `mapping/openbis-annotations.csv` (`scripts/annotate_masterdata.py`), imported with "Update if exists", then checked against the mapping (`--check`, read-only). `out/openbis/annotated/` holds the zip to import and `annotations-changes.md`, the note for the collaborator.
 
 What the 7.0 import does with the three ontology columns (tested locally):
 
 - On a type row they annotate the type; on a property row they annotate the **assignment**, even for a property only one type uses. The Excel import never annotates a property type, so the mapping has type and assignment rows only.
 - It fills the `predicate*` fields (Ontology Id, Version, Annotation Id), as the admin UI form and 7.0's own annotations do; `descriptor*` stay empty.
 - It only adds. Importing the same annotation again changes nothing; a different version or term adds a second annotation next to the first; clearing the cells removes nothing. The export lists every annotation of an item, one per line, so the generator reports unwanted ones for removal by hand in the admin UI.
+- It cannot annotate any field of the built-in PERSON and ORGANIZATION types, not even one a change added: admin gets "Internal property assignments can be managed only by the system user". V3 `createSemanticAnnotations` works as admin, so the note lists those annotations for the collaborator to add in the admin UI, and `--import` creates them through V3 locally.
 - A validation script `X.py` becomes plugin `TYPE.X`, and the export writes `TYPE.X.py`, so re-importing an export unchanged adds a plugin `TYPE.TYPE.X` each time. The generator drops one `TYPE.` prefix so the existing plugin is kept.
 
-Ontology Id and Version per prefix are in `scripts/config.py` (`ANNOTATION_SOURCES`). Because imports only add, a new ontology version gives every Bedretto item a second annotation that someone has to remove by hand; decide before the first production import whether the version should be part of the annotation.
+Ontology Id and Version per prefix are in `scripts/config.py` (`ANNOTATION_SOURCES`). The generator counts an annotation with the same term IRI as present, whatever its Ontology Id and Version, and leaves it as it is: 7.0's own PERSON annotations use `https://schema.org` without the slash. So a new ontology version adds no second annotation, but annotations keep the version they were made with. Decide before the first production import whether the version should be part of the annotation.
 
 ## Seed
 
@@ -64,6 +67,34 @@ Ontology Id and Version per prefix are in `scripts/config.py` (`ANNOTATION_SOURC
 - Stubs for what the exports reference but do not contain: SEIS_SENSOR GS100-600-01/02 (serials from the installs), DEVICE DEV8–DEV11 (the tilt meters' computers), SENSORS LY1066.
 
 The collection for boreholes is a stand-in, `/INFRASTRUCTURE/BOREHOLES/BOREHOLES`, until the collaborator gives the real one. The importer accepts vocabulary labels and stores term codes ("Sanded" becomes `SANDED-IN`).
+
+## Master-data changes
+
+`just openbis-changes` rehearses the seven changes in order. For each, it exports the master data of the Bedretto types and their objects, builds the change from that export, and imports it with "Update if exists". `out/openbis/changes/` then holds the file to import (`NN-name.xlsx`, or a zip when it carries validation scripts) and `NN-name.md`, the note for the collaborator. `out/openbis/review/` holds the review sheets, which contain names.
+
+For production, the collaborator's exports go in instead: `uv run scripts/openbis_changes.py 01 --masterdata DIR/object-types.xlsx --objects OBJECTS.xlsx`. `--annotate` also fills the ontology columns of new types and fields; leave it out until the final domain is set.
+
+| Change | What it does |
+|---|---|
+| `01-people` | PERSON gets Email and Affiliation. Free-text name fields become PERSON (or ORGANIZATION) objects, linked through DEPLOYED_BY, REMOVED_BY, OPERATED_BY, REQUESTED_BY and RESPONSIBLE. |
+| `02-testbeds` | The TESTBED vocabulary becomes TESTBED objects; boreholes link to them through TEST_BED. |
+| `03-borehole-mouth-surveys` | BOREHOLE_MOUTH_SURVEY type and the SURVEY_TYPE and COORDINATE_SYSTEM vocabularies; one survey per row of `borehole_mouth_coord.csv`, compared with the position fields on BOREHOLES. |
+| `04-sensor-positions` | SENSOR_POSITION type, linked to the installation; installations with coordinates get one (none locally). |
+| `05-object-links` | BOREHOLE and SENSOR links on installations, logging runs and cores, from the parents or from the borehole name and serial number. |
+| `06-vocabularies` | Free-text and yes/no fields become vocabulary fields (`*_TERM`, INSTALLATION_ENVIRONMENT), with vocabularies made from `ontology/bedretto/bedretto-vocab.ttl`. |
+| `07-core-validation` | CORES's validation script checks top ≤ bottom depth instead of dates CORES does not have. |
+
+New fields get new codes; the old fields stay until the collaborator retires them. New vocabulary terms are added to `mapping/openbis-terms.csv`.
+
+What the 7.0 import does (tested locally):
+
+- An import is all or nothing: one bad value and nothing is imported.
+- A type section may list only the new property rows; existing assignments are kept. The built-in PERSON accepts new assignments.
+- Listing only the new terms of an existing vocabulary adds them.
+- An object update changes only the columns in the sheet, and empty cells change nothing.
+- Multi-valued object links take identifiers separated by newlines. Multi-valued vocabulary fields take term codes separated by **commas**; with newlines the whole value is read as one code.
+- A type row copied from an export names its validation script, so the change has to carry that script (`05-object-links` is a zip because of CORES). A new script `X.py` becomes plugin `TYPE.X`; the old plugin stays.
+- Object exports write vocabulary values as labels and booleans as `true`/`false`.
 
 ## API
 

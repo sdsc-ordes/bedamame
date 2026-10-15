@@ -11,7 +11,8 @@ import openbis_workbook as wb
 import validate as v
 
 ROOT = Path(__file__).resolve().parent.parent
-# a fresh master-data export of the 12 types from the local openBIS 7.0, before annotation
+# a fresh master-data export of the Bedretto types from the local openBIS 7.0, after changes 01-07 and
+# before annotation
 MASTERDATA = ROOT / "tests" / "fixtures" / "openbis-masterdata.xlsx"
 MAPPING = ROOT / "mapping"
 # standard vocabularies whose terms are used as they are
@@ -56,7 +57,7 @@ def bedretto_types(sections: list[wb.Section]) -> list[wb.Section]:
     return [
         s
         for s in sections
-        if s.kind == "SAMPLE_TYPE" and s.code in config.BEDRETTO_TYPES
+        if s.kind == "SAMPLE_TYPE" and s.code in config.ANNOTATED_TYPES
     ]
 
 
@@ -156,7 +157,9 @@ def test_annotating_changes_only_the_ontology_columns(tmp_path):
     types, items = am.annotate(wb.read(MASTERDATA), am.load_mapping())
     wb.write(types, tmp_path / "masterdata.xlsx")
     after = {s.code: s for s in wb.read(tmp_path / "masterdata.xlsx")}
-    before = {s.code: s for s in bedretto_types(wb.read(MASTERDATA))}
+    before = {
+        s.code: s for s in bedretto_types(wb.read(MASTERDATA)) if not am.internal(s)
+    }
     assert after.keys() == before.keys()
 
     def cell(table, row, header):
@@ -170,5 +173,9 @@ def test_annotating_changes_only_the_ontology_columns(tmp_path):
                 for h in set(tb.header) | set(ta.header):
                     if h not in am.COLUMNS:
                         assert cell(tb, rb, h) == cell(ta, ra, h), (code, h)
-    added = [i for i in items if i["status"] == "add"]
-    assert len(added) == sum(1 for r in rows("openbis-annotations.csv") if r["term"])
+    # openBIS 7.0 ships PERSON and ORGANIZATION with some annotations; the rest are added by hand
+    mapped = [i for i in items if i["mapping"]["term"]]
+    assert len(mapped) == sum(1 for r in rows("openbis-annotations.csv") if r["term"])
+    assert {i["status"] for i in mapped} <= {"add", "present", "by hand"}
+    builtin = {i["type"] for i in mapped if i["status"] in ("present", "by hand")}
+    assert builtin <= {"PERSON", "ORGANIZATION"}

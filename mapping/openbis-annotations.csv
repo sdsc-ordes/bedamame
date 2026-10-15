@@ -7,7 +7,7 @@ assignment,BOREHOLES,BOREHOLE_PURPOSE,bed:purpose,bed,,,
 assignment,BOREHOLES,BOREHOLE_CODE,bed:fdsnCode,bed,,,
 assignment,BOREHOLES,PROJECT,bed:project,bed,,,
 assignment,BOREHOLES,TESTBED,,skip,,,replaced by a link to TESTBED objects in change 02-testbeds
-assignment,BOREHOLES,TUNNEL_SECTION,bed:tunnelSection,bed,,bedv:tunnel-section,"free text, matched to concept labels"
+assignment,BOREHOLES,TUNNEL_SECTION,,skip,,,free text; replaced by the vocabulary field TUNNEL_SECTION_TERM in change 06-vocabularies
 assignment,BOREHOLES,LOCATION_TM,bed:tunnelMeter,bed,,,a number; written as TM followed by the number
 assignment,BOREHOLES,BOREHOLE_MOUTH_E,,skip,,,superseded by BOREHOLE_MOUTH_SURVEY objects (change 03-borehole-mouth-surveys)
 assignment,BOREHOLES,BOREHOLE_MOUTH_N,,skip,,,superseded by BOREHOLE_MOUTH_SURVEY objects (change 03-borehole-mouth-surveys)
@@ -15,23 +15,28 @@ assignment,BOREHOLES,BOREHOLE_MOUTH_H,,skip,,,superseded by BOREHOLE_MOUTH_SURVE
 assignment,BOREHOLES,AZIMUTH,,skip,,,superseded by BOREHOLE_MOUTH_SURVEY objects (change 03-borehole-mouth-surveys)
 assignment,BOREHOLES,BOREHOLE_DIP,,skip,,,superseded by BOREHOLE_MOUTH_SURVEY objects (change 03-borehole-mouth-surveys)
 assignment,BOREHOLES,COORDSYS,,skip,,,superseded by BOREHOLE_MOUTH_SURVEY objects (change 03-borehole-mouth-surveys)
-assignment,BOREHOLES,BOREHOLE_GEOMETRY,bed:boreholeGeometry,bed,,bedv:borehole-geometry,"free text, matched to concept labels"
+assignment,BOREHOLES,BOREHOLE_GEOMETRY,,skip,,,free text; replaced by the vocabulary field BOREHOLE_GEOMETRY_TERM in change 06-vocabularies
 assignment,BOREHOLES,BOREHOLE_DIAMETER,bed:boreholeDiameter,bed,unit:MilliM,,
 assignment,BOREHOLES,BOREHOLE_LENGTH,bed:totalLength,bed,unit:M,,
-assignment,BOREHOLES,DRILLSTYLE,bed:drillingStyle,bed,,bedv:drilling-style,"free text, matched to concept labels"
+assignment,BOREHOLES,DRILLSTYLE,,skip,,,free text; replaced by the vocabulary field DRILLSTYLE_TERM in change 06-vocabularies
 assignment,BOREHOLES,CORE_DIAMETER,bed:coreDiameter,bed,unit:MilliM,,
 assignment,BOREHOLES,CORE_LENGTH,bed:coreLength,bed,unit:M,,
 assignment,BOREHOLES,DRILLING_START,bed:drillingStart,bed,,,
 assignment,BOREHOLES,DRILLING_PERIOD,bed:drillingEnd,bed,,,"free text, YYYY-MM-DD"
-assignment,BOREHOLES,BOREHOLE_COMPLETION,bed:boreholeStatus,bed,,bedv:borehole-status,"free text, matched to concept labels"
+assignment,BOREHOLES,BOREHOLE_COMPLETION,,skip,,,free text; replaced by the vocabulary field BOREHOLE_COMPLETION_TERM in change 06-vocabularies
 assignment,BOREHOLES,NOTES,rdfs:comment,standard,,,
+assignment,BOREHOLES,TUNNEL_SECTION_TERM,bed:tunnelSection,bed,,bedv:tunnel-section,
+assignment,BOREHOLES,BOREHOLE_GEOMETRY_TERM,bed:boreholeGeometry,bed,,bedv:borehole-geometry,
+assignment,BOREHOLES,DRILLSTYLE_TERM,bed:drillingStyle,bed,,bedv:drilling-style,
+assignment,BOREHOLES,BOREHOLE_COMPLETION_TERM,bed:boreholeStatus,bed,,bedv:borehole-status,
+assignment,BOREHOLES,TEST_BED,bed:hasTestBed,bed,,,link to TESTBED; replaces TESTBED (change 02-testbeds)
 type,BOREHOLE_LOGGING,,bed:LoggingRun,bed,,,
 assignment,BOREHOLE_LOGGING,BOREHOLE_NAME,,skip,,,text reference; replaced by a borehole link in change 05-object-links
 assignment,BOREHOLE_LOGGING,NAME,schema:name,standard,,,openBIS internal field; the lab uses it for the file name
 assignment,BOREHOLE_LOGGING,START_DATE,bed:startDate,bed,,,
 assignment,BOREHOLE_LOGGING,END_DATE,bed:endDate,bed,,,
 assignment,BOREHOLE_LOGGING,OPERATOR,,skip,,,free-text names; replaced by a link to PERSON objects (OPERATED_BY) in change 01-people
-assignment,BOREHOLE_LOGGING,TOOL,bed:tool,bed,,bedv:logging-tool,"free text, comma-separated abbreviations matched to concept labels"
+assignment,BOREHOLE_LOGGING,TOOL,,skip,,,free text; replaced by the vocabulary field TOOL_TERM in change 06-vocabularies
 assignment,BOREHOLE_LOGGING,INSTITUTION,,skip,,,free-text organisation; see change 01-people
 assignment,BOREHOLE_LOGGING,LOGGING_DIRECTION,bed:loggingDirection,bed,,bedv:logging-direction,
 assignment,BOREHOLE_LOGGING,FILE_FORMAT,bed:fileFormat,bed,,,comma-separated
@@ -42,6 +47,9 @@ assignment,BOREHOLE_LOGGING,CENTRALIZED,bed:centralised,bed,,,
 assignment,BOREHOLE_LOGGING,MAGNETIC_INCLINATION,bed:magneticInclination,bed,unit:DEG,,
 assignment,BOREHOLE_LOGGING,MAGNETIC_DECLINATION,bed:magneticDeclination,bed,unit:DEG,,
 assignment,BOREHOLE_LOGGING,NOTES,rdfs:comment,standard,,,
+assignment,BOREHOLE_LOGGING,TOOL_TERM,bed:tool,bed,,bedv:logging-tool,
+assignment,BOREHOLE_LOGGING,OPERATED_BY,bed:operatedBy,bed,,,links to PERSON; replaces OPERATOR (change 01-people)
+assignment,BOREHOLE_LOGGING,BOREHOLE,bed:loggedBorehole,bed,,,link to BOREHOLES; replaces BOREHOLE_NAME (change 05-object-links)
 type,CORES,,bed:Core,bed,,,
 assignment,CORES,CORES.SAMPLE_ORIGIN,,skip,,,not modelled
 assignment,CORES,EXPERIMENT,,skip,,,free text
@@ -57,6 +65,7 @@ assignment,CORES,CORES.CHARGE_NUMBER,bed:chargeNumber,bed,,,
 assignment,CORES,CORES.LOCATION,,skip,,,the building; the storage position says where in it
 assignment,CORES,CORES.STORAGE_POSITION,bed:storageLocation,bed,,,the term label
 assignment,CORES,CORES.REGISTRATION_DATE,bed:storedOn,bed,,,
+assignment,CORES,BOREHOLE,bed:ofBorehole,bed,,,link to BOREHOLES; replaces CORES.BOREHOLE (change 05-object-links)
 type,CORE_REQUEST,,bed:CoreRequest,bed,,,
 assignment,CORE_REQUEST,REQUESTER,,skip,,,free-text names; replaced by a link to PERSON objects (REQUESTED_BY) in change 01-people
 assignment,CORE_REQUEST,START_DATE,bed:startDate,bed,,,
@@ -64,6 +73,7 @@ assignment,CORE_REQUEST,END_DATE,bed:endDate,bed,,,
 assignment,CORE_REQUEST,CORE_REQUEST_PURPOSE,bed:purpose,bed,,,
 assignment,CORE_REQUEST,CORE_DESTROYED,bed:sampleDestroyed,bed,,,
 assignment,CORE_REQUEST,CORE_DEVELUTION,bed:returnedToStorage,bed,,,
+assignment,CORE_REQUEST,REQUESTED_BY,bed:requestedBy,bed,,,links to PERSON; replaces REQUESTER (change 01-people)
 type,DATALOGGER,,bed:DataLogger,bed,,,
 assignment,DATALOGGER,SEIS_DIGITIZER_CODE,,skip,,,a name from a list of Greek letters; not modelled
 assignment,DATALOGGER,DATALOGGER,schema:model,standard,,,the term label
@@ -87,6 +97,7 @@ assignment,DEVICE,MAC_ADDRESS,,skip,,,IT inventory; not modelled
 assignment,DEVICE,IP_ADDRESS,,skip,,,IT inventory; not modelled
 assignment,DEVICE,FDQN,,skip,,,IT inventory; not modelled
 assignment,DEVICE,DOCUMENT,,skip,,,openBIS internal field
+assignment,DEVICE,RESPONSIBLE,bed:responsible,bed,,,links to PERSON or ORGANIZATION; replaces OWNER (change 01-people)
 type,IGSN_CORE,,bed:Core,bed,,,a core registered with an IGSN; CORES are the boxed pieces
 assignment,IGSN_CORE,PROJECT,bed:project,bed,,,
 assignment,IGSN_CORE,EXPERIMENT,,skip,,,free text
@@ -102,7 +113,7 @@ assignment,IGSN_CORE,LOCATION_DESC,,skip,,,IGSN registration metadata; not model
 assignment,IGSN_CORE,COUNTRY,,skip,,,IGSN registration metadata; not modelled
 assignment,IGSN_CORE,PROVINCE,,skip,,,IGSN registration metadata; not modelled
 assignment,IGSN_CORE,CITY,,skip,,,IGSN registration metadata; not modelled
-assignment,IGSN_CORE,ROCK_CLASSIFICATION,bed:rockClass,bed,,bedv:rock-class,"free text, matched to concept labels"
+assignment,IGSN_CORE,ROCK_CLASSIFICATION,,skip,,,free text; replaced by the vocabulary field ROCK_CLASSIFICATION_TERM in change 06-vocabularies
 assignment,IGSN_CORE,ROCK_TYPE,bed:rockType,bed,,,
 assignment,IGSN_CORE,ROCK_DESC,schema:description,standard,,,
 assignment,IGSN_CORE,CORES.TOP,bed:topDepth,bed,unit:M,,
@@ -120,7 +131,7 @@ assignment,IGSN_CORE,MSCL,,skip,,,ELN checklist flag
 assignment,IGSN_CORE,XRF,,skip,,,ELN checklist flag
 assignment,IGSN_CORE,DRILLING_START,bed:drillingStart,bed,,,
 assignment,IGSN_CORE,DRILLING_PERIOD,bed:drillingEnd,bed,,,"free text, YYYY-MM-DD"
-assignment,IGSN_CORE,DRILL_METHOD,bed:drillingStyle,bed,,bedv:drilling-style,"free text, matched to concept labels"
+assignment,IGSN_CORE,DRILL_METHOD,,skip,,,free text; replaced by the vocabulary field DRILL_METHOD_TERM in change 06-vocabularies
 assignment,IGSN_CORE,OPERATOR,,skip,,,free-text names; replaced by a link to PERSON objects in change 01-people
 assignment,IGSN_CORE,CORE_LENGTH,bed:coreLength,bed,unit:M,,
 assignment,IGSN_CORE,XMLCOMMENTS,,skip,,,openBIS internal field
@@ -132,6 +143,11 @@ assignment,IGSN_CORE,CORE_RESPONSIBLE_EMAIL,,skip,,,moves to the PERSON objects 
 assignment,IGSN_CORE,CORE_LOAN,,skip,,,not modelled
 assignment,IGSN_CORE,CORE_SUBSAMPLE,sosa:hasSample,standard,,,link to CORES
 assignment,IGSN_CORE,CORE_REQUEST,bed:forRequest,bed,,,link to CORE_REQUEST
+assignment,IGSN_CORE,ROCK_CLASSIFICATION_TERM,bed:rockClass,bed,,bedv:rock-class,
+assignment,IGSN_CORE,DRILL_METHOD_TERM,bed:drillingStyle,bed,,bedv:drilling-style,
+assignment,IGSN_CORE,OPERATED_BY,bed:operatedBy,bed,,,links to PERSON; replaces OPERATOR (change 01-people)
+assignment,IGSN_CORE,BOREHOLE,bed:ofBorehole,bed,,,link to BOREHOLES; replaces CORES.BOREHOLE (change 05-object-links)
+assignment,IGSN_CORE,RESPONSIBLE,bed:responsible,bed,,,links to PERSON or ORGANIZATION; replaces OWNER (change 01-people)
 type,METHOD,,sosa:Procedure,standard,,,
 assignment,METHOD,NAME,schema:name,standard,,,openBIS internal field
 assignment,METHOD,PRODUCT.DESCRIPTION,schema:description,standard,,,openBIS internal field
@@ -165,17 +181,18 @@ assignment,SEIS_SENSOR,DOCUMENT,,skip,,,openBIS internal field
 assignment,SEIS_SENSOR,PURCHASED_BY,,skip,,,free-text names; not converted
 assignment,SEIS_SENSOR,EMAIL_CONTACT,,skip,,,moves to the PERSON objects in change 01-people
 assignment,SEIS_SENSOR,OWNER,,skip,,,free-text names; replaced by a link to PERSON objects (RESPONSIBLE) in change 01-people
+assignment,SEIS_SENSOR,RESPONSIBLE,bed:responsible,bed,,,links to PERSON or ORGANIZATION; replaces OWNER (change 01-people)
 type,SEIS_SENSOR_INSTAL,,ssn:Deployment,standard,,,
 assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_START,bed:deployedOn,bed,,,
 assignment,SEIS_SENSOR_INSTAL,PROJECT,bed:project,bed,,,
 assignment,SEIS_SENSOR_INSTAL,EXPERIMENT,,skip,,,"the experiment comes from the collection, via mapping/collections.csv"
-assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_TYPE,bed:deploymentType,bed,,bedv:deployment-type,"free text, matched to concept labels"
+assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_TYPE,,skip,,,free text; replaced by the vocabulary field DEPLOYMENT_TYPE_TERM in change 06-vocabularies
 assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_USER,,skip,,,free-text names; replaced by a link to PERSON objects in change 01-people
 assignment,SEIS_SENSOR_INSTAL,SENSOR_BOREHOLE,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
 assignment,SEIS_SENSOR_INSTAL,BOREHOLE_NAME,,skip,,,text reference; replaced by a borehole link in change 05-object-links
 assignment,SEIS_SENSOR_INSTAL,BOREHOLE_NICKNAME,,skip,,,text reference; replaced by a borehole link in change 05-object-links
 assignment,SEIS_SENSOR_INSTAL,SENSOR_TUNNEL,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
-assignment,SEIS_SENSOR_INSTAL,TUNNEL_SECTION,bed:tunnelSection,bed,,bedv:tunnel-section,"free text, matched to concept labels"
+assignment,SEIS_SENSOR_INSTAL,TUNNEL_SECTION,,skip,,,free text; replaced by the vocabulary field TUNNEL_SECTION_TERM in change 06-vocabularies
 assignment,SEIS_SENSOR_INSTAL,TUNNEL_METER,bed:tunnelMeter,bed,,,
 assignment,SEIS_SENSOR_INSTAL,SENSOR_SURFACE,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
 assignment,SEIS_SENSOR_INSTAL,SENSOR_COUPLING,bed:coupling,bed,,bedv:coupling,
@@ -214,6 +231,13 @@ assignment,SEIS_SENSOR_INSTAL,COORD_USER,,skip,,,moves to SENSOR_POSITION in cha
 assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_END,bed:removedOn,bed,,,
 assignment,SEIS_SENSOR_INSTAL,REMOVAL_USER,,skip,,,free-text names; replaced by a link to PERSON objects in change 01-people
 assignment,SEIS_SENSOR_INSTAL,NOTES,rdfs:comment,standard,,,
+assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_TYPE_TERM,bed:deploymentType,bed,,bedv:deployment-type,
+assignment,SEIS_SENSOR_INSTAL,TUNNEL_SECTION_TERM,bed:tunnelSection,bed,,bedv:tunnel-section,
+assignment,SEIS_SENSOR_INSTAL,DEPLOYED_BY,bed:deployedBy,bed,,,links to PERSON; replaces DEPLOYMENT_USER (change 01-people)
+assignment,SEIS_SENSOR_INSTAL,REMOVED_BY,bed:removedBy,bed,,,links to PERSON; replaces REMOVAL_USER (change 01-people)
+assignment,SEIS_SENSOR_INSTAL,BOREHOLE,ssn:deployedOnPlatform,standard,,,link to BOREHOLES; replaces BOREHOLE_NAME (change 05-object-links)
+assignment,SEIS_SENSOR_INSTAL,SENSOR,ssn:deployedSystem,standard,,,link to SENSORS or SEIS_SENSOR; replaces SERIAL_NUMBER (change 05-object-links)
+assignment,SEIS_SENSOR_INSTAL,INSTALLATION_ENVIRONMENT,bed:environment,bed,,bedv:environment,replaces the yes/no installation fields (change 06-vocabularies)
 type,SENSORS,,sosa:Sensor,standard,,,
 assignment,SENSORS,DOMAIN,bed:domain,bed,,,"the term label; kept as text, the sensor type hierarchy groups by discipline"
 assignment,SENSORS,SENSOR_TYPE,bed:sensorKind,bed,,bedv:sensor-type,
@@ -234,8 +258,9 @@ assignment,SENSORS,OWNER,,skip,,,free-text names; replaced by a link to PERSON o
 assignment,SENSORS,MAIN_CONTACT,,skip,,,free-text names; not converted
 assignment,SENSORS,SENSOR_AVAILABILITY,bed:availability,bed,,bedv:availability,
 assignment,SENSORS,XMLCOMMENTS,,skip,,,openBIS internal field
+assignment,SENSORS,RESPONSIBLE,bed:responsible,bed,,,links to PERSON or ORGANIZATION; replaces OWNER (change 01-people)
 type,SENSOR_INSTAL,,ssn:Deployment,standard,,,
-assignment,SENSOR_INSTAL,DEPLOYMENT_TYPE,bed:deploymentType,bed,,bedv:deployment-type,"free text, matched to concept labels"
+assignment,SENSOR_INSTAL,DEPLOYMENT_TYPE,,skip,,,free text; replaced by the vocabulary field DEPLOYMENT_TYPE_TERM in change 06-vocabularies
 assignment,SENSOR_INSTAL,DEPLOYMENT_START,bed:deployedOn,bed,,,
 assignment,SENSOR_INSTAL,DEPLOYMENT_USER,,skip,,,free-text names; replaced by a link to PERSON objects in change 01-people
 assignment,SENSOR_INSTAL,PROJECT,bed:project,bed,,,
@@ -246,7 +271,7 @@ assignment,SENSOR_INSTAL,BOREHOLE_NICKNAME,,skip,,,text reference; replaced by a
 assignment,SENSOR_INSTAL,SENSOR_WALL,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
 assignment,SENSOR_INSTAL,SENSOR_TUNNEL,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
 assignment,SENSOR_INSTAL,SENSOR_TRENCH,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
-assignment,SENSOR_INSTAL,TUNNEL_SECTION,bed:tunnelSection,bed,,bedv:tunnel-section,"free text, matched to concept labels"
+assignment,SENSOR_INSTAL,TUNNEL_SECTION,,skip,,,free text; replaced by the vocabulary field TUNNEL_SECTION_TERM in change 06-vocabularies
 assignment,SENSOR_INSTAL,TUNNEL_METER,bed:tunnelMeter,bed,,,
 assignment,SENSOR_INSTAL,SENSOR_SURFACE,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
 assignment,SENSOR_INSTAL,SENSOR_COUPLING,bed:coupling,bed,,bedv:coupling,
@@ -281,3 +306,49 @@ assignment,SENSOR_INSTAL,COORDSYS,,skip,,,moves to SENSOR_POSITION in change 04-
 assignment,SENSOR_INSTAL,COORD_USER,,skip,,,moves to SENSOR_POSITION in change 04-sensor-positions
 assignment,SENSOR_INSTAL,COORD_DATE,,skip,,,moves to SENSOR_POSITION in change 04-sensor-positions
 assignment,SENSOR_INSTAL,NOTES,rdfs:comment,standard,,,
+assignment,SENSOR_INSTAL,DEPLOYMENT_TYPE_TERM,bed:deploymentType,bed,,bedv:deployment-type,
+assignment,SENSOR_INSTAL,TUNNEL_SECTION_TERM,bed:tunnelSection,bed,,bedv:tunnel-section,
+assignment,SENSOR_INSTAL,DEPLOYED_BY,bed:deployedBy,bed,,,links to PERSON; replaces DEPLOYMENT_USER (change 01-people)
+assignment,SENSOR_INSTAL,REMOVED_BY,bed:removedBy,bed,,,links to PERSON; replaces REMOVAL_USER (change 01-people)
+assignment,SENSOR_INSTAL,BOREHOLE,ssn:deployedOnPlatform,standard,,,link to BOREHOLES; replaces BOREHOLE_NAME (change 05-object-links)
+assignment,SENSOR_INSTAL,SENSOR,ssn:deployedSystem,standard,,,link to SENSORS or SEIS_SENSOR; replaces SERIAL_NUMBER (change 05-object-links)
+assignment,SENSOR_INSTAL,INSTALLATION_ENVIRONMENT,bed:environment,bed,,bedv:environment,replaces the yes/no installation fields (change 06-vocabularies)
+type,PERSON,,schema:Person,standard,,,built into openBIS 7 with this annotation
+assignment,PERSON,NAME,schema:name,standard,,,openBIS internal field
+assignment,PERSON,PERSON.GIVEN_NAME,schema:givenName,standard,,,
+assignment,PERSON,PERSON.FAMILY_NAME,schema:familyName,standard,,,
+assignment,PERSON,PERSON.IDENTIFIER,schema:identifier,standard,,,ORCID
+assignment,PERSON,PERSON.EMAIL,schema:email,standard,,,
+assignment,PERSON,PERSON.AFFILIATION,schema:affiliation,standard,,,links to ORGANIZATION
+type,ORGANIZATION,,schema:Organization,standard,,,built into openBIS 7 with this annotation
+assignment,ORGANIZATION,NAME,schema:name,standard,,,openBIS internal field; not annotated in openBIS 7
+assignment,ORGANIZATION,ORGANIZATION.IDENTIFIER,schema:identifier,standard,,,ROR
+type,TESTBED,,bed:TestBed,bed,,,
+assignment,TESTBED,NAME,schema:name,standard,,,openBIS internal field
+assignment,TESTBED,TESTBED.ABBREVIATION,schema:identifier,standard,,,the former TESTBED vocabulary code
+assignment,TESTBED,TESTBED.DESCRIPTION,schema:description,standard,,,
+type,BOREHOLE_MOUTH_SURVEY,,bed:CollarSurvey,bed,,,
+assignment,BOREHOLE_MOUTH_SURVEY,BOREHOLE,bed:ofBorehole,bed,,,link to BOREHOLES
+assignment,BOREHOLE_MOUTH_SURVEY,SURVEY_TYPE,bed:surveyType,bed,,bedv:location-type,
+assignment,BOREHOLE_MOUTH_SURVEY,SURVEY_DATE,bed:surveyDate,bed,,,
+assignment,BOREHOLE_MOUTH_SURVEY,SURVEY_SOURCE,dcterms:source,standard,,,
+assignment,BOREHOLE_MOUTH_SURVEY,SURVEYED_BY,bed:surveyedBy,bed,,,links to PERSON or ORGANIZATION
+assignment,BOREHOLE_MOUTH_SURVEY,COORDINATE_SYSTEM,bed:coordinateSystem,bed,,bedv:crs,
+assignment,BOREHOLE_MOUTH_SURVEY,BOREHOLE_MOUTH_E,bed:easting,bed,,,
+assignment,BOREHOLE_MOUTH_SURVEY,BOREHOLE_MOUTH_N,bed:northing,bed,,,
+assignment,BOREHOLE_MOUTH_SURVEY,BOREHOLE_MOUTH_H,bed:elevation,bed,,,
+assignment,BOREHOLE_MOUTH_SURVEY,SURVEY_AZIMUTH,bed:azimuth,bed,unit:DEG,,
+assignment,BOREHOLE_MOUTH_SURVEY,SURVEY_DIP,bed:dip,bed,unit:DEG,,
+assignment,BOREHOLE_MOUTH_SURVEY,DIP_CONVENTION,bed:dipConvention,bed,,,
+assignment,BOREHOLE_MOUTH_SURVEY,NOTES,rdfs:comment,standard,,,
+type,SENSOR_POSITION,,bed:SensorPosition,bed,,,
+assignment,SENSOR_POSITION,INSTALLATION,bed:ofDeployment,bed,,,link to SENSOR_INSTAL or SEIS_SENSOR_INSTAL
+assignment,SENSOR_POSITION,EASTING,bed:easting,bed,,,
+assignment,SENSOR_POSITION,NORTHING,bed:northing,bed,,,
+assignment,SENSOR_POSITION,ELEVATION,bed:elevation,bed,,,
+assignment,SENSOR_POSITION,LAT,schema:latitude,standard,,,
+assignment,SENSOR_POSITION,LONG,schema:longitude,standard,,,
+assignment,SENSOR_POSITION,COORD_DATE,bed:computedOn,bed,,,
+assignment,SENSOR_POSITION,COORDINATE_SYSTEM,bed:coordinateSystem,bed,,bedv:crs,
+assignment,SENSOR_POSITION,COORDINATES_BY,bed:coordinatesBy,bed,,,links to PERSON
+assignment,SENSOR_POSITION,NOTES,rdfs:comment,standard,,,

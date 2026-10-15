@@ -46,6 +46,7 @@ KEEP_OLD = (
 class Export:
     masterdata: list[wb.Section]
     objects: list[dict]
+    scripts: dict[str, str] = field(default_factory=dict)
 
     def section(self, code: str, kind: str = "SAMPLE_TYPE") -> wb.Section | None:
         return next(
@@ -148,8 +149,8 @@ def concept_code(vocab: Graph, concept: URIRef, scheme: str) -> str:
 
 def curie(iri: URIRef) -> str:
     for prefix, ns in config.NAMESPACES.items():
-        if str(iri).startswith(ns) and prefix in ("bedv",):
-            return f"{prefix}:{str(iri)[len(ns):]}"
+        if str(iri).startswith(ns) and prefix in ("bedv", "epsg"):
+            return f"{prefix}:{str(iri)[len(ns) :]}"
     return str(iri)
 
 
@@ -175,6 +176,29 @@ def vocabulary_from_scheme(
         )
     description = str(vocab.value(URIRef(config.expand(scheme)), SKOS.prefLabel))
     return wb.vocabulary(code, description, terms), rows
+
+
+def extend_vocabulary(
+    export: Export, vocab: Graph, scheme: str, code: str
+) -> tuple[wb.Section, list[dict], dict[str, str]]:
+    # new terms only; an existing vocabulary keeps its description and term codes. Existing means in
+    # the export: openbis-terms.csv may list terms of a change that has not been imported yet.
+    old = export.section(code, "VOCABULARY_TYPE")
+    in_openbis = (
+        {old.children.get(r, "Code") for r in old.children.rows} if old else set()
+    )
+    existing = {t: c for t, c in mapped_terms(code).items() if t in in_openbis}
+    section, rows = vocabulary_from_scheme(vocab, scheme, code, existing)
+    if old:
+        section.entity.set(
+            section.entity.rows[0],
+            "Description",
+            old.entity.get(old.entity.rows[0], "Description") or "",
+        )
+    term_of = {c: t for t, c in existing.items()} | {
+        r["concept"]: r["term_code"] for r in rows
+    }
+    return section, rows, term_of
 
 
 def matcher(vocab: Graph, scheme: str, terms: dict[str, str]):
@@ -578,7 +602,8 @@ def sensor_positions(export: Export, **_) -> Change:
     crs = matcher(
         vocab, "bedv:crs", {c: t for t, c in mapped_terms("COORDINATE_SYSTEM").items()}
     )
-    objects, review = [], [["installation", "computed by, as written"]]
+    agents = Agents(export)
+    objects, review = [], [["installation", "field", "as written", "why"]]
     for o in export.of_type(*INSTALLS):
         values = {
             p: o["properties"][p] for p in POSITION_FIELDS if o["properties"].get(p)
@@ -587,12 +612,20 @@ def sensor_positions(export: Export, **_) -> Change:
             continue
         if text := o["properties"].get("COORDSYS"):
             values["COORDINATE_SYSTEM"] = crs(text) or ""
+            if not values["COORDINATE_SYSTEM"]:
+                review.append([o["identifier"], "COORDSYS", text, "no matching term"])
+        if who := o["properties"].get("COORD_USER"):
+            values["COORDINATES_BY"] = "\n".join(agents(n) for n in split_names(who))
         values["INSTALLATION"] = o["identifier"]
         objects.append({"identifier": f"{o['identifier']}_POSITION",
                         "collection": o["collection"], "properties": values})  # fmt: skip
-        if who := o["properties"].get("COORD_USER"):
-            review.append([o["identifier"], who])
     sections = [positions]
+    if agents.new:
+        sections += [
+            *registers(),
+            wb.collections({PEOPLE: "People"}),
+            *agents.sections(),
+        ]
     if objects:
         sections.append(
             wb.samples("SENSOR_POSITION", objects, [p[0] for p in properties])
@@ -605,11 +638,19 @@ def sensor_positions(export: Export, **_) -> Change:
         "longitude, coordinate system, computation date, computed by (people), notes.",
         f"- {len(objects)} positions copied from installations that have coordinates.",
     ]
+    if agents.new:
+        note.append(
+            f"- {len(agents.new)} people created from 'Coordinates by'; see "
+            "`out/openbis/review/04-sensor-positions.xlsx`."
+        )
     if len(review) > 1:
-        note.append("- Link 'computed by' by hand; the names are in the review sheet.")
+        note.append(
+            f"- {len(review) - 1} coordinate systems match no term and stay empty; they are "
+            "in the review sheet."
+        )
     note += ["", KEEP_OLD]
     return Change("04-sensor-positions", "Sensor positions", sections, note,
-                  review={"computed by": review} if len(review) > 1 else {})  # fmt: skip
+                  review={"people": agents.review(), "values": review})  # fmt: skip
 
 
 # change 05: links to boreholes and sensors in place of names and serial numbers
@@ -622,22 +663,14 @@ def object_links(export: Export, **_) -> Change:
     sensor_ids = set(sensors.values())
     borehole = export.property_row("BOREHOLE")
     sections, unresolved, counts = [], [], {}
+    # the types that name their borehole as text, and the field they use
+    named = {t: "CORES.BOREHOLE" for t in export.types_with("CORES.BOREHOLE")}
+    named |= {t: "BOREHOLE_NAME" for t in export.types_with("BOREHOLE_NAME")}
     for t in config.BEDRETTO_TYPES:
-        if t == "BOREHOLES" or not (
-            set(export.types_with("BOREHOLE_NAME"))
-            | set(export.types_with("CORES.BOREHOLE"))
-        ) & {t}:
+        if t == "BOREHOLES" or t not in named:
             continue
         rows = [list(borehole)]
-        rows[0][wb.PROPERTY_HEADER.index("Section")] = section_of(
-            export,
-            t,
-            (
-                "BOREHOLE_NAME"
-                if t in export.types_with("BOREHOLE_NAME")
-                else "CORES.BOREHOLE"
-            ),
-        )
+        rows[0][wb.PROPERTY_HEADER.index("Section")] = section_of(export, t, named[t])
         codes = ["BOREHOLE"]
         if t in INSTALLS:
             rows.append(wb.property_row("SENSOR", "Sensor", "SAMPLE", "The installed sensor",
@@ -720,13 +753,10 @@ def vocabularies(export: Export, **_) -> Change:
     schemes = {(voc, scheme) for _, _, voc, scheme, _ in CONVERSIONS}
     schemes.add(("INSTALLATION_ENVIRONMENT", "bedv:environment"))
     for voc, scheme in sorted(schemes):
-        existing = mapped_terms(voc) if export.section(voc, "VOCABULARY_TYPE") else {}
-        section, terms = vocabulary_from_scheme(vocab, scheme, voc, existing)
+        section, terms, term_of[voc] = extend_vocabulary(export, vocab, scheme, voc)
         if section.children.rows:
             sections.append(section)
         all_terms += terms
-        term_of[voc] = {**{c: t for t, c in existing.items()},
-                        **{r["concept"]: r["term_code"] for r in terms}}  # fmt: skip
 
     rows: dict[str, list] = {}
     values: dict[str, dict] = {}
@@ -734,10 +764,7 @@ def vocabularies(export: Export, **_) -> Change:
     for old, new, voc, scheme, several in CONVERSIONS:
         match = matcher(vocab, scheme, term_of[voc])
         for t in export.types_with(old):
-            label = next(
-                r[wb.PROPERTY_HEADER.index("Property label")]
-                for r in [export.property_row(old)]
-            )
+            label = export.property_row(old)[wb.PROPERTY_HEADER.index("Property label")]
             rows.setdefault(t, []).append(
                 wb.property_row(new, label, "CONTROLLEDVOCABULARY", f"{label}; replaces {old}",
                                 section_of(export, t, old), vocabulary=voc, multivalued=several)
@@ -752,12 +779,10 @@ def vocabularies(export: Export, **_) -> Change:
                     entry = values.setdefault(t, {}).setdefault(
                         o["identifier"], (o, {})
                     )
-                    entry[1][new] = "\n".join(codes)
+                    # several vocabulary terms are comma-separated; several links newline-separated
+                    entry[1][new] = ", ".join(codes)
                 else:
                     review.append([o["identifier"], old, text, "no matching term"])
-    environment = matcher(
-        vocab, "bedv:environment", term_of["INSTALLATION_ENVIRONMENT"]
-    )
     for t in INSTALLS:
         if not export.section(t):
             continue
@@ -776,7 +801,6 @@ def vocabularies(export: Export, **_) -> Change:
                 review.append(
                     [o["identifier"], ", ".join(chosen), "true", "more than one"]
                 )
-    del environment
     for t, assignments in rows.items():
         sections.append(type_row(export, t, assignments))
     for t, objects in values.items():
@@ -829,6 +853,9 @@ def core_validation(export: Export, **_) -> Change:
         "",
         "Importing a validation script needs a user listed in `code-plugins.allowed-editing-users` "
         "in the application server's `service.properties`.",
+        "",
+        "The old script stays as an unused plugin; delete it in the admin UI under **Tools → Entity "
+        "Validation Plugins** if nothing else uses it.",
     ]
     return Change("07-core-validation", "Core validation", [cores], note,
                   scripts={"depth_range_validation.py": DEPTH_SCRIPT})  # fmt: skip
@@ -860,11 +887,25 @@ def annotate(change: Change, export: Export) -> None:
                     table.set(row, column, value)
 
 
-def write(change: Change, out: Path, review: Path) -> Path:
+def referenced_scripts(change: Change, export: Export) -> dict[str, str]:
+    # a type row copied from the export names its validation script; the zip has to carry it
+    scripts = dict(change.scripts)
+    for s in change.sections:
+        if s.kind == "SAMPLE_TYPE":
+            name = s.entity.get(s.entity.rows[0], "Validation script")
+            if name and name not in scripts:
+                scripts[name] = (
+                    export.scripts.get(f"{s.code}.{name}") or export.scripts[name]
+                )
+    return scripts
+
+
+def write(change: Change, export: Export, out: Path, review: Path) -> Path:
     out.mkdir(parents=True, exist_ok=True)
     sheet = out / f"{change.name}.xlsx"
     wb.write(change.sections, sheet)
     target = sheet
+    change.scripts = referenced_scripts(change, export)
     if change.scripts:
         target = out / f"{change.name}.zip"
         with zipfile.ZipFile(target, "w") as z:
@@ -901,8 +942,11 @@ def write(change: Change, out: Path, review: Path) -> Path:
 
 def load(masterdata: Path, objects: Path) -> Export:
     sections = wb.read(masterdata)
+    scripts = masterdata.parent / "scripts"
     return Export(
-        sections, wb.read_objects(objects, sections) if objects.exists() else []
+        sections,
+        wb.read_objects(objects, sections) if objects.exists() else [],
+        {f.name: f.read_text() for f in scripts.glob("*.py")},
     )
 
 
@@ -948,7 +992,7 @@ def main() -> int:
         change = CHANGES[number](export, csv_dir=args.csv)
         if args.annotate:
             annotate(change, export)
-        target = write(change, args.out, REVIEW)
+        target = write(change, export, args.out, REVIEW)
         print(target)
         if o:
             o.import_excel(target)

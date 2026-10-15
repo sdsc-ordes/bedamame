@@ -114,7 +114,10 @@ class Openbis:
             )
         except urllib.error.HTTPError as e:
             raw = e.read()
-        resp = json.loads(raw)
+        try:
+            resp = json.loads(raw)
+        except json.JSONDecodeError:
+            raise RuntimeError(f"{method}: not a JSON-RPC response: {raw[:200]!r}")
         if "error" in resp:
             raise RuntimeError(f"{method}: {resp['error'].get('message')}")
         return resolve(resp["result"])
@@ -125,17 +128,18 @@ class Openbis:
     def search(
         self, kind: str, criteria: dict | None = None, fetch: dict | None = None
     ) -> list[dict]:
-        # kind is the DTO package, e.g. "space", "sample", "semanticannotation"
+        # kind names the DTO, e.g. "space", "sample", "sampletype", "semanticannotation"
         name = {
             "semanticannotation": "SemanticAnnotation",
             "sampletype": "SampleType",
         }.get(kind, kind.title())
+        package = {"sampletype": "sample"}.get(kind, kind)
         criteria = {
-            "@type": f"as.dto.{kind}.search.{name}SearchCriteria",
+            "@type": f"as.dto.{package}.search.{name}SearchCriteria",
             **(criteria or {}),
         }
         fetch = {
-            "@type": f"as.dto.{kind}.fetchoptions.{name}FetchOptions",
+            "@type": f"as.dto.{package}.fetchoptions.{name}FetchOptions",
             **(fetch or {}),
         }
         method = {
@@ -189,7 +193,9 @@ class Openbis:
 
     def export_masterdata(self, sample_types: list[str], out: Path) -> Path:
         # the admin UI's import-compatible export: object-types.xlsx, with the vocabularies the types use,
-        # and the scripts/ folder of their validation scripts
+        # and the scripts/ folder of their validation scripts; types not in openBIS (yet) are left out
+        existing = {t["code"] for t in self.search("sampletype")}
+        sample_types = [t for t in sample_types if t in existing]
         data = {
             "@type": "as.dto.exporter.data.ExportData",
             "permIds": [
@@ -248,6 +254,8 @@ class Openbis:
             ],
         }
         perm_ids = [s["permId"]["permId"] for s in self.search("sample", criteria)]
+        if not perm_ids:
+            return out
         data = {
             "@type": "as.dto.exporter.data.ExportData",
             "permIds": [
@@ -327,13 +335,13 @@ def main() -> int:
         "--masterdata",
         type=Path,
         metavar="DIR",
-        help="export the master data of the 12 Bedretto object types to DIR",
+        help="export the master data of the Bedretto object types to DIR",
     )
     args = ap.parse_args()
 
     o = Openbis()
     if args.masterdata:
-        print(o.export_masterdata(config.BEDRETTO_TYPES, args.masterdata))
+        print(o.export_masterdata(config.ANNOTATED_TYPES, args.masterdata))
         return 0
     if args.export:
         crate = o.export_crate(

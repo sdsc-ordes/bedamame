@@ -39,3 +39,48 @@ SENSOR_TYPE,V_STRAIN,Volumetric Strain,bedv:sensor-type-volumetric-strain
 TUNNEL_SECTION,END_NICHE,End Niche,bedv:tunnel-section-fear-end-niche
 TUNNEL_SECTION,FEAR_TUNNEL,FEAR Tunnel,bedv:tunnel-section-fear-tunnel
 TUNNEL_SECTION,MAIN_TUNNEL,Main tunnel,bedv:tunnel-section-main-tunnel
+SURVEY_TYPE,AS_BUILT,As built,bedv:location-type-as-built
+SURVEY_TYPE,PLANNED,Planned,bedv:location-type-planned
+SURVEY_TYPE,STAKED_OUT,Staked out,bedv:location-type-staked-out
+COORDINATE_SYSTEM,EPSG_2056,CH1903+ / LV95,epsg:2056
+COORDINATE_SYSTEM,BEDRETTO_LOCAL_V1,Bedretto local grid,bedv:crs-bedretto-local-v1
+BOREHOLE_GEOMETRY,HORIZONTAL,Horizontal,bedv:borehole-geometry-horizontal
+BOREHOLE_GEOMETRY,INCLINED,Inclined,bedv:borehole-geometry-inclined
+BOREHOLE_GEOMETRY,INCLINED_DOWNWARD,Inclined downward,bedv:borehole-geometry-inclined-downward
+BOREHOLE_GEOMETRY,INCLINED_UPWARD,Inclined upward,bedv:borehole-geometry-inclined-upward
+BOREHOLE_GEOMETRY,SUBHORIZONTAL,Subhorizontal,bedv:borehole-geometry-subhorizontal
+BOREHOLE_GEOMETRY,VERTICAL,Vertical,bedv:borehole-geometry-vertical
+BOREHOLE_STATUS,ABANDONED,Abandoned,bedv:borehole-status-abandoned
+BOREHOLE_STATUS,CEMENTED,Cemented,bedv:borehole-status-cemented
+BOREHOLE_STATUS,CLOSED,Closed,bedv:borehole-status-closed
+BOREHOLE_STATUS,COLLAPSED,Collapsed,bedv:borehole-status-collapsed
+BOREHOLE_STATUS,LOCKED_WITH_PACKERS,Locked with packers,bedv:borehole-status-locked-with-packers
+BOREHOLE_STATUS,OPEN,Open,bedv:borehole-status-open
+BOREHOLE_STATUS,OPEN_INSTRUMENTED,"Open, instrumented",bedv:borehole-status-open-instrumented
+BOREHOLE_STATUS,OPEN_INSTRUMENTS_LOST,"Open, instruments lost",bedv:borehole-status-open-instruments-lost
+DEPLOYMENT_TYPE,PERMANENT,Permanent,bedv:deployment-type-permanent
+DEPLOYMENT_TYPE,TEMPORARY,Temporary,bedv:deployment-type-temporary
+DRILLING_STYLE,CORED,Cored,bedv:drilling-style-cored
+DRILLING_STYLE,HAMMER,Hammer,bedv:drilling-style-hammer
+DRILLING_STYLE,NOT_CORED,Not cored,bedv:drilling-style-not-cored
+DRILLING_STYLE,ROTARY,Rotary,bedv:drilling-style-rotary
+INSTALLATION_ENVIRONMENT,BOREHOLE,Borehole,bedv:environment-borehole
+INSTALLATION_ENVIRONMENT,ON_THE_SURFACE,On the surface,bedv:environment-on-the-surface
+INSTALLATION_ENVIRONMENT,TUNNEL_SURFACE,Tunnel surface,bedv:environment-tunnel-surface
+INSTALLATION_ENVIRONMENT,TUNNEL_TRENCH,Tunnel trench,bedv:environment-tunnel-trench
+INSTALLATION_ENVIRONMENT,TUNNEL_WALL,Tunnel wall,bedv:environment-tunnel-wall
+LOGGING_TOOL,ATV,Acoustic televiewer,bedv:logging-tool-atv
+LOGGING_TOOL,CAL,Caliper,bedv:logging-tool-cal
+LOGGING_TOOL,DEV,Deviation tool,bedv:logging-tool-dev
+LOGGING_TOOL,FTC,Fluid temperature and conductivity,bedv:logging-tool-ftc
+LOGGING_TOOL,FWS,Full waveform sonic,bedv:logging-tool-fws
+LOGGING_TOOL,MAGNETIC_SUSCEPTIBILITY,Magnetic susceptibility,bedv:logging-tool-magnetic-susceptibility
+LOGGING_TOOL,OTV,Optical televiewer,bedv:logging-tool-otv
+LOGGING_TOOL,SGR,Spectral gamma ray,bedv:logging-tool-sgr
+LOGGING_TOOL,SIDEWALL_DENSITY,Sidewall density,bedv:logging-tool-sidewall-density
+LOGGING_TOOL,THREE_ARM_CALIPER,Three-arm caliper,bedv:logging-tool-three-arm-caliper
+ROCK_CLASS,IGNEOUS,Igneous,bedv:rock-class-igneous
+ROCK_CLASS,METAMORPHIC,Metamorphic,bedv:rock-class-metamorphic
+ROCK_CLASS,SEDIMENTARY,Sedimentary,bedv:rock-class-sedimentary
+TUNNEL_SECTION,FEAR_NICHE_1,FEAR niche 1,bedv:tunnel-section-fear-niche-1
+TUNNEL_SECTION,MAIN_LAB,Main Lab,bedv:tunnel-section-main-lab

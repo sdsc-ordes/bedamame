@@ -68,6 +68,10 @@ openbis-masterdata:
 openbis-seed:
     uv run openbis/seed.py --import
 
+# Rehearse the master-data changes 01-07 on the local openBIS: for each, a fresh export, generate, import
+openbis-changes:
+    uv run scripts/openbis_changes.py --local
+
 # Annotate the local openBIS from mapping/: fresh master-data export, annotate, import, check
 openbis-annotate:
     uv run scripts/openbis_api.py --masterdata out/openbis/export

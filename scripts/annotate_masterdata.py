@@ -49,11 +49,18 @@ def unprefix_scripts(types: list[wb.Section]) -> dict[str, str]:
     return renamed
 
 
+def internal(s: wb.Section) -> bool:
+    # openBIS 7.0's own PERSON and ORGANIZATION: an import may add fields to them, but not change one
+    return s.entity.get(s.entity.rows[0], "Internal") == "TRUE"
+
+
 def annotate(sections: list[wb.Section], mapping: dict) -> tuple[list, list[dict]]:
+    # the 12 Bedretto types must be there; the types the changes add are annotated once they exist.
+    # Returns the types to import, without the internal ones, whose missing annotations are "by hand".
     types = [
         s
         for s in sections
-        if s.kind == "SAMPLE_TYPE" and s.code in config.BEDRETTO_TYPES
+        if s.kind == "SAMPLE_TYPE" and s.code in config.ANNOTATED_TYPES
     ]
     missing = set(config.BEDRETTO_TYPES) - {s.code for s in types}
     if missing:
@@ -69,9 +76,16 @@ def annotate(sections: list[wb.Section], mapping: dict) -> tuple[list, list[dict
                 raise SystemExit(f"no row in {MAPPING.name} for {s.code} {code}")
             have = present(table, row)
             want = annotation(m["term"]) if m["term"] else None
-            if want:
-                for column, value in zip(COLUMNS, want):
-                    table.set(row, column, value)
+            # the same term counts as present whatever its Ontology Id and Version: openBIS 7.0's own
+            # PERSON annotations use https://schema.org without the slash. The cells then hold that
+            # annotation as it is, so that the import leaves it alone.
+            same = [h for h in have if want and h[2] == want[2]]
+            status = "skip" if not want else "present" if same else "add"
+            if status == "add" and internal(s):
+                status = "by hand"
+            cells = same[0] if same else want or ("", "", "")
+            for column, value in zip(COLUMNS, cells):
+                table.set(row, column, value)
             label = table.get(row, "Property label") if code else ""
             items.append(
                 {
@@ -79,13 +93,11 @@ def annotate(sections: list[wb.Section], mapping: dict) -> tuple[list, list[dict
                     "code": code,
                     "label": label or "",
                     "mapping": m,
-                    "status": (
-                        "skip" if not want else "present" if want in have else "add"
-                    ),
-                    "stale": [h for h in have if h != want],
+                    "status": status,
+                    "stale": [h for h in have if not want or h[2] != want[2]],
                 }
             )
-    return types, items
+    return [s for s in types if not internal(s)], items
 
 
 def note(items: list[dict], export: Path, renamed: dict[str, str]) -> str:
@@ -95,10 +107,12 @@ def note(items: list[dict], export: Path, renamed: dict[str, str]) -> str:
         label = labels.value(URIRef(config.expand(curie)), RDFS.label)
         return f"{label} (`{curie}`)" if label else f"`{curie}`"
 
-    count = {k: sum(i["status"] == k for i in items) for k in ("add", "present")}
+    count = {
+        k: sum(i["status"] == k for i in items) for k in ("add", "present", "by hand")
+    }
     stale = [i for i in items if i["stale"]]
     lines = [
-        "# Semantic annotations for the 12 Bedretto object types",
+        "# Semantic annotations for the Bedretto object types",
         "",
         f"Made from `{export.name}` on {datetime.date.today().isoformat()}, "
         f"with Bedretto ontology {config.VERSION}.",
@@ -118,6 +132,7 @@ def note(items: list[dict], export: Path, renamed: dict[str, str]) -> str:
         "",
         f"- {count['add']} annotations are added;",
         f"- {count['present']} are already there and stay as they are;",
+        f"- {count['by hand']} have to be added by hand, listed below;",
         f"- {len(stale)} fields have an annotation that is no longer wanted, listed below.",
         "",
         "Make a fresh master-data export first; this file must be built from it. Then, in the admin "
@@ -141,6 +156,25 @@ def note(items: list[dict], export: Path, renamed: dict[str, str]) -> str:
         + ".",
         "",
     ]
+    by_hand = [i for i in items if i["status"] == "by hand"]
+    if by_hand:
+        lines += [
+            "## Annotations to add by hand",
+            "",
+            "PERSON and ORGANIZATION come with openBIS; an import may add fields to them but not "
+            "change their fields, so it cannot annotate them. In the admin UI, open the type and add "
+            "these in the field's Semantic Annotations section:",
+            "",
+            "| Type | Field | Ontology Id | Ontology Version | Ontology Annotation Id |",
+            "|---|---|---|---|---|",
+        ]
+        for i in by_hand:
+            lines.append(
+                f"| {i['type']} | {i['code'] or '(the type)'} | "
+                + " | ".join(f"`{x}`" for x in annotation(i["mapping"]["term"]))
+                + " |"
+            )
+        lines.append("")
     if stale:
         lines += ["## Annotations to remove by hand", ""]
         for i in stale:
@@ -174,6 +208,25 @@ def note(items: list[dict], export: Path, renamed: dict[str, str]) -> str:
             )
             lines.append("")
     return "\n".join(lines)
+
+
+def create(o: Openbis, items: list[dict]) -> None:
+    # what the collaborator does by hand in the admin UI, through V3 for the local rehearsal
+    creations = []
+    for i in items:
+        entity = {"@type": "as.dto.entitytype.id.EntityTypePermId", "permId": i["type"], "entityKind": "SAMPLE"}  # fmt: skip
+        target = (
+            {"propertyAssignmentId": {"@type": "as.dto.property.id.PropertyAssignmentPermId", "entityTypeId": entity,
+                                      "propertyTypeId": {"@type": "as.dto.property.id.PropertyTypePermId", "permId": i["code"]}}}
+            if i["code"]
+            else {"entityTypeId": entity}
+        )  # fmt: skip
+        oid, version, term = annotation(i["mapping"]["term"])
+        creations.append({"@type": "as.dto.semanticannotation.create.SemanticAnnotationCreation", **target,
+                          "predicateOntologyId": oid, "predicateOntologyVersion": version, "predicateAccessionId": term})  # fmt: skip
+    if creations:
+        o.require_local()
+        o.call("createSemanticAnnotations", creations)
 
 
 def live(o: Openbis) -> dict[tuple[str, str], list[tuple]]:
@@ -211,12 +264,31 @@ def live(o: Openbis) -> dict[tuple[str, str], list[tuple]]:
     return out
 
 
+def assignments(o: Openbis) -> dict[str, set[str]]:
+    # the sample types in openBIS and their property codes
+    fetch = {
+        "propertyAssignments": {
+            "@type": "as.dto.property.fetchoptions.PropertyAssignmentFetchOptions",
+            "propertyType": {
+                "@type": "as.dto.property.fetchoptions.PropertyTypeFetchOptions"
+            },
+        }
+    }
+    return {
+        t["code"]: {pa["propertyType"]["code"] for pa in t["propertyAssignments"]}
+        for t in o.search("sampletype", fetch=fetch)
+    }
+
+
 def check(o: Openbis, mapping: dict) -> list[str]:
-    have = live(o)
+    # compares term IRIs; mapping rows for types or fields not in openBIS (yet) are left out
+    have, types = live(o), assignments(o)
     problems = []
     for (t, code), m in mapping.items():
-        got = sorted(have.get((t, code), []))
-        want = [annotation(m["term"])] if m["term"] else []
+        if t not in types or (code and code not in types[t]):
+            continue
+        got = sorted(a[2] for a in have.get((t, code), []))
+        want = [config.expand(m["term"])] if m["term"] else []
         if got != want:
             problems.append(f"{t} {code or '(type)'}: has {got}, mapping says {want}")
     codes = {code for _, code in mapping if code}
@@ -230,7 +302,7 @@ def check(o: Openbis, mapping: dict) -> list[str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser(
-        description="Annotate the 12 Bedretto object types in a fresh openBIS master-data export"
+        description="Annotate the Bedretto object types in a fresh openBIS master-data export"
     )
     ap.add_argument(
         "export",
@@ -275,10 +347,14 @@ def main() -> int:
             z.write(f, f"scripts/{f.name}")
     (args.out / "annotations-changes.md").write_text(note(items, args.export, renamed))
     added = sum(i["status"] == "add" for i in items)
-    print(f"{args.out}: {added} to add, {sum(bool(i['stale']) for i in items)} stale")
+    by_hand = [i for i in items if i["status"] == "by hand"]
+    print(f"{args.out}: {added} to add, {len(by_hand)} by hand, "
+          f"{sum(bool(i['stale']) for i in items)} stale")  # fmt: skip
 
     if args.do_import:
-        Openbis().import_excel(args.out / "annotated.zip")
+        o = Openbis()
+        o.import_excel(args.out / "annotated.zip")
+        create(o, by_hand)
         print("imported")
     return 0
 

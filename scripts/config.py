@@ -46,6 +46,7 @@ NAMESPACES = {
     "qudt": "http://qudt.org/schema/qudt/",
     "unit": "http://qudt.org/vocab/unit/",
     "quantitykind": "http://qudt.org/vocab/quantitykind/",
+    "epsg": "http://www.opengis.net/def/crs/EPSG/0/",
 }
 
 # openBIS semantic annotations: Ontology Id and Ontology Version per prefix; the Ontology Annotation Id
