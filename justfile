@@ -1,3 +1,6 @@
+# The lab's openBIS export (git-ignored)
+lab := "drive-files/openBIS-20261006T123341Z-1-001/openBIS"
+
 # List the available recipes
 default:
     @just --list
@@ -38,6 +41,32 @@ crate-lint: crate
 
 # Validate, run the queries, build the crate
 all: validate queries crate
+
+# Start the local openBIS 7.0.0 at https://local.openbis.ch; the first start takes a few minutes
+openbis-up:
+    test -f openbis/.env || cp openbis/.env.example openbis/.env
+    docker compose -f openbis/compose.yaml up -d --wait --wait-timeout 900
+    curl -fsSk https://local.openbis.ch/openbis/webapp/eln-lims/version.txt
+
+# Import the lab's 12 object types, cleaned for 7.0, into the local openBIS
+openbis-masterdata:
+    uv run scripts/openbis_workbook.py "{{lab}}/all-object-types.2026-09-23/object-types.xlsx" --import
+
+# Import boreholes, sensors, installations and stubs into the local openBIS
+openbis-seed:
+    uv run openbis/seed.py --import
+
+# Stop the local openBIS and keep its data
+openbis-down:
+    docker compose -f openbis/compose.yaml down
+
+# Follow the local openBIS logs
+openbis-logs:
+    docker compose -f openbis/compose.yaml logs -f
+
+# Stop the local openBIS and delete its data
+openbis-reset:
+    docker compose -f openbis/compose.yaml down -v
 
 # Remove generated files
 clean:

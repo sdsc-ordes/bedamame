@@ -1,0 +1,69 @@
+# Local openBIS 7.0.0 for rehearsing master-data changes; mirrors the 7.x Docker quickstart.
+# https://local.openbis.ch (resolves to 127.0.0.1). Passwords come from openbis/.env.
+name: bedamame-openbis
+
+services:
+  openbis-db:
+    image: postgres:15
+    hostname: openbis-db
+    environment:
+      POSTGRES_PASSWORD: ${OPENBIS_DB_ADMIN_PASS}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - openbis-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 20
+
+  openbis-app:
+    image: openbis/openbis-app:7.0.0
+    hostname: openbis-app
+    pid: host
+    depends_on:
+      openbis-db:
+        condition: service_healthy
+    environment:
+      OPENBIS_ADMIN_PASS: ${OPENBIS_ADMIN_PASS}
+      OPENBIS_DB_ADMIN_USER: postgres
+      OPENBIS_DB_ADMIN_PASS: ${OPENBIS_DB_ADMIN_PASS}
+      OPENBIS_DB_APP_USER: openbis
+      OPENBIS_DB_APP_PASS: ${OPENBIS_DB_APP_PASS}
+      OPENBIS_DB_HOST: openbis-db
+      OPENBIS_DATA: /data/openbis
+      OPENBIS_ETC: /etc/openbis
+      OPENBIS_HOME: /home/openbis
+      OPENBIS_LOG: /var/log/openbis
+      OPENBIS_FQDN: local.openbis.ch
+    volumes:
+      - openbis-app-data:/data
+      - openbis-app-etc:/etc/openbis
+      - openbis-app-logs:/var/log/openbis
+      # see the comment on sessionWorkSpace in this file
+      - ./ro-crate/service.properties:/etc/openbis/ro-crate/service.properties:ro
+      # lets admin import validation scripts
+      - ./as/openbis.conf:/etc/openbis/as/openbis.conf:ro
+
+  # The stock ingress has no route to the RO-Crate server (port 8086), so it runs our copy
+  # of its config, which adds /ro-crate-server. The alias lets the RO-Crate server fetch its
+  # export from https://local.openbis.ch inside the network (outside, it is 127.0.0.1).
+  openbis-ingress:
+    image: openbis/openbis-local@sha256:cb89d48a13533d07cde0a91be933e7113c7ab6bb2c935807daffca32df377b1b
+    hostname: openbis-ingress
+    depends_on:
+      - openbis-app
+    command: ["haproxy", "-f", "/usr/local/etc/haproxy/haproxy.cfg"]
+    volumes:
+      - ./ingress/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - "443:443"
+    networks:
+      default:
+        aliases:
+          - local.openbis.ch
+
+volumes:
+  openbis-db-data:
+  openbis-app-data:
+  openbis-app-etc:
+  openbis-app-logs:

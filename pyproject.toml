@@ -16,3 +16,9 @@ dev = [
     "black>=26.1.0",
     "roc-validator==0.12.2",
 ]
+openbis = [
+    "openpyxl==3.1.5",
+]
+
+[tool.uv]
+default-groups = ["dev", "openbis"]
