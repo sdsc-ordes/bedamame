@@ -226,6 +226,57 @@ class Openbis:
                     target.write_bytes(z.read(name))
         return out / "object-types.xlsx"
 
+    def export_objects(self, sample_types: list[str], out: Path) -> Path:
+        # every object of these types, in the import-compatible format of an ELN export
+        criteria = {
+            "@type": "as.dto.sample.search.SampleSearchCriteria",
+            "operator": "OR",
+            "criteria": [
+                {
+                    "@type": "as.dto.sample.search.SampleTypeSearchCriteria",
+                    "criteria": [
+                        {
+                            "@type": "as.dto.common.search.CodeSearchCriteria",
+                            "fieldValue": {
+                                "@type": "as.dto.common.search.StringEqualToValue",
+                                "value": t,
+                            },
+                        }
+                    ],
+                }
+                for t in sample_types
+            ],
+        }
+        perm_ids = [s["permId"]["permId"] for s in self.search("sample", criteria)]
+        data = {
+            "@type": "as.dto.exporter.data.ExportData",
+            "permIds": [
+                {
+                    "@type": "as.dto.exporter.data.ExportablePermId",
+                    "exportableKind": "SAMPLE",
+                    "permId": p,
+                }
+                for p in perm_ids
+            ],
+            "fields": {"@type": "as.dto.exporter.data.AllFields"},
+        }
+        options = {
+            "@type": "as.dto.exporter.options.ExportOptions",
+            "formats": ["XLSX"],
+            "xlsTextFormat": "PLAIN",
+            "withReferredTypes": False,
+            "withImportCompatibility": True,
+            "zipSingleFiles": False,
+        }
+        url = self.call("executeExport", data, options)["downloadURL"]
+        body = request(url, {})
+        out.parent.mkdir(parents=True, exist_ok=True)
+        if not url.endswith(".xlsx"):
+            with zipfile.ZipFile(io.BytesIO(body)) as z:
+                body = z.read(next(n for n in z.namelist() if n.endswith(".xlsx")))
+        out.write_bytes(body)
+        return out
+
     def export_crate(
         self, identifiers: list[str], fmt: str = "application/ld+json", **options: bool
     ) -> bytes:

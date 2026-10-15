@@ -19,6 +19,11 @@ BEDRETTO_TYPES = [
     "DATALOGGER", "DEVICE", "METHOD",
 ]  # fmt: skip
 
+# types the Phase 3 changes add or extend; annotated like the 12
+ANNOTATED_TYPES = BEDRETTO_TYPES + [
+    "PERSON", "ORGANIZATION", "TESTBED", "BOREHOLE_MOUTH_SURVEY", "SENSOR_POSITION",
+]  # fmt: skip
+
 NAMESPACES = {
     "bed": TERMS,
     "bedv": VOCAB,
@@ -33,7 +38,6 @@ NAMESPACES = {
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "sh": "http://www.w3.org/ns/shacl#",
     "dcterms": "http://purl.org/dc/terms/",
-    "foaf": "http://xmlns.com/foaf/0.1/",
     "sosa": "http://www.w3.org/ns/sosa/",
     "ssn": "http://www.w3.org/ns/ssn/",
     "prov": "http://www.w3.org/ns/prov#",
@@ -45,14 +49,15 @@ NAMESPACES = {
 }
 
 # openBIS semantic annotations: Ontology Id and Ontology Version per prefix; the Ontology Annotation Id
-# is the full term IRI. schema.org as on openBIS 7.0's own PUBLICATION type; RDFS, SOSA and SSN publish
-# no version IRI, so their version is the namespace.
+# is the full term IRI. schema.org as on openBIS 7.0's own PUBLICATION type; RDFS, SOSA, SSN and Dublin
+# Core publish no version IRI, so their version is the namespace.
 ANNOTATION_SOURCES = {
     "bed": (ONTOLOGY, ONTOLOGY_VERSION),
     "schema": ("https://schema.org/", "https://schema.org/version/28.1"),
     "rdfs": (NAMESPACES["rdfs"], NAMESPACES["rdfs"]),
     "sosa": (NAMESPACES["sosa"], NAMESPACES["sosa"]),
     "ssn": (NAMESPACES["ssn"], NAMESPACES["ssn"]),
+    "dcterms": (NAMESPACES["dcterms"], NAMESPACES["dcterms"]),
 }
 
 

@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 MASTERDATA = ROOT / "tests" / "fixtures" / "openbis-masterdata.xlsx"
 MAPPING = ROOT / "mapping"
 # standard vocabularies whose terms are used as they are
-EXTERNAL = {"schema", "rdfs", "sosa", "ssn"}
+EXTERNAL = {"schema", "rdfs", "sosa", "ssn", "dcterms"}
 
 
 def rows(name: str) -> list[dict]:

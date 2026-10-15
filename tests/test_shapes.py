@@ -23,7 +23,6 @@ PREFIXES = config.turtle_prefixes(
     "unit",
     "xsd",
     "skos",
-    "foaf",
 )
 
 VALID = """
@@ -39,11 +38,11 @@ bdr:request1 a bed:CoreRequest ; schema:name "core 1 request" ; bed:requestedBy 
     bed:purpose "porosity" ; bed:startDate "2025-10-01"^^xsd:date ; bed:endDate "2025-12-01"^^xsd:date ;
     bed:sampleDestroyed false ; bed:returnedToStorage true .
 
-bdr:person1 a prov:Agent, foaf:Person ; schema:name "Josiah Carberry" ;
+bdr:person1 a schema:Person ; schema:name "Josiah Carberry" ;
     schema:identifier "https://orcid.org/0000-0002-1825-0097" ;
     schema:affiliation bdr:org1 ; schema:email "josiah@example.org" .
 
-bdr:org1 a prov:Agent, foaf:Organization ; schema:name "Example Lab" .
+bdr:org1 a schema:Organization ; schema:name "Example Lab" .
 
 bdr:corelog1 a bed:CoreLog ; schema:name "core 1 log" ;
     bed:ofCore bdr:core1 ; bed:rockClass bedv:rock-class-igneous ; bed:rockType "granite" ;
@@ -145,13 +144,13 @@ bdr:bad14 a bed:CollarSurvey ; schema:name "bad14" ; bed:ofBorehole bdr:dgqga6al
     bed:easting 1.0 ; bed:northing 2.0 ; bed:elevation 3.0 ; bed:dipConvention "negative downward" .
 """),
     "malformed ORCID": ("bdr:bad15", "PatternConstraintComponent", """
-bdr:bad15 a prov:Agent, foaf:Person ; schema:name "bad15" ; schema:identifier "0000-0002-1825-0097" .
+bdr:bad15 a schema:Person ; schema:name "bad15" ; schema:identifier "0000-0002-1825-0097" .
 """),
-    "person not an agent": ("bdr:bad16", "ClassConstraintComponent", """
-bdr:bad16 a foaf:Person ; schema:name "bad16" .
+    "organisation with two identifiers": ("bdr:bad16", "MaxCountConstraintComponent", """
+bdr:bad16 a schema:Organization ; schema:name "bad16" ; schema:identifier "a", "b" .
 """),
     "affiliation to a person": ("bdr:bad17", "ClassConstraintComponent", """
-bdr:bad17 a prov:Agent, foaf:Person ; schema:name "bad17" ; schema:affiliation bdr:person1 .
+bdr:bad17 a schema:Person ; schema:name "bad17" ; schema:affiliation bdr:person1 .
 """),
     "sensor position without deployment": ("bdr:bad18", "MinCountConstraintComponent", """
 bdr:bad18 a bed:SensorPosition ; schema:name "bad18" ; bed:easting 1.0 .

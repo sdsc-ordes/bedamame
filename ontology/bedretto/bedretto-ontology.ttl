@@ -630,6 +630,10 @@ bed:observation a rdf:Property, owl:DatatypeProperty ;
 
 # Provenance
 
+# openBIS 7.0 types people and organisations as schema:Person and schema:Organization
+schema:Person rdfs:subClassOf prov:Agent .
+schema:Organization rdfs:subClassOf prov:Agent .
+
 bed:builtFromGraph a rdf:Property, owl:ObjectProperty ;
     rdfs:label "built from graph"@en ;
     skos:definition "A named graph of the store from which an exported crate was built."@en .

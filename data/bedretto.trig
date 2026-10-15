@@ -9,7 +9,6 @@
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix schema:  <https://schema.org/> .
-@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
 
 @prefix sosa:    <http://www.w3.org/ns/sosa/> .
 @prefix ssn:     <http://www.w3.org/ns/ssn/> .
@@ -59,12 +58,12 @@ gr:provenance {
 
 gr:register-agents {
 
-    bdr:xvjsy5qorfduvbpla7ntwiajfu a prov:Agent, foaf:Person ; schema:name "Simon Kinglele" .
-    bdr:dv3mpsfsfnftll6asnosnrwjam a prov:Agent, foaf:Person ; schema:name "Men-Andrin Meier" .
-    bdr:ffpsexkqjzepdick47nvjp5lrq a prov:Agent, foaf:Person ; schema:name "Fiona" .
-    bdr:oqio7hpc75goplavdagpvtm33y a prov:Agent, foaf:Person ; schema:name "Mathilde" .
-    bdr:4zmptncecvaopjermr62rpe65i a prov:Agent, foaf:Person ; schema:name "Aurora" .
-    bdr:2buzlf2k25ft3fyx773xwwpodm a prov:Agent, foaf:Organization ; schema:name "Flotron" .
+    bdr:xvjsy5qorfduvbpla7ntwiajfu a schema:Person ; schema:name "Simon Kinglele" .
+    bdr:dv3mpsfsfnftll6asnosnrwjam a schema:Person ; schema:name "Men-Andrin Meier" .
+    bdr:ffpsexkqjzepdick47nvjp5lrq a schema:Person ; schema:name "Fiona" .
+    bdr:oqio7hpc75goplavdagpvtm33y a schema:Person ; schema:name "Mathilde" .
+    bdr:4zmptncecvaopjermr62rpe65i a schema:Person ; schema:name "Aurora" .
+    bdr:2buzlf2k25ft3fyx773xwwpodm a schema:Organization ; schema:name "Flotron" .
 }
 
 gr:register-testbeds {

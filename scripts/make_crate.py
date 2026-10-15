@@ -41,7 +41,7 @@ STUB_PROPS = {
 
 NAMESPACES = {
     p: config.NAMESPACES[p]
-    for p in ("bed", "sosa", "ssn", "prov", "geo", "qudt", "skos", "time", "foaf")
+    for p in ("bed", "sosa", "ssn", "prov", "geo", "qudt", "skos", "time")
 }
 
 CONTEXT = ["https://w3id.org/ro/crate/1.2/context", NAMESPACES]

@@ -15,7 +15,6 @@
 @prefix qudt:    <http://qudt.org/schema/qudt/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix time:    <http://www.w3.org/2006/time#> .
-@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
 
 <https://example.org/bedretto/shapes> a owl:Ontology ;
     dcterms:title "Bedretto shapes"@en ;
@@ -187,6 +186,7 @@ bedsh:CollarSurveyShape a sh:NodeShape ;
 
     sh:property [ sh:path bed:surveyDate ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
     sh:property [ sh:path bed:surveyedBy ; sh:class prov:Agent ] ;
+    sh:property [ sh:path dcterms:source  ; sh:datatype xsd:string ] ;
 
     sh:property [ sh:path bed:easting   ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
     sh:property [ sh:path bed:northing  ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
@@ -523,9 +523,8 @@ bedsh:TestBedShape a sh:NodeShape ;
     sh:property [ sh:path schema:description ; sh:maxCount 1 ; sh:datatype xsd:string ] .
 
 bedsh:PersonShape a sh:NodeShape ;
-    sh:targetClass foaf:Person ;
+    sh:targetClass schema:Person ;
     rdfs:label "Person" ;
-    sh:class       prov:Agent ;
 
     sh:property [
         sh:path        schema:identifier ;
@@ -537,13 +536,12 @@ bedsh:PersonShape a sh:NodeShape ;
 
     sh:property [ sh:path schema:givenName   ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
     sh:property [ sh:path schema:familyName  ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
-    sh:property [ sh:path schema:affiliation ; sh:class foaf:Organization ] ;
+    sh:property [ sh:path schema:affiliation ; sh:class schema:Organization ] ;
     sh:property [ sh:path schema:email       ; sh:datatype xsd:string ; sh:pattern "^[^@\\s]+@[^@\\s]+$" ] .
 
 bedsh:OrganizationShape a sh:NodeShape ;
-    sh:targetClass foaf:Organization ;
+    sh:targetClass schema:Organization ;
     rdfs:label "Organisation" ;
-    sh:class       prov:Agent ;
 
     sh:property [ sh:path schema:identifier ; sh:maxCount 1 ; sh:datatype xsd:string ] .
 
