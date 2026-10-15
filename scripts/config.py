@@ -1,0 +1,57 @@
+# The one base IRI of everything Bedretto publishes; `just set-base URL` rewrites it everywhere
+BASE = "https://example.org/bedretto/"
+VERSION = "0.4.0"
+
+TERMS = BASE + "terms#"
+VOCAB = BASE + "vocab/"
+SHAPES = BASE + "shapes#"
+ID = BASE + "id/"
+GRAPH = BASE + "graph/"
+
+ONTOLOGY = BASE + "terms"
+ONTOLOGY_VERSION = f"{ONTOLOGY}/{VERSION}"
+
+NAMESPACES = {
+    "bed": TERMS,
+    "bedv": VOCAB,
+    "bedsh": SHAPES,
+    "bdr": ID,
+    "gr": GRAPH,
+    "schema": "https://schema.org/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "sh": "http://www.w3.org/ns/shacl#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "sosa": "http://www.w3.org/ns/sosa/",
+    "ssn": "http://www.w3.org/ns/ssn/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "geo": "http://www.opengis.net/ont/geosparql#",
+    "time": "http://www.w3.org/2006/time#",
+    "qudt": "http://qudt.org/schema/qudt/",
+    "unit": "http://qudt.org/vocab/unit/",
+    "quantitykind": "http://qudt.org/vocab/quantitykind/",
+}
+
+# openBIS semantic annotations: Ontology Id and Ontology Version per prefix; the Ontology Annotation Id
+# is the full term IRI. schema.org as on openBIS 7.0's own PUBLICATION type.
+ANNOTATION_SOURCES = {
+    "bed": (ONTOLOGY, ONTOLOGY_VERSION),
+    "schema": ("https://schema.org/", "https://schema.org/version/28.1"),
+}
+
+
+def expand(curie: str) -> str:
+    prefix, local = curie.split(":", 1)
+    return NAMESPACES[prefix] + local
+
+
+def sparql_prefixes(*names: str) -> str:
+    return "".join(f"PREFIX {n + ':':<14}<{NAMESPACES[n]}>\n" for n in names)
+
+
+def turtle_prefixes(*names: str) -> str:
+    return "".join(f"@prefix {n + ':':<14}<{NAMESPACES[n]}> .\n" for n in names)

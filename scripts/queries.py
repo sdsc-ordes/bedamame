@@ -4,10 +4,12 @@ from pathlib import Path
 
 from rdflib import Dataset, URIRef
 
+import config
+
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "bedretto.trig"
 BEDRETTO = ROOT / "ontology" / "bedretto"
-GRAPH_NS = "https://example.org/bedretto/graph/"
+GRAPH_NS = config.GRAPH
 
 # loaded as named graphs next to the data, so queries can join terms, labels and shapes
 STATIC_GRAPHS = {
@@ -16,20 +18,9 @@ STATIC_GRAPHS = {
     "shapes": BEDRETTO / "bedretto-shapes.ttl",
 }
 
-PREFIXES = """
-PREFIX bed:     <https://example.org/bedretto/terms#>
-PREFIX bedv:    <https://example.org/bedretto/vocab/>
-PREFIX bedsh:   <https://example.org/bedretto/shapes#>
-PREFIX gr:      <https://example.org/bedretto/graph/>
-PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX sh:      <http://www.w3.org/ns/shacl#>
-PREFIX schema:  <https://schema.org/>
-PREFIX skos:    <http://www.w3.org/2004/02/skos/core#>
-PREFIX prov:    <http://www.w3.org/ns/prov#>
-PREFIX ssn:     <http://www.w3.org/ns/ssn/>
-PREFIX qudt:    <http://qudt.org/schema/qudt/>
-PREFIX time:    <http://www.w3.org/2006/time#>
-"""
+PREFIXES = "\n" + config.sparql_prefixes(
+    "bed", "bedv", "bedsh", "gr", "rdfs", "sh", "schema", "skos", "prov", "ssn", "qudt"
+)
 
 QUERIES: dict[str, str] = {}
 
@@ -41,32 +32,31 @@ def q(name: str, sparql: str) -> None:
 q(
     "current-collar-position",
     """
-SELECT ?borehole ?surveyType ?easting ?northing ?elevation ?assertedOn ?by
+SELECT ?borehole ?surveyType ?easting ?northing ?elevation ?surveyed
+       (GROUP_CONCAT(?name ; separator=", ") AS ?by)
 WHERE {
     GRAPH ?g {
         ?survey a bed:CollarSurvey ;
                 bed:ofBorehole  ?bh ;
                 bed:surveyType  ?type ;
+                bed:surveyDate  ?surveyed ;
                 bed:easting     ?easting ;
                 bed:northing    ?northing ;
                 bed:elevation   ?elevation .
+        OPTIONAL { ?survey bed:surveyedBy ?agent }
     }
     GRAPH gr:register-boreholes { ?bh schema:name ?borehole }
     GRAPH gr:vocab { ?type skos:prefLabel ?surveyType }
-    GRAPH gr:provenance {
-        ?g prov:generatedAtTime ?assertedOn ;
-           prov:wasAttributedTo ?agent .
-    }
-    GRAPH gr:register-agents { ?agent schema:name ?by }
+    OPTIONAL { GRAPH gr:register-agents { ?agent schema:name ?name } }
 
     FILTER (?borehole = "BFE_A_01")
 
     FILTER NOT EXISTS {
-        GRAPH ?later { ?other a bed:CollarSurvey ; bed:ofBorehole ?bh }
-        GRAPH gr:provenance { ?later prov:generatedAtTime ?laterDate }
-        FILTER (?laterDate > ?assertedOn)
+        GRAPH ?later { ?other a bed:CollarSurvey ; bed:ofBorehole ?bh ; bed:surveyDate ?laterDate }
+        FILTER (?laterDate > ?surveyed)
     }
 }
+GROUP BY ?borehole ?surveyType ?easting ?northing ?elevation ?surveyed
 """,
 )
 
@@ -82,7 +72,7 @@ WHERE {
     GRAPH gr:register-sensors {
         ?s bed:sensorKind    ?type ;
            schema:name       ?sensor ;
-           bed:serialNumber  ?serial .
+           schema:serialNumber ?serial .
     }
     GRAPH ?g {
         ?depl a ssn:Deployment ;
@@ -91,7 +81,7 @@ WHERE {
               bed:servesExperiment   ?exp ;
               bed:coupling           ?coup .
         OPTIONAL { ?depl bed:measuredDepth [ qudt:numericValue ?depth_m ] }
-        OPTIONAL { ?depl time:hasTime [ time:hasBeginning [ time:inXSDDate ?installed ] ] }
+        OPTIONAL { ?depl bed:deployedOn ?installed }
     }
     GRAPH ?eg { ?exp a bed:Experiment ; schema:name "FEAR-2" }
     GRAPH gr:register-boreholes { ?bh schema:name ?borehole }
@@ -158,14 +148,7 @@ WHERE {
         GRAPH gr:register-boreholes { ?o qudt:numericValue ?num ; qudt:hasUnit ?unit }
         BIND (CONCAT(STR(?num), " ", REPLACE(STR(?unit), "^.*/", "")) AS ?quantity)
     }
-    OPTIONAL {
-        GRAPH gr:register-boreholes {
-            ?o time:hasBeginning/time:inXSDDate ?from ;
-               time:hasEnd/time:inXSDDate       ?to .
-        }
-        BIND (CONCAT(STR(?from), " to ", STR(?to)) AS ?interval)
-    }
-    BIND (COALESCE(?concept, ?testBed, ?quantity, ?interval, ?o) AS ?value)
+    BIND (COALESCE(?concept, ?testBed, ?quantity, ?o) AS ?value)
 }
 ORDER BY ?property
 """,

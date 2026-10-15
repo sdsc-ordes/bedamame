@@ -27,7 +27,13 @@ WITH_CHILDREN = {"VOCABULARY_TYPE", "SAMPLE_TYPE", "EXPERIMENT_TYPE", "DATASET_T
 DROP = ["Registrator", "Registration Date", "Modification Date", "Unique Subcodes"]
 # internal in 7.0 although the export has them without $
 INTERNAL_IN_70 = {"PRODUCT.DESCRIPTION"}
-PROPERTY_TYPE_COLUMNS = ["Property label", "Description", "Data type", "Vocabulary code", "Metadata"]
+PROPERTY_TYPE_COLUMNS = [
+    "Property label",
+    "Description",
+    "Data type",
+    "Vocabulary code",
+    "Metadata",
+]
 
 
 @dataclass
@@ -126,13 +132,19 @@ def internal_to_70(types: list[Section]) -> None:
     for t in types:
         for row in t.children.rows:
             if (code := t.children.get(row, "Code")).startswith("$"):
-                defs.setdefault(code[1:], [t.children.get(row, c) for c in PROPERTY_TYPE_COLUMNS])
+                defs.setdefault(
+                    code[1:], [t.children.get(row, c) for c in PROPERTY_TYPE_COLUMNS]
+                )
     for t in types:
         for row in t.children.rows:
             code = t.children.get(row, "Code")
             plain = code.removeprefix("$")
             t.children.set(row, "Code", plain)
-            t.children.set(row, "Internal", "TRUE" if plain in defs or plain in INTERNAL_IN_70 else "FALSE")
+            t.children.set(
+                row,
+                "Internal",
+                "TRUE" if plain in defs or plain in INTERNAL_IN_70 else "FALSE",
+            )
             own = [t.children.get(row, c) for c in PROPERTY_TYPE_COLUMNS]
             if plain in defs and own != defs[plain]:
                 print(f"{t.code}.{plain}: takes the definition of ${plain}, was {own}")
@@ -142,9 +154,17 @@ def internal_to_70(types: list[Section]) -> None:
 
 def import_subset(sections: list[Section]) -> list[Section]:
     # 7.0 ships the ELN defaults and the $ vocabularies; keep the Bedretto types and what they use
-    types = [s for s in sections if s.kind == "SAMPLE_TYPE" and s.code in BEDRETTO_TYPES]
+    types = [
+        s for s in sections if s.kind == "SAMPLE_TYPE" and s.code in BEDRETTO_TYPES
+    ]
     vocabs = used_vocabularies(types)
-    keep = [s for s in sections if s.kind == "VOCABULARY_TYPE" and s.code in vocabs and not s.code.startswith("$")]
+    keep = [
+        s
+        for s in sections
+        if s.kind == "VOCABULARY_TYPE"
+        and s.code in vocabs
+        and not s.code.startswith("$")
+    ]
     keep += sorted(types, key=lambda t: BEDRETTO_TYPES.index(t.code))
     for s in keep:
         if s.entity.get(s.entity.rows[0], "Unique Subcodes") not in (None, "FALSE"):
@@ -154,11 +174,21 @@ def import_subset(sections: list[Section]) -> list[Section]:
     internal_to_70([s for s in keep if s.kind == "SAMPLE_TYPE"])
     return keep
 
+
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Build an importable master-data folder from an openBIS export")
-    ap.add_argument("export", type=Path, help="object-types.xlsx from an openBIS master-data export")
+    ap = argparse.ArgumentParser(
+        description="Build an importable master-data folder from an openBIS export"
+    )
+    ap.add_argument(
+        "export", type=Path, help="object-types.xlsx from an openBIS master-data export"
+    )
     ap.add_argument("--out", type=Path, default=OUT)
-    ap.add_argument("--import", dest="do_import", action="store_true", help="import the zip into the local openBIS")
+    ap.add_argument(
+        "--import",
+        dest="do_import",
+        action="store_true",
+        help="import the zip into the local openBIS",
+    )
     args = ap.parse_args()
 
     sections = import_subset(read(args.export))
@@ -176,7 +206,9 @@ def main() -> int:
     shutil.make_archive(str(args.out), "zip", args.out)
 
     vocabs = [s.code for s in sections if s.kind == "VOCABULARY_TYPE"]
-    print(f"{args.out}.zip: {len(sections) - len(vocabs)} types, {len(vocabs)} vocabularies ({', '.join(vocabs)})")
+    print(
+        f"{args.out}.zip: {len(sections) - len(vocabs)} types, {len(vocabs)} vocabularies ({', '.join(vocabs)})"
+    )
     if args.do_import:
         Openbis().import_excel(Path(f"{args.out}.zip"))
         print("imported")

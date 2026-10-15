@@ -15,14 +15,16 @@
 @prefix qudt:    <http://qudt.org/schema/qudt/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix time:    <http://www.w3.org/2006/time#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
 
 <https://example.org/bedretto/shapes> a owl:Ontology ;
     dcterms:title "Bedretto shapes"@en ;
     dcterms:description "SHACL shapes for the Bedretto metadata store, validated over the union of all named graphs together with the Bedretto ontology and vocabularies. A property that takes a controlled value must point to a concept in the scheme named here, so the values themselves are listed only in the vocabulary."@en ;
     dcterms:creator "Robin Franken" ;
     dcterms:created "2026-10-05"^^xsd:date ;
-    dcterms:modified "2026-10-06"^^xsd:date ;
-    owl:versionInfo "0.3.0" ;
+    dcterms:modified "2026-10-15"^^xsd:date ;
+    owl:versionInfo "0.4.0" ;
+    owl:versionIRI <https://example.org/bedretto/shapes/0.4.0> ;
     rdfs:seeAlso <https://example.org/bedretto/terms>, <https://example.org/bedretto/vocab> .
 
 bedsh:Prefixes
@@ -91,7 +93,7 @@ bedsh:TunnelMeterProperty a sh:PropertyShape ;
     sh:path        bed:tunnelMeter ;
     sh:maxCount    1 ;
     sh:datatype    xsd:string ;
-    sh:pattern     "^TM[0-9]+$" .
+    sh:pattern     "^F?TM[0-9]+$" .
 
 bedsh:BoreholeShape a sh:NodeShape ;
     sh:targetClass bed:Borehole ;
@@ -137,7 +139,10 @@ bedsh:BoreholeShape a sh:NodeShape ;
 
     sh:property [ sh:path bed:totalLength      ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
     sh:property [ sh:path bed:boreholeDiameter ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
-    sh:property [ sh:path bed:drilledBetween   ; sh:maxCount 1 ; sh:class time:Interval ] ;
+    sh:property [ sh:path bed:coreDiameter     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:coreLength       ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:drillingStart    ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:drillingEnd      ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
 
     sh:sparql [
         a sh:SPARQLConstraint ;
@@ -178,6 +183,9 @@ bedsh:CollarSurveyShape a sh:NodeShape ;
         sh:maxCount    1 ;
         bedsh:inScheme bedv:location-type ;
     ] ;
+
+    sh:property [ sh:path bed:surveyDate ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:surveyedBy ; sh:class prov:Agent ] ;
 
     sh:property [ sh:path bed:easting   ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
     sh:property [ sh:path bed:northing  ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
@@ -243,7 +251,21 @@ bedsh:CoreShape a sh:NodeShape ;
     sh:property [ sh:path bed:mass         ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
 
     sh:property [ sh:path bed:chargeNumber    ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
-    sh:property [ sh:path bed:storageLocation ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+    sh:property [ sh:path bed:storageLocation ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:coreBoxNumber   ; sh:maxCount 1 ; sh:datatype xsd:integer ] ;
+    sh:property [ sh:path bed:forRequest      ; sh:class bed:CoreRequest ] ;
+    sh:property [ sh:path bed:responsible     ; sh:class prov:Agent ] .
+
+bedsh:CoreRequestShape a sh:NodeShape ;
+    sh:targetClass bed:CoreRequest ;
+    rdfs:label "Core request" ;
+
+    sh:property [ sh:path bed:requestedBy       ; sh:class prov:Agent ] ;
+    sh:property [ sh:path bed:purpose           ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:startDate         ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:endDate           ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:sampleDestroyed   ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+    sh:property [ sh:path bed:returnedToStorage ; sh:maxCount 1 ; sh:datatype xsd:boolean ] .
 
 bedsh:CoreLogShape a sh:NodeShape ;
     sh:targetClass bed:CoreLog ;
@@ -287,7 +309,8 @@ bedsh:CoreSampleShape a sh:NodeShape ;
     ] ;
 
     sh:property [ sh:path bed:purpose     ; sh:datatype xsd:string ] ;
-    sh:property [ sh:path bed:requestedBy ; sh:class prov:Agent ] .
+    sh:property [ sh:path bed:requestedBy ; sh:class prov:Agent ] ;
+    sh:property [ sh:path bed:forRequest  ; sh:class bed:CoreRequest ] .
 
 bedsh:LabAnalysisShape a sh:NodeShape ;
     sh:targetClass bed:LabAnalysis ;
@@ -339,18 +362,24 @@ bedsh:LoggingRunShape a sh:NodeShape ;
         bedsh:inScheme bedv:logging-direction ;
     ] ;
 
-    sh:property [ sh:path bed:centralised         ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
-    sh:property [ sh:path bed:samplingInterval    ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
-    sh:property [ sh:path bed:magneticInclination ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
-    sh:property [ sh:path bed:magneticDeclination ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
-    sh:property [ sh:path prov:wasAssociatedWith  ; sh:class prov:Agent ] .
+    sh:property [ sh:path bed:startDate            ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:endDate              ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:centralised          ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+    sh:property [ sh:path bed:fileFormat           ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:samplingInterval     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:timeSamplingInterval ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:depthCorrection      ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:magneticInclination  ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:magneticDeclination  ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:operatedBy           ; sh:class prov:Agent ] ;
+    sh:property [ sh:path prov:wasAssociatedWith   ; sh:class prov:Agent ] .
 
 bedsh:SensorShape a sh:NodeShape ;
     sh:targetClass sosa:Sensor ;
     rdfs:label "Sensor" ;
 
     sh:property [
-        sh:path        bed:serialNumber ;
+        sh:path        schema:serialNumber ;
         sh:minCount    1 ;
         sh:maxCount    1 ;
         sh:datatype    xsd:string ;
@@ -363,7 +392,12 @@ bedsh:SensorShape a sh:NodeShape ;
         bedsh:inScheme bedv:sensor-type ;
     ] ;
 
-    sh:property [ sh:path bed:inventoryLabel ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:inventoryLabel      ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:responsible         ; sh:class prov:Agent ] ;
+    sh:property [ sh:path bed:fdsnBandCode        ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z]$" ] ;
+    sh:property [ sh:path bed:fdsnSourceCode      ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z]$" ] ;
+    sh:property [ sh:path bed:fdsnOrientationCode ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z0-9]$" ] ;
+    sh:property [ sh:path bed:fdsnChannelCode     ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
 
     sh:sparql [
         a sh:SPARQLConstraint ;
@@ -371,8 +405,8 @@ bedsh:SensorShape a sh:NodeShape ;
         sh:select """
             SELECT $this ?serial ?other
             WHERE {
-                $this  bed:serialNumber ?serial .
-                ?other a sosa:Sensor ; bed:serialNumber ?serial .
+                $this  schema:serialNumber ?serial .
+                ?other a sosa:Sensor ; schema:serialNumber ?serial .
                 FILTER (?other != $this)
             }
         """ ;
@@ -398,9 +432,26 @@ bedsh:DeploymentShape a sh:NodeShape ;
         sh:class       sosa:Platform ;
     ] ;
 
-    sh:property [ sh:path bed:measuredDepth ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
-    sh:property [ sh:path bed:depthDatum    ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
-    sh:property [ sh:path bed:cableLength   ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:deployedOn        ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:removedOn         ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:deployedBy        ; sh:class prov:Agent ] ;
+    sh:property [ sh:path bed:removedBy         ; sh:class prov:Agent ] ;
+
+    sh:property [
+        sh:path        bed:deploymentType ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:deployment-type ;
+    ] ;
+
+    sh:property [ sh:path bed:measuredDepth     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorTopDepth    ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorCentreDepth ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorBottomDepth ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorAzimuth     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorDip         ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:depthDatum        ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:cableLength       ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:cableLabel        ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
 
     sh:property [
         sh:path        bed:coupling ;
@@ -425,6 +476,58 @@ bedsh:DeploymentShape a sh:NodeShape ;
         sh:path        bed:servesExperiment ;
         sh:class       bed:Experiment ;
     ] .
+
+bedsh:SensorPositionShape a sh:NodeShape ;
+    sh:targetClass bed:SensorPosition ;
+    rdfs:label "Sensor position" ;
+
+    sh:property [
+        sh:path        bed:ofDeployment ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       ssn:Deployment ;
+    ] ;
+
+    sh:property [ sh:path bed:coordinateSystem ; sh:maxCount 1 ; sh:class bed:CoordinateReferenceSystem ] ;
+    sh:property [ sh:path bed:easting          ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path bed:northing         ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path bed:elevation        ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path schema:latitude      ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path schema:longitude     ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path bed:computedOn       ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:coordinatesBy    ; sh:class prov:Agent ] .
+
+bedsh:TestBedShape a sh:NodeShape ;
+    sh:targetClass bed:TestBed ;
+    rdfs:label "Test bed" ;
+
+    sh:property [ sh:path schema:identifier  ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path schema:description ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+bedsh:PersonShape a sh:NodeShape ;
+    sh:targetClass foaf:Person ;
+    rdfs:label "Person" ;
+    sh:class       prov:Agent ;
+
+    sh:property [
+        sh:path        schema:identifier ;
+        sh:maxCount    1 ;
+        sh:datatype    xsd:string ;
+        sh:pattern     "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$" ;
+        sh:name        "ORCID" ;
+    ] ;
+
+    sh:property [ sh:path schema:givenName   ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path schema:familyName  ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path schema:affiliation ; sh:class foaf:Organization ] ;
+    sh:property [ sh:path schema:email       ; sh:datatype xsd:string ; sh:pattern "^[^@\\s]+@[^@\\s]+$" ] .
+
+bedsh:OrganizationShape a sh:NodeShape ;
+    sh:targetClass foaf:Organization ;
+    rdfs:label "Organisation" ;
+    sh:class       prov:Agent ;
+
+    sh:property [ sh:path schema:identifier ; sh:maxCount 1 ; sh:datatype xsd:string ] .
 
 bedsh:BundleShape a sh:NodeShape ;
     sh:targetClass prov:Bundle ;
@@ -451,9 +554,4 @@ bedsh:BundleShape a sh:NodeShape ;
         sh:path        dcterms:temporal ;
         sh:maxCount    1 ;
         sh:class       time:Interval ;
-    ] ;
-
-    sh:property [
-        sh:path        bed:supersedes ;
-        sh:class       prov:Bundle ;
     ] .

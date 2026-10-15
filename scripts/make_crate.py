@@ -9,19 +9,21 @@ from pyshacl import validate
 from rdflib import Dataset, Graph, Literal, URIRef
 from rdflib.namespace import RDF
 
+import config
+
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "bedretto.trig"
 CRATE_SHAPES = ROOT / "ontology" / "crate" / "crate-shapes.ttl"
 OUT_DIR = ROOT / "out"
 
-ID = "https://example.org/bedretto/id/"
-TERMS = "https://example.org/bedretto/terms#"
-GRAPH_NS = "https://example.org/bedretto/graph/"
-SCHEMA = "https://schema.org/"
+ID = config.ID
+TERMS = config.TERMS
+GRAPH_NS = config.GRAPH
+SCHEMA = config.NAMESPACES["schema"]
 
 PROFILE = "https://w3id.org/bedretto/profile/experiment/0.1"
 LICENCE = "https://creativecommons.org/licenses/by/4.0/"
-CRATE_BASE = "https://example.org/bedretto/crate/"
+CRATE_BASE = config.BASE + "crate/"
 
 SELECTED = [
     GRAPH_NS + "campaign-fear2-install",
@@ -31,21 +33,15 @@ SELECTED = [
 STUB_PROPS = {
     SCHEMA + "name",
     SCHEMA + "manufacturer",
-    TERMS + "serialNumber",
+    SCHEMA + "serialNumber",
     TERMS + "nickname",
     TERMS + "totalLength",
     TERMS + "boreholeGeometry",
 }
 
 NAMESPACES = {
-    "bed": TERMS,
-    "sosa": "http://www.w3.org/ns/sosa/",
-    "ssn": "http://www.w3.org/ns/ssn/",
-    "prov": "http://www.w3.org/ns/prov#",
-    "geo": "http://www.opengis.net/ont/geosparql#",
-    "qudt": "http://qudt.org/schema/qudt/",
-    "skos": "http://www.w3.org/2004/02/skos/core#",
-    "time": "http://www.w3.org/2006/time#",
+    p: config.NAMESPACES[p]
+    for p in ("bed", "sosa", "ssn", "prov", "geo", "qudt", "skos", "time", "foaf")
 }
 
 CONTEXT = ["https://w3id.org/ro/crate/1.2/context", NAMESPACES]
@@ -59,6 +55,7 @@ VALIDATION_CONTEXT = {
 COMPACT = {
     URIRef(SCHEMA + "name"): "name",
     URIRef(SCHEMA + "manufacturer"): "manufacturer",
+    URIRef(SCHEMA + "serialNumber"): "serialNumber",
 }
 
 

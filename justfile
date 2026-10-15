@@ -13,6 +13,18 @@ sync:
 validate:
     uv run scripts/validate.py
 
+# Run the tests
+test:
+    uv run pytest -q
+
+# Write HTML documentation of the ontology and vocabularies to site/ with pyLODE
+docs:
+    uv run scripts/docs.py
+
+# Replace the base IRI (placeholder https://example.org/bedretto/) in ontology, data and fixtures
+set-base URL:
+    uv run scripts/set_base.py {{URL}}
+
 # Validate with one survey's CRS removed; expects a violation
 demo-failure:
     uv run scripts/validate.py --demo-failure

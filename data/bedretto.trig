@@ -70,14 +70,16 @@ gr:register-agents {
 gr:register-testbeds {
 
     bdr:eqxnbtcmpbaynl4zzzdfpjlsg4
-        a            bed:TestBed ;
-        schema:name  "Earthquake Physics" .
+        a                   bed:TestBed ;
+        schema:name         "Earthquake Physics" ;
+        schema:identifier   "EARTHTB" ;
+        schema:description  "Earthquake Physics Testbed" .
 }
 
 gr:register-boreholes {
 
     bdr:rqefuczecfce7lg3neucpuxfve
-        a                   bed:Borehole, sosa:Platform ;
+        a                   bed:Borehole ;
         schema:name         "BFE_D_31" ;
         bed:nickname        "vertical5a" ;
         bed:purpose         "tilt0560" ;
@@ -88,13 +90,12 @@ gr:register-boreholes {
         bed:drillingStyle   bedv:drilling-style-not-cored ;
         bed:boreholeDiameter [ a qudt:QuantityValue ; qudt:numericValue 96 ; qudt:hasUnit unit:MilliM ] ;
         bed:totalLength     [ a qudt:QuantityValue ; qudt:numericValue 12 ; qudt:hasUnit unit:M ] ;
-        bed:drilledBetween  [ a time:Interval ;
-                              time:hasBeginning [ a time:Instant ; time:inXSDDate "2025-09-01"^^xsd:date ] ;
-                              time:hasEnd       [ a time:Instant ; time:inXSDDate "2025-09-01"^^xsd:date ] ] ;
+        bed:drillingStart   "2025-09-01"^^xsd:date ;
+        bed:drillingEnd     "2025-09-01"^^xsd:date ;
         bed:boreholeStatus  bedv:borehole-status-open .
 
     bdr:dgqga6alw5gybldbmlxgxymvf4
-        a                   bed:Borehole, sosa:Platform ;
+        a                   bed:Borehole ;
         schema:name         "BFE_A_01" ;
         bed:nickname        "PrelimAE" ;
         bed:purpose         "Preliminary AE monitoring" ;
@@ -110,7 +111,7 @@ gr:register-boreholes {
         bed:boreholeStatus  bedv:borehole-status-open .
 
     bdr:qduhmbvzafhwpo5lh6l7rf2huq
-        a                   bed:Borehole, sosa:Platform ;
+        a                   bed:Borehole ;
         schema:name         "BFE_A_05" ;
         bed:nickname        "Prospection borehole 1" ;
         bed:project         "FEAR" ;
@@ -119,9 +120,9 @@ gr:register-boreholes {
         bed:totalLength     [ a qudt:QuantityValue ; qudt:numericValue 216.5 ; qudt:hasUnit unit:M ] ;
         bed:boreholeStatus  bedv:borehole-status-closed .
 
-    bdr:d2n4ek5egnfgtoeakstwdg73c4 a bed:Borehole, sosa:Platform ; schema:name "BFE_D_27" ; bed:project "FEAR" .
-    bdr:jnkzuoojzzdelejy777guhtule a bed:Borehole, sosa:Platform ; schema:name "BFE_C_23" ; bed:project "FEAR" .
-    bdr:nibzanitt5bcna2bkvvyenetqm a bed:Borehole, sosa:Platform ; schema:name "BFE_C_19" ; bed:project "FEAR" .
+    bdr:d2n4ek5egnfgtoeakstwdg73c4 a bed:Borehole ; schema:name "BFE_D_27" ; bed:project "FEAR" .
+    bdr:jnkzuoojzzdelejy777guhtule a bed:Borehole ; schema:name "BFE_C_23" ; bed:project "FEAR" .
+    bdr:nibzanitt5bcna2bkvvyenetqm a bed:Borehole ; schema:name "BFE_C_19" ; bed:project "FEAR" .
 }
 
 gr:register-sensors {
@@ -130,7 +131,7 @@ gr:register-sensors {
         a                   sosa:Sensor ;
         schema:name         "tilt01" ;
         bed:sensorKind      bedv:sensor-type-tilt-meter ;
-        bed:serialNumber    "LY1123" ;
+        schema:serialNumber "LY1123" ;
         bed:inventoryLabel  "tilt01" ;
         bed:domain          "Geomechanics" ;
         schema:manufacturer "Jewells Instruments / CSIRO" .
@@ -139,7 +140,7 @@ gr:register-sensors {
         a                   sosa:Sensor ;
         schema:name         "tilt02" ;
         bed:sensorKind      bedv:sensor-type-tilt-meter ;
-        bed:serialNumber    "LY1127" ;
+        schema:serialNumber "LY1127" ;
         bed:inventoryLabel  "tilt02", "tilt0536" ;
         bed:domain          "Geomechanics" ;
         schema:manufacturer "Jewells Instruments / CSIRO" .
@@ -148,14 +149,14 @@ gr:register-sensors {
         a                   sosa:Sensor ;
         schema:name         "tilt03" ;
         bed:sensorKind      bedv:sensor-type-tilt-meter ;
-        bed:serialNumber    "LY1066" ;
+        schema:serialNumber "LY1066" ;
         bed:inventoryLabel  "tilt03" .
 
     bdr:ep2yc5c6xrcv5in5i5puuwdrki
         a                   sosa:Sensor ;
         schema:name         "tilt04" ;
         bed:sensorKind      bedv:sensor-type-tilt-meter ;
-        bed:serialNumber    "LY5020" ;
+        schema:serialNumber "LY5020" ;
         bed:inventoryLabel  "tilt04", "tilt0537" ;
         bed:domain          "Geomechanics" ;
         schema:manufacturer "Jewells Instruments / CSIRO" .
@@ -168,6 +169,8 @@ gr:survey-fear-plan-v8 {
         schema:name          "BFE_A_01 collar position, planned (FEAR implementation plan v8)" ;
         bed:ofBorehole       bdr:dgqga6alw5gybldbmlxgxymvf4 ;
         bed:surveyType       bedv:location-type-planned ;
+        bed:surveyDate       "2024-01-05"^^xsd:date ;
+        bed:surveyedBy       bdr:dv3mpsfsfnftll6asnosnrwjam ;
         bed:coordinateSystem bedv:crs-bedretto-local-v1 ;
         bed:easting          -410.2 ;
         bed:northing         439.1 ;
@@ -186,6 +189,8 @@ gr:survey-flotron-2024-01-18 {
         schema:name          "BFE_A_01 collar position, staked out by Flotron, 18 January 2024" ;
         bed:ofBorehole       bdr:dgqga6alw5gybldbmlxgxymvf4 ;
         bed:surveyType       bedv:location-type-staked-out ;
+        bed:surveyDate       "2024-01-18"^^xsd:date ;
+        bed:surveyedBy       bdr:2buzlf2k25ft3fyx773xwwpodm, bdr:xvjsy5qorfduvbpla7ntwiajfu ;
         bed:coordinateSystem bedv:crs-bedretto-local-v1 ;
         bed:easting          -415.64 ;
         bed:northing         447.7 ;
@@ -204,6 +209,8 @@ gr:survey-flotron-2024-09-08 {
         schema:name          "BFE_D_31 collar position, staked out by Flotron, 8 September 2024" ;
         bed:ofBorehole       bdr:rqefuczecfce7lg3neucpuxfve ;
         bed:surveyType       bedv:location-type-staked-out ;
+        bed:surveyDate       "2024-09-08"^^xsd:date ;
+        bed:surveyedBy       bdr:2buzlf2k25ft3fyx773xwwpodm, bdr:xvjsy5qorfduvbpla7ntwiajfu ;
         bed:coordinateSystem bedv:crs-bedretto-local-v1 ;
         bed:easting          -386.154 ;
         bed:northing         247.251 ;
@@ -225,14 +232,14 @@ gr:campaign-fear2-install {
         ssn:deployedSystem     bdr:6elykqev4jep5n4gvvqx5sxsne ;
         ssn:deployedOnPlatform bdr:rqefuczecfce7lg3neucpuxfve ;
         bed:servesExperiment   bdr:qxmtubc3a5c5dhygzhkr2navxi ;
+        bed:deploymentType     bedv:deployment-type-temporary ;
         bed:environment        bedv:environment-borehole ;
         bed:coupling           bedv:coupling-sanded ;
         bed:measuredDepth      [ a qudt:QuantityValue ; qudt:numericValue 14 ; qudt:hasUnit unit:M ] ;
         bed:depthDatum         "borehole collar" ;
         bed:cableLength        [ a qudt:QuantityValue ; qudt:numericValue 30 ; qudt:hasUnit unit:M ] ;
         bed:sensorStatus       bedv:sensor-status-functioning ;
-        time:hasTime           [ a time:Interval ;
-                                 time:hasBeginning [ a time:Instant ; time:inXSDDate "2025-11-25"^^xsd:date ] ] .
+        bed:deployedOn         "2025-11-25"^^xsd:date .
 
     bdr:arvehvxjbnawjowaezoyzhbiom
         a                      ssn:Deployment ;
@@ -240,13 +247,13 @@ gr:campaign-fear2-install {
         ssn:deployedSystem     bdr:gsbvvymdrfhwffeoilxbb7deou ;
         ssn:deployedOnPlatform bdr:d2n4ek5egnfgtoeakstwdg73c4 ;
         bed:servesExperiment   bdr:qxmtubc3a5c5dhygzhkr2navxi ;
+        bed:deploymentType     bedv:deployment-type-temporary ;
         bed:environment        bedv:environment-borehole ;
         bed:coupling           bedv:coupling-sanded ;
         bed:measuredDepth      [ a qudt:QuantityValue ; qudt:numericValue 20 ; qudt:hasUnit unit:M ] ;
         bed:cableLength        [ a qudt:QuantityValue ; qudt:numericValue 30 ; qudt:hasUnit unit:M ] ;
         bed:sensorStatus       bedv:sensor-status-functioning ;
-        time:hasTime           [ a time:Interval ;
-                                 time:hasBeginning [ a time:Instant ; time:inXSDDate "2025-11-25"^^xsd:date ] ] .
+        bed:deployedOn         "2025-11-25"^^xsd:date .
 
     bdr:w6jsndipezcaxa6kymmnkpnefe
         a                      ssn:Deployment ;
@@ -254,12 +261,12 @@ gr:campaign-fear2-install {
         ssn:deployedSystem     bdr:n6orjfutcfgihnwfwexw2gn2om ;
         ssn:deployedOnPlatform bdr:jnkzuoojzzdelejy777guhtule ;
         bed:servesExperiment   bdr:qxmtubc3a5c5dhygzhkr2navxi ;
+        bed:deploymentType     bedv:deployment-type-temporary ;
         bed:environment        bedv:environment-borehole ;
         bed:coupling           bedv:coupling-sanded ;
         bed:measuredDepth      [ a qudt:QuantityValue ; qudt:numericValue 19 ; qudt:hasUnit unit:M ] ;
         bed:sensorStatus       bedv:sensor-status-functioning ;
-        time:hasTime           [ a time:Interval ;
-                                 time:hasBeginning [ a time:Instant ; time:inXSDDate "2025-11-26"^^xsd:date ] ] .
+        bed:deployedOn         "2025-11-26"^^xsd:date .
 
     bdr:bo34weavhnff5fx4fwn7rs5sfi
         a                      ssn:Deployment ;
@@ -267,10 +274,10 @@ gr:campaign-fear2-install {
         ssn:deployedSystem     bdr:ep2yc5c6xrcv5in5i5puuwdrki ;
         ssn:deployedOnPlatform bdr:nibzanitt5bcna2bkvvyenetqm ;
         bed:servesExperiment   bdr:qxmtubc3a5c5dhygzhkr2navxi ;
+        bed:deploymentType     bedv:deployment-type-temporary ;
         bed:environment        bedv:environment-borehole ;
         bed:coupling           bedv:coupling-sanded ;
         bed:measuredDepth      [ a qudt:QuantityValue ; qudt:numericValue 18 ; qudt:hasUnit unit:M ] ;
         bed:sensorStatus       bedv:sensor-status-functioning ;
-        time:hasTime           [ a time:Interval ;
-                                 time:hasBeginning [ a time:Instant ; time:inXSDDate "2025-11-26"^^xsd:date ] ] .
+        bed:deployedOn         "2025-11-26"^^xsd:date .
 }

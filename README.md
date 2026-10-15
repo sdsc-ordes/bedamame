@@ -13,7 +13,13 @@ uv run scripts/validate.py                  # Bedretto shapes over all graphs, S
 uv run scripts/validate.py --demo-failure   # remove one survey's CRS, expect a violation
 uv run scripts/queries.py --all             # example SPARQL queries
 uv run scripts/make_crate.py                # write and validate out/ro-crate-metadata.json
+uv run pytest                               # shape, vocabulary and ontology tests
 ```
+
+`just docs` writes HTML documentation of the ontology and each vocabulary to
+`site/` with pyLODE. `just set-base URL` replaces the placeholder base IRI
+`https://example.org/bedretto/` in the ontology, data and test fixtures, and in
+`scripts/config.py`, which the scripts take their namespaces from.
 
 `just all` runs validation, the queries and the crate build in order. `just crate`
 also checks the crate against the REQUIRED rules of the RO-Crate 1.2 base profile
@@ -80,7 +86,6 @@ Each survey, plan or campaign graph is described once, in `gr:provenance`, as a
 | `prov:wasAttributedTo` | Who is responsible for the record | at least one |
 | `dcterms:contributor` | Who took part in the fieldwork, when that differs | no |
 | `dcterms:temporal` | When the fieldwork happened, as a `time:Interval`, when that differs | at most one |
-| `bed:supersedes` | The graph this one corrects | no |
 
 There is no separate activity for the survey or campaign: the graph record carries
 its name, dates and people. The register graphs have no record yet.

@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 
 out/
+site/
 
 .direnv/
 

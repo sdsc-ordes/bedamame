@@ -5,6 +5,8 @@ from pathlib import Path
 from pyshacl import validate
 from rdflib import Dataset, Graph, URIRef
 
+import config
+
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "bedretto.trig"
 BEDRETTO = ROOT / "ontology" / "bedretto"
@@ -12,8 +14,6 @@ ONTOLOGY = BEDRETTO / "bedretto-ontology.ttl"
 VOCAB = BEDRETTO / "bedretto-vocab.ttl"
 SHAPES = BEDRETTO / "bedretto-shapes.ttl"
 VOCAB_SHAPES = ROOT / "ontology" / "skos" / "skos-shapes.ttl"
-
-BED = "https://example.org/bedretto/terms#"
 
 
 def load_dataset() -> Dataset:
@@ -32,7 +32,7 @@ def union_graph(ds: Dataset) -> Graph:
 
 
 def break_one_crs(g: Graph) -> URIRef | None:
-    prop = URIRef(BED + "coordinateSystem")
+    prop = URIRef(config.TERMS + "coordinateSystem")
     for subject, _, _ in g.triples((None, prop, None)):
         g.remove((subject, prop, None))
         return subject

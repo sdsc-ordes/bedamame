@@ -28,8 +28,16 @@ OBJECT_EXPORTS = [
 BLANK = {"DOCUMENT", "XMLCOMMENTS", "GENERAL_PROTOCOL.SPREADSHEET"}
 DROP_PARENTS = {"/INFRASTRUCTURE/BOREHOLES/WELLTEC"}
 
-SPACES = {"INFRASTRUCTURE": "Boreholes and logging", "09_FEAR": "FEAR experiments", "EQUIPMENT": "Sensors and devices"}
-PROJECTS = ["/INFRASTRUCTURE/BOREHOLES", "/09_FEAR/06_FEAR2", "/EQUIPMENT/SENSOR_CATALOG"]
+SPACES = {
+    "INFRASTRUCTURE": "Boreholes and logging",
+    "09_FEAR": "FEAR experiments",
+    "EQUIPMENT": "Sensors and devices",
+}
+PROJECTS = [
+    "/INFRASTRUCTURE/BOREHOLES",
+    "/09_FEAR/06_FEAR2",
+    "/EQUIPMENT/SENSOR_CATALOG",
+]
 # the lab's borehole collection is unknown (see collaborator-requests.md); BOREHOLES stands in for it
 COLLECTIONS = {
     "/INFRASTRUCTURE/BOREHOLES/BOREHOLES": "Boreholes",
@@ -42,12 +50,24 @@ COLLECTIONS = {
 }
 STUB = "stub: referenced by the lab export but not in it"
 
-ATTRIBUTES = ["$", "Auto generate code", "Identifier", "Code", "Space", "Project", "Experiment", "Parents", "Children"]
+ATTRIBUTES = [
+    "$",
+    "Auto generate code",
+    "Identifier",
+    "Code",
+    "Space",
+    "Project",
+    "Experiment",
+    "Parents",
+    "Children",
+]
 
 
 def assignment_codes(masterdata: Path) -> dict[str, list[str]]:
     return {
-        s.code: [s.children.get(row, "Code").removeprefix("$") for row in s.children.rows]
+        s.code: [
+            s.children.get(row, "Code").removeprefix("$") for row in s.children.rows
+        ]
         for s in wb.read(masterdata)
         if s.kind == "SAMPLE_TYPE" and s.code in wb.BEDRETTO_TYPES
     }
@@ -58,31 +78,57 @@ def objects(collection: str, rows: list[dict]) -> list[list]:
     out = []
     for r in rows:
         code = r.pop("code")
-        out.append(["", "FALSE", f"{project}/{code}", code, space, project, collection, "", "", r])
+        out.append(
+            [
+                "",
+                "FALSE",
+                f"{project}/{code}",
+                code,
+                space,
+                project,
+                collection,
+                "",
+                "",
+                r,
+            ]
+        )
     return out
+
 
 def from_export(path: Path, codes: dict[str, list[str]]) -> tuple[str, list[list]]:
     # property columns follow the type's assignments in order; the headers are labels, so map by position
-    rows = [list(r) for r in load_workbook(path).worksheets[0].iter_rows(values_only=True)]
+    rows = [
+        list(r) for r in load_workbook(path).worksheets[0].iter_rows(values_only=True)
+    ]
     sample_type, header = rows[2][0], wb.trim(rows[3])
     props = codes[sample_type]
     first = header.index("Children") + 1
     if len(header) - first != len(props):
-        raise SystemExit(f"{path.name}: {len(header) - first} property columns, {sample_type} has {len(props)}")
+        raise SystemExit(
+            f"{path.name}: {len(header) - first} property columns, {sample_type} has {len(props)}"
+        )
     out = []
     for row in rows[4:]:
         if not any(row):
             continue
         row = list(row) + [None] * (len(header) - len(row))
         attrs = dict(zip(ATTRIBUTES, row[:first]))
-        values = {p: ("" if p in BLANK else row[first + i]) for i, p in enumerate(props)}
-        parents = [p for p in (attrs["Parents"] or "").split("\n") if p and p not in DROP_PARENTS]
+        values = {
+            p: ("" if p in BLANK else row[first + i]) for i, p in enumerate(props)
+        }
+        parents = [
+            p
+            for p in (attrs["Parents"] or "").split("\n")
+            if p and p not in DROP_PARENTS
+        ]
         out.append([*row[:first][:7], "\n".join(parents), "", values])
     return sample_type, out
 
 
 def boreholes(path: Path, coords: Path) -> list[dict]:
-    coord = {c["coord_id"]: c for c in csv.DictReader(coords.open(encoding="utf-8-sig"))}
+    coord = {
+        c["coord_id"]: c for c in csv.DictReader(coords.open(encoding="utf-8-sig"))
+    }
     out = []
     for b in csv.DictReader(path.open(encoding="utf-8-sig")):
         c = coord.get(b["coord_id"], {})
@@ -122,7 +168,13 @@ def stubs(installs: dict[str, list[list]]) -> dict[str, tuple[str, list[dict]]]:
         for parent in row[7].split("\n"):
             if parent.startswith("/EQUIPMENT/SENSOR_CATALOG/"):
                 sensors[parent.rsplit("/", 1)[1]] = row[9]["SERIAL_NUMBER"]
-    computers = sorted({row[9]["COMPUTER"].rsplit("/", 1)[1] for row in installs["SENSOR_INSTAL"] if row[9]["COMPUTER"]})
+    computers = sorted(
+        {
+            row[9]["COMPUTER"].rsplit("/", 1)[1]
+            for row in installs["SENSOR_INSTAL"]
+            if row[9]["COMPUTER"]
+        }
+    )
     return {
         "SEIS_SENSOR": ("/EQUIPMENT/SENSOR_CATALOG/SEISMIC_SENSORS",
                         [{"code": c, "SERIAL_NUMBER": s, "NOTES": STUB} for c, s in sorted(sensors.items())]),
@@ -151,7 +203,9 @@ def build(lab: Path, csv_dir: Path) -> Workbook:
         sample_type, rows = from_export(lab / name, codes)
         exported.setdefault(sample_type, []).extend(rows)
 
-    holes = boreholes(csv_dir / "borehole_information.csv", csv_dir / "borehole_mouth_coord.csv")
+    holes = boreholes(
+        csv_dir / "borehole_information.csv", csv_dir / "borehole_mouth_coord.csv"
+    )
     bad = [h["code"] for h in holes if not re.fullmatch(r"[A-Za-z0-9_.-]+", h["code"])]
     if bad:
         raise SystemExit(f"borehole names that are not valid codes: {bad}")
@@ -187,11 +241,20 @@ def build(lab: Path, csv_dir: Path) -> Workbook:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Write an object-import workbook that seeds the local openBIS")
-    ap.add_argument("--lab", type=Path, default=LAB, help="folder of the lab's openBIS exports")
+    ap = argparse.ArgumentParser(
+        description="Write an object-import workbook that seeds the local openBIS"
+    )
+    ap.add_argument(
+        "--lab", type=Path, default=LAB, help="folder of the lab's openBIS exports"
+    )
     ap.add_argument("--csv", type=Path, default=CSV, help="folder of the borehole CSVs")
     ap.add_argument("--out", type=Path, default=OUT)
-    ap.add_argument("--import", dest="do_import", action="store_true", help="import it into the local openBIS")
+    ap.add_argument(
+        "--import",
+        dest="do_import",
+        action="store_true",
+        help="import it into the local openBIS",
+    )
     args = ap.parse_args()
 
     args.out.parent.mkdir(parents=True, exist_ok=True)

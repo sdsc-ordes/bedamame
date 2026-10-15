@@ -9,13 +9,14 @@
 
 <https://example.org/bedretto/vocab> a owl:Ontology ;
     dcterms:title "Bedretto vocabularies"@en ;
-    dcterms:description "SKOS concept schemes for the controlled values in Bedretto Underground Laboratory metadata. Each scheme holds the values of one property of the Bedretto ontology. Hidden labels record spellings found in the laboratory's spreadsheet exports, so that source values can be mapped to concepts."@en ;
+    dcterms:description "SKOS concept schemes for the controlled values in Bedretto Underground Laboratory metadata. Each scheme holds the values of one property of the Bedretto ontology. Hidden labels record spellings found in the laboratory's spreadsheets and free-text openBIS fields, so that source values can be mapped to concepts; matching ignores case and extra spaces. openBIS vocabulary terms are mapped to concepts by code, in mapping/openbis-terms.csv."@en ;
     dcterms:creator "Robin Franken" ;
     dcterms:source <https://github.com/sdsc-ordes/bedretto-ontology> ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:created "2026-10-05"^^xsd:date ;
-    dcterms:modified "2026-10-06"^^xsd:date ;
-    owl:versionInfo "0.3.0" ;
+    dcterms:modified "2026-10-15"^^xsd:date ;
+    owl:versionInfo "0.4.0" ;
+    owl:versionIRI <https://example.org/bedretto/vocab/0.4.0> ;
     rdfs:seeAlso <https://example.org/bedretto/terms> .
 
 bedv:tunnel-section a skos:ConceptScheme ;
@@ -119,6 +120,20 @@ bedv:borehole-status-open a skos:Concept ;
     skos:inScheme bedv:borehole-status ;
     skos:prefLabel "Open"@en .
 
+bedv:borehole-status-open-instrumented a skos:Concept ;
+    skos:inScheme bedv:borehole-status ;
+    skos:broader bedv:borehole-status-open ;
+    skos:prefLabel "Open, instrumented"@en ;
+    skos:hiddenLabel "Open instrumented"@en, "open / instrumented"@en ;
+    skos:definition "Open, with instruments installed in it."@en .
+
+bedv:borehole-status-open-instruments-lost a skos:Concept ;
+    skos:inScheme bedv:borehole-status ;
+    skos:broader bedv:borehole-status-open ;
+    skos:prefLabel "Open, instruments lost"@en ;
+    skos:hiddenLabel "Open lost instruments"@en, "open/ lost instruments"@en ;
+    skos:definition "Open, with instruments lost in it that could not be recovered."@en .
+
 bedv:borehole-status-closed a skos:Concept ;
     skos:inScheme bedv:borehole-status ;
     skos:prefLabel "Closed"@en .
@@ -131,6 +146,7 @@ bedv:borehole-status-cemented a skos:Concept ;
 bedv:borehole-status-locked-with-packers a skos:Concept ;
     skos:inScheme bedv:borehole-status ;
     skos:prefLabel "Locked with packers"@en ;
+    skos:hiddenLabel "locked/ packers"@en ;
     skos:definition "Sealed in one or more intervals by packers."@en .
 
 bedv:borehole-status-collapsed a skos:Concept ;
@@ -165,12 +181,20 @@ bedv:location-type-as-built a skos:Concept ;
 
 bedv:crs a skos:ConceptScheme ;
     skos:prefLabel "Coordinate reference system"@en ;
-    dcterms:description "Coordinate reference systems in which collar positions are given. A standard system would be reused by its official IRI instead."@en .
+    dcterms:description "Coordinate reference systems in which collar and sensor positions are given. Standard systems are members by their official IRI."@en .
 
 bedv:crs-bedretto-local-v1 a skos:Concept, bed:CoordinateReferenceSystem ;
     skos:inScheme bedv:crs ;
-    skos:prefLabel "Bedretto tunnel local grid v1"@en ;
-    skos:definition "Placeholder for the local grid of the collar surveys. The exports do not name their coordinate system."@en .
+    skos:prefLabel "Bedretto local grid"@en ;
+    skos:altLabel "global-local"@en ;
+    skos:definition "The laboratory's local grid, in metres, with its zero point at tunnel meter TM2000, which lies at E 2679720.696, N 1151600.128 in LV95. Eastings and northings are LV95 coordinates less those of the zero point; elevations are LV95 heights, since the zero point is at height 0. The laboratory calls it global-local."@en ;
+    skos:related <http://www.opengis.net/def/crs/EPSG/0/2056> .
+
+<http://www.opengis.net/def/crs/EPSG/0/2056> a skos:Concept, bed:CoordinateReferenceSystem ;
+    skos:inScheme bedv:crs ;
+    skos:prefLabel "CH1903+ / LV95"@en ;
+    skos:altLabel "LV95"@en, "EPSG:2056"@en ;
+    skos:definition "The Swiss national projected coordinate system, as defined by EPSG code 2056."@en .
 
 bedv:rock-class a skos:ConceptScheme ;
     skos:prefLabel "Rock class"@en ;
@@ -408,6 +432,18 @@ bedv:sensor-type-acoustic-emission a skos:Concept ;
     skos:hiddenLabel "D: Acoustic emission sensor"@en ;
     skos:definition "Records high-frequency elastic waves from microfracturing in the rock."@en .
 
+bedv:sensor-type-broadband-accelerometer a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-accelerometer ;
+    skos:prefLabel "Broadband accelerometer"@en .
+
+bedv:sensor-type-rotational-seismometer a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-seismic ;
+    skos:prefLabel "Rotational seismometer"@en ;
+    skos:altLabel "Rotational sensor"@en ;
+    skos:definition "Records the rotation of the ground about one or more axes."@en .
+
 bedv:sensor-type-hydromechanical a skos:Concept ;
     skos:inScheme bedv:sensor-type ;
     skos:prefLabel "Hydromechanical sensor"@en ;
@@ -427,6 +463,24 @@ bedv:sensor-type-strain-meter a skos:Concept ;
     skos:prefLabel "Strain meter"@en ;
     skos:altLabel "Strainmeter"@en ;
     skos:definition "Records deformation of the rock over a fixed baseline."@en .
+
+bedv:sensor-type-linear-strain a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-strain-meter ;
+    skos:prefLabel "Linear strain sensor"@en ;
+    skos:definition "Records the change in length along one direction."@en .
+
+bedv:sensor-type-volumetric-strain a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-strain-meter ;
+    skos:prefLabel "Volumetric strain sensor"@en ;
+    skos:definition "Records the change in volume of the surrounding rock."@en .
+
+bedv:sensor-type-creep-meter a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-hydromechanical ;
+    skos:prefLabel "Creep meter"@en ;
+    skos:definition "Records slow displacement across a fault or fracture."@en .
 
 bedv:sensor-type-hydraulic a skos:Concept ;
     skos:inScheme bedv:sensor-type ;
@@ -479,6 +533,45 @@ bedv:sensor-type-fbg a skos:Concept ;
     skos:prefLabel "Fibre Bragg Grating"@en ;
     skos:altLabel "FBG"@en .
 
+bedv:sensor-type-electromagnetic a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:prefLabel "Electromagnetic sensor"@en ;
+    skos:definition "Records electric or magnetic fields."@en .
+
+bedv:sensor-type-electric-potential a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-electromagnetic ;
+    skos:prefLabel "Electric potential sensor"@en ;
+    skos:definition "Records the electric potential between electrodes."@en .
+
+bedv:sensor-type-magnetometer a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-electromagnetic ;
+    skos:prefLabel "Magnetometer"@en ;
+    skos:definition "Records the strength or direction of the magnetic field."@en .
+
+bedv:sensor-type-gravimeter a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:prefLabel "Gravimeter"@en ;
+    skos:definition "Records variations in the acceleration due to gravity."@en .
+
+bedv:sensor-type-environmental a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:prefLabel "Environmental sensor"@en ;
+    skos:definition "Records conditions of the air or the weather."@en .
+
+bedv:sensor-type-humidity a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-environmental ;
+    skos:prefLabel "Humidity sensor"@en ;
+    skos:altLabel "Hygrometer"@en .
+
+bedv:sensor-type-rain-gauge a skos:Concept ;
+    skos:inScheme bedv:sensor-type ;
+    skos:broader bedv:sensor-type-environmental ;
+    skos:prefLabel "Rain gauge"@en ;
+    skos:altLabel "Rainfall sensor"@en .
+
 bedv:coupling a skos:ConceptScheme ;
     skos:prefLabel "Sensor coupling"@en ;
     dcterms:description "How a sensor is mechanically coupled to the rock mass."@en .
@@ -503,6 +596,11 @@ bedv:coupling-clamped a skos:Concept ;
     skos:prefLabel "Clamped"@en ;
     skos:hiddenLabel "Campled"@en ;
     skos:definition "Sensor pressed against the borehole wall or the rock by a mechanical clamp."@en .
+
+bedv:coupling-anchored a skos:Concept ;
+    skos:inScheme bedv:coupling ;
+    skos:prefLabel "Anchored"@en ;
+    skos:definition "Sensor fixed to the rock with anchors or bolts."@en .
 
 bedv:coupling-free-surface a skos:Concept ;
     skos:inScheme bedv:coupling ;
@@ -529,6 +627,11 @@ bedv:environment-tunnel-trench a skos:Concept ;
     skos:inScheme bedv:environment ;
     skos:prefLabel "Tunnel trench"@en .
 
+bedv:environment-on-the-surface a skos:Concept ;
+    skos:inScheme bedv:environment ;
+    skos:prefLabel "On the surface"@en ;
+    skos:definition "At the ground surface above the laboratory, outside the tunnel."@en .
+
 bedv:sensor-status a skos:ConceptScheme ;
     skos:prefLabel "Sensor status"@en ;
     dcterms:description "Operational state of a deployed sensor."@en .
@@ -538,14 +641,35 @@ bedv:sensor-status-planned a skos:Concept ;
     skos:prefLabel "Planned"@en ;
     skos:definition "Installation planned but not yet done."@en .
 
+bedv:sensor-status-deployed a skos:Concept ;
+    skos:inScheme bedv:sensor-status ;
+    skos:prefLabel "Deployed"@en ;
+    skos:definition "Installed at its position."@en .
+
 bedv:sensor-status-functioning a skos:Concept ;
     skos:inScheme bedv:sensor-status ;
+    skos:broader bedv:sensor-status-deployed ;
     skos:prefLabel "Functioning"@en .
 
 bedv:sensor-status-failed a skos:Concept ;
     skos:inScheme bedv:sensor-status ;
+    skos:broader bedv:sensor-status-deployed ;
     skos:prefLabel "Failed"@en .
 
 bedv:sensor-status-removed a skos:Concept ;
     skos:inScheme bedv:sensor-status ;
     skos:prefLabel "Removed"@en .
+
+bedv:deployment-type a skos:ConceptScheme ;
+    skos:prefLabel "Deployment type"@en ;
+    dcterms:description "Whether a sensor is installed for good or for a campaign."@en .
+
+bedv:deployment-type-permanent a skos:Concept ;
+    skos:inScheme bedv:deployment-type ;
+    skos:prefLabel "Permanent"@en ;
+    skos:definition "Installed to stay, often grouted in."@en .
+
+bedv:deployment-type-temporary a skos:Concept ;
+    skos:inScheme bedv:deployment-type ;
+    skos:prefLabel "Temporary"@en ;
+    skos:definition "Installed for an experiment or campaign and to be removed afterwards."@en .

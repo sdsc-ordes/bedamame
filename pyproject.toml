@@ -14,6 +14,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "black>=26.1.0",
+    "pytest==9.1.1",
     "roc-validator==0.12.2",
 ]
 openbis = [
@@ -22,3 +23,8 @@ openbis = [
 
 [tool.uv]
 default-groups = ["dev", "openbis"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["scripts"]
+filterwarnings = ["ignore::DeprecationWarning:rdflib"]
