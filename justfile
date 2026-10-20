@@ -66,15 +66,6 @@ export:
     uv run scripts/validate.py
     uv run scripts/queries.py --all
 
-# Start the local SPARQL endpoint and load out/bedretto.trig with the ontology, vocabulary and shapes
-load:
-    docker compose -f endpoint/compose.yaml up -d --wait
-    uv run scripts/queries.py --endpoint --load
-
-# Stop the local SPARQL endpoint and keep its data
-endpoint-down:
-    docker compose -f endpoint/compose.yaml down
-
 # Convert, validate, run the queries, build the crate
 all: convert crate
 
@@ -92,7 +83,7 @@ openbis-masterdata:
 openbis-seed:
     uv run openbis/seed.py --import
 
-# Rehearse the master-data changes 01-07 on the local openBIS: for each, a fresh export, generate, import
+# Rehearse the master-data changes 01-06 on the local openBIS: for each, a fresh export, generate, import
 openbis-changes:
     uv run scripts/openbis_changes.py --local
 

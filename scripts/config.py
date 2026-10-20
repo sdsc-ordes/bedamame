@@ -1,3 +1,6 @@
+import csv
+from pathlib import Path
+
 # The one base IRI of everything Bedretto publishes; `just set-base URL` rewrites it everywhere
 BASE = "https://example.org/bedretto/"
 VERSION = "0.4.0"
@@ -49,6 +52,9 @@ NAMESPACES = {
     "epsg": "http://www.opengis.net/def/crs/EPSG/0/",
 }
 
+# openBIS type and field -> term, unit and scheme; read by the converter and the annotation generator
+MAPPING = Path(__file__).resolve().parent.parent / "mapping" / "openbis-annotations.csv"
+
 # openBIS semantic annotations: Ontology Id and Ontology Version per prefix; the Ontology Annotation Id
 # is the full term IRI. schema.org as on openBIS 7.0's own PUBLICATION type; RDFS, SOSA, SSN and Dublin
 # Core publish no version IRI, so their version is the namespace.
@@ -73,3 +79,9 @@ def sparql_prefixes(*names: str) -> str:
 
 def turtle_prefixes(*names: str) -> str:
     return "".join(f"@prefix {n + ':':<14}<{NAMESPACES[n]}> .\n" for n in names)
+
+
+def load_mapping(path: Path = MAPPING) -> dict[tuple[str, str], dict]:
+    # keyed by (object type, property code), "" for the type itself
+    with path.open() as f:
+        return {(r["object_type"], r["property_code"]): r for r in csv.DictReader(f)}

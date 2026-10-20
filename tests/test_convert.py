@@ -4,14 +4,13 @@ from pathlib import Path
 import pytest
 from rdflib import Graph, Literal, Namespace, URIRef
 
-import annotate_masterdata as am
 import config
 import openbis_to_rdf as convert
 import queries
 import validate as v
 
 ROOT = Path(__file__).resolve().parent.parent
-# a V3 dump of the local openBIS after changes 01-07 and annotation; people's names replaced
+# a V3 dump of the local openBIS after the master-data changes and annotation; people's names replaced
 EXPORT = ROOT / "tests" / "fixtures" / "openbis-export.json"
 
 BED = Namespace(config.TERMS)
@@ -39,7 +38,7 @@ def union(converted) -> Graph:
 
 
 def test_dump_annotations_agree_with_the_mapping(export):
-    mapping = am.load_mapping()
+    mapping = config.load_mapping()
     for t, info in export["types"].items():
         want = mapping[(t, "")]["term"]
         assert info["annotations"] == [config.expand(want)], t

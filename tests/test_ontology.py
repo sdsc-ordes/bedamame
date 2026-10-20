@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -5,6 +6,7 @@ from rdflib import OWL, RDF, RDFS, Dataset, Graph, Literal, Namespace, URIRef
 from rdflib.namespace import SH, SKOS
 
 import config
+import openbis_to_rdf as convert
 import validate as v
 
 QUDT = Namespace(config.NAMESPACES["qudt"])
@@ -24,6 +26,11 @@ def vocab() -> Graph:
 @pytest.fixture(scope="module")
 def shapes() -> Graph:
     return Graph().parse(v.SHAPES, format="turtle")
+
+
+@pytest.fixture(scope="module")
+def data() -> Dataset:
+    return convert.convert(json.loads(convert.EXPORT.read_text()))[0]
 
 
 def iris(g: Graph | Dataset, namespace: str) -> set[URIRef]:
@@ -52,26 +59,26 @@ def test_versions_match_config(path, header):
     assert g.value(header, OWL.versionIRI) == URIRef(f"{header}/{config.VERSION}")
 
 
-def test_bed_terms_in_use_are_declared(ontology, vocab, shapes):
+def test_bed_terms_in_use_are_declared(ontology, vocab, shapes, data):
     declared = set(ontology.subjects(RDF.type, RDF.Property)) | set(
         ontology.subjects(RDF.type, RDFS.Class)
     )
     used = (
         iris(vocab, config.TERMS)
         | iris(shapes, config.TERMS)
-        | iris(v.load_dataset(v.HANDWRITTEN), config.TERMS)
+        | iris(data, config.TERMS)
     )
     assert used - declared == set()
 
 
-def test_concepts_in_use_are_declared(ontology, vocab, shapes):
+def test_concepts_in_use_are_declared(ontology, vocab, shapes, data):
     declared = set(vocab.subjects(RDF.type, SKOS.Concept)) | set(
         vocab.subjects(RDF.type, SKOS.ConceptScheme)
     )
     used = (
         iris(ontology, config.VOCAB)
         | iris(shapes, config.VOCAB)
-        | iris(v.load_dataset(v.HANDWRITTEN), config.VOCAB)
+        | iris(data, config.VOCAB)
     )
     assert used - declared - {URIRef(config.BASE + "vocab")} == set()
 

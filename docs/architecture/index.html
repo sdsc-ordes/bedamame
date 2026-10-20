@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&display=swap">
 <style>
 /* Layout: a single drawing sheet. Short header, then two hand-drawn figures (pipeline, data model),
-   then two compact lists (vocabularies, files) and a short list of what is still open. */
+   a compact list of vocabularies, example questions and a short list of what is still open. */
 :root {
   --bg: #EEF0ED;
   --surface: #FCFCFB;
@@ -19,8 +19,6 @@
   --accent-ink: #A33A0C;
   --vocab: #2A664A;
   --vocab-wash: #DDEBE2;
-  --code-bg: #F5F6F3;
-  --t-s: #7A4A12; --t-i: #2D5C8A; --t-p: #6A3D99; --t-k: #A33A0C; --t-n: #9A3412;
   --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -29,16 +27,14 @@
   :root:not([data-theme="light"]) {
     --bg: #111514; --surface: #1A1F1D; --ink: #E3E8E5; --muted: #9AA6A0; --line: #2F3935;
     --line-strong: #56625C; --edge: #7E8A84; --region: #201B17; --region-prov: #161C23; --accent: #EE7442; --accent-ink: #F39468;
-    --vocab: #86C8A4; --vocab-wash: #1B2C23; --code-bg: #161B19;
-    --t-s: #E0B07A; --t-i: #8DB8E6; --t-p: #C3A3EC; --t-k: #F39468; --t-n: #F0A274;
+    --vocab: #86C8A4; --vocab-wash: #1B2C23;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #111514; --surface: #1A1F1D; --ink: #E3E8E5; --muted: #9AA6A0; --line: #2F3935;
   --line-strong: #56625C; --edge: #7E8A84; --region: #201B17; --region-prov: #161C23; --accent: #EE7442; --accent-ink: #F39468;
-  --vocab: #86C8A4; --vocab-wash: #1B2C23; --code-bg: #161B19;
-  --t-s: #E0B07A; --t-i: #8DB8E6; --t-p: #C3A3EC; --t-k: #F39468; --t-n: #F0A274;
+  --vocab: #86C8A4; --vocab-wash: #1B2C23;
   color-scheme: dark;
 }
 
@@ -97,39 +93,12 @@ figcaption, .cap { margin: 0; font-size: 13px; color: var(--muted); max-width: 7
 .pill i { font: 400 11px/1 var(--font-mono); font-style: normal; font-variant-numeric: tabular-nums; opacity: .8; }
 @media (max-width: 520px) { .vocab li { grid-template-columns: minmax(0, 1fr); } }
 
-/* Files */
-.files { margin: 0; display: grid; }
-.files div { display: grid; grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); gap: 4px 16px; padding: 8px 0; border-bottom: 1px solid var(--line); }
-.files div:first-child { border-top: 1px solid var(--line); }
-.files dt { font: 400 12.5px/1.45 var(--font-mono); overflow-wrap: anywhere; }
-.files dt span { color: var(--muted); }
-.files dd { margin: 0; color: var(--muted); }
-@media (max-width: 640px) { .files div { grid-template-columns: minmax(0, 1fr); } }
-
-/* Collapsible examples */
-.examples { display: grid; min-width: 0; margin-top: 6px; }
-.examples .eyebrow { padding-bottom: 8px; }
-.examples .cap { padding-top: 10px; }
-.ex { border-top: 1px solid var(--line); min-width: 0; }
-.ex:last-child { border-bottom: 1px solid var(--line); }
-.ex summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; padding: 9px 0; cursor: pointer; list-style: none; }
-.ex summary::-webkit-details-marker { display: none; }
-.ex summary::before { content: "+"; width: 1ch; font: 500 14px/1 var(--font-mono); color: var(--muted); }
-.ex[open] summary::before { content: "−"; }
-.ex summary:hover .ex-name { color: var(--accent-ink); }
-.ex summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.ex-name { font-weight: 600; }
-.ex-where { font: 400 12px/1.4 var(--font-mono); color: var(--muted); }
-.ex pre { margin: 0 0 12px; padding: 10px 12px; overflow-x: auto; background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px; font: 400 12px/1.55 var(--font-mono); tab-size: 4; }
-.ex-note { margin: 0 0 8px; font-size: 13px; color: var(--muted); max-width: 72ch; }
-.ex .eyebrow { padding-bottom: 6px; }
-.result { overflow-x: auto; margin-bottom: 14px; }
-.result table { border-collapse: collapse; font-size: 13px; }
-.result th { text-align: left; font: 500 10.5px/1.2 var(--font-mono); letter-spacing: .06em; color: var(--muted); padding: 6px 20px 6px 0; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
-.result td { padding: 5px 20px 5px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
-.result .num { text-align: right; font-variant-numeric: tabular-nums; }
-.t-v { color: var(--vocab); }
-.t-s { color: var(--t-s); } .t-i { color: var(--t-i); } .t-p { color: var(--t-p); } .t-k { color: var(--t-k); font-weight: 500; } .t-n { color: var(--t-n); }
+/* Example table */
+.example { display: grid; gap: 8px; min-width: 0; margin-top: 6px; }
+.table { overflow-x: auto; }
+.table table { border-collapse: collapse; font-size: 13px; }
+.table th { text-align: left; font: 500 10.5px/1.2 var(--font-mono); letter-spacing: .06em; color: var(--muted); padding: 6px 20px 6px 0; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+.table td { padding: 5px 20px 5px 0; border-bottom: 1px solid var(--line); }
 
 .notes { margin: 0; padding-left: 18px; display: grid; gap: 6px; max-width: 72ch; }
 .notes b { font-weight: 600; }
@@ -140,14 +109,14 @@ figcaption, .cap { margin: 0; font-size: 13px; color: var(--muted); max-width: 7
   <header>
     <div class="eyebrow">Bedretto Underground Laboratory · semantic layer over openBIS</div>
     <h1>Bedamame architecture</h1>
-    <p class="lede">The lab records boreholes, sensors and installations in openBIS. Annotations say what each object type and field means; a dump through the openBIS API becomes RDF named graphs, passes a SHACL check, and answers SPARQL queries and RO-Crate exports.</p>
+    <p class="lede">Ontology, vocabulary and SHACL shapes for the lab's openBIS, where boreholes, sensors and installations are recorded. Each openBIS object type and field is annotated with an ontology term. A dump made through the openBIS V3 API is converted to RDF, one named graph per collection, validated with SHACL, and then queried with SPARQL or exported as an RO-Crate.</p>
     <ul class="facts">
       <li>Ontology <b>0.4.0</b></li>
       <li><b>19</b> classes</li>
       <li><b>19</b> vocabularies</li>
       <li><b>17</b> openBIS types</li>
       <li><b>217</b> annotations</li>
-      <li><b>7</b> master-data changes</li>
+      <li><b>6</b> master-data changes</li>
     </ul>
   </header>
 
@@ -155,7 +124,7 @@ figcaption, .cap { margin: 0; font-size: 13px; color: var(--muted); max-width: 7
     <h2 id="h-pipeline">Pipeline</h2>
     <figure id="pipeline">
       <div class="scroll">
-        <svg viewBox="0 0 1140 250" role="img" aria-label="The mapping is written into openBIS as annotations and gives the converter its terms. openBIS, the source of truth, is dumped through its V3 API, converted to named graphs and validated; the graphs answer queries and become RO-Crates.">
+        <svg viewBox="0 0 1140 250" role="img" aria-label="The mapping is imported into openBIS as annotations and read by the converter. openBIS is dumped through its V3 API, converted to named graphs and validated with SHACL; the graphs are then queried and exported as an RO-Crate.">
           <defs>
             <marker id="pa" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto"><path class="arrowhead" d="M0 0 L10 5 L0 10 z"/></marker>
           </defs>
@@ -168,27 +137,32 @@ figcaption, .cap { margin: 0; font-size: 13px; color: var(--muted); max-width: 7
           <g class="edge"><line x1="880" y1="130" x2="950" y2="130" marker-end="url(#pa)"/><text class="lbl" x="915" y="122">query</text></g>
           <g class="edge"><line x1="880" y1="200" x2="950" y2="200" marker-end="url(#pa)"/><text class="lbl" x="915" y="192">export</text></g>
 
-          <g class="box"><rect x="365" y="20" width="170" height="50" rx="6"/><text class="name" x="450" y="41">Mapping</text><text class="sub" x="450" y="59">mapping/*.csv</text></g>
+          <g class="box"><rect x="365" y="20" width="170" height="50" rx="6"/><text class="name" x="450" y="41">Mapping</text><text class="sub" x="450" y="59">field → term</text></g>
           <g class="box truth"><rect x="20" y="110" width="170" height="110" rx="6"/><text class="tag" x="105" y="150">SOURCE OF TRUTH</text><text class="name" x="105" y="172">openBIS</text><text class="sub" x="105" y="191">the lab's records</text></g>
-          <g class="box"><rect x="250" y="135" width="170" height="60" rx="6"/><text class="name" x="335" y="161">V3 dump</text><text class="sub" x="335" y="180">just export</text></g>
-          <g class="box"><rect x="480" y="135" width="170" height="60" rx="6"/><text class="name" x="565" y="161">Named graphs</text><text class="sub" x="565" y="180">out/bedretto.trig</text></g>
-          <g class="box"><rect x="710" y="100" width="170" height="130" rx="6"/><text class="name" x="795" y="161">Validate</text><text class="sub" x="795" y="180">just validate</text></g>
-          <g class="box"><rect x="950" y="100" width="170" height="60" rx="6"/><text class="name" x="1035" y="126">Questions</text><text class="sub" x="1035" y="145">just queries · load</text></g>
-          <g class="box"><rect x="950" y="170" width="170" height="60" rx="6"/><text class="name" x="1035" y="196">RO-Crate</text><text class="sub" x="1035" y="215">just crate</text></g>
+          <g class="box"><rect x="250" y="135" width="170" height="60" rx="6"/><text class="name" x="335" y="161">V3 dump</text><text class="sub" x="335" y="180">through the API</text></g>
+          <g class="box"><rect x="480" y="135" width="170" height="60" rx="6"/><text class="name" x="565" y="161">Named graphs</text><text class="sub" x="565" y="180">one per collection</text></g>
+          <g class="box"><rect x="710" y="100" width="170" height="130" rx="6"/><text class="name" x="795" y="161">Validate</text><text class="sub" x="795" y="180">SHACL shapes</text></g>
+          <g class="box"><rect x="950" y="100" width="170" height="60" rx="6"/><text class="name" x="1035" y="126">Questions</text><text class="sub" x="1035" y="145">SPARQL</text></g>
+          <g class="box"><rect x="950" y="170" width="170" height="60" rx="6"/><text class="name" x="1035" y="196">RO-Crate</text><text class="sub" x="1035" y="215">for publication</text></g>
         </svg>
       </div>
-      <figcaption>The lab keeps entering data in openBIS. The mapping does two jobs: it is written into openBIS as annotations, and the converter takes its terms from it. <code>just convert</code> runs the same path on a committed dump, without openBIS; <code>just load</code> puts the graphs into a local SPARQL endpoint.</figcaption>
+      <figcaption>The mapping gives each openBIS type and field an ontology term. It is imported into openBIS as annotations, and the converter uses the same list. The lab keeps entering data in openBIS; everything to its right is generated from a dump.</figcaption>
     </figure>
-    <div class="examples">
-      <div class="eyebrow">From mapping/openbis-annotations.csv</div>
-      <details class="ex"><summary><span class="ex-name">Fields of SENSOR_INSTAL</span><code class="ex-where">openBIS field → term</code></summary><pre><code>kind,object_type,property_code,term,match,unit,scheme,notes
-assignment,SENSOR_INSTAL,DEPLOYMENT_USER,,skip,,,free-text names; replaced by <span class="t-k">a</span> link to PERSON objects in change <span class="t-n">01</span>-people
-assignment,SENSOR_INSTAL,SENSOR_COUPLING,<span class="t-p">bed:coupling</span>,bed,,<span class="t-p">bedv:coupling</span>,
-assignment,SENSOR_INSTAL,BOREHOLE_METER,<span class="t-p">bed:measuredDepth</span>,bed,<span class="t-p">unit:M</span>,,from the borehole collar
-assignment,SENSOR_INSTAL,DEPLOYED_BY,<span class="t-p">bed:deployedBy</span>,bed,,,links to PERSON; replaces DEPLOYMENT_USER (change <span class="t-n">01</span>-people)
-assignment,SENSOR_INSTAL,BOREHOLE,<span class="t-p">ssn:deployedOnPlatform</span>,standard,,,link to BOREHOLES; replaces BOREHOLE_NAME (change <span class="t-n">05</span>-object-links)
-assignment,SENSOR_INSTAL,SENSOR,<span class="t-p">ssn:deployedSystem</span>,standard,,,link to SENSORS or SEIS_SENSOR; replaces SERIAL_NUMBER (change <span class="t-n">05</span>-object-links)</code></pre></details>
-      <p class="cap">One row per openBIS type and field: the annotation it gets, the unit or concept scheme of its values, and why a field is skipped.</p>
+    <div class="example">
+      <div class="eyebrow">Example: one sensor installation, after the proposed changes</div>
+      <div class="table"><table>
+        <thead><tr><th>openBIS field</th><th>Ontology term</th><th>Value in BFE_D_31_TILT1_4</th></tr></thead>
+        <tbody>
+          <tr><td>Borehole</td><td><code>ssn:deployedOnPlatform</code></td><td>BFE_D_31, a borehole object</td></tr>
+          <tr><td>Sensor</td><td><code>ssn:deployedSystem</code></td><td>TILT4, a sensor object</td></tr>
+          <tr><td>Deployment Date</td><td><code>bed:deployedOn</code></td><td>2025-11-25</td></tr>
+          <tr><td>Borehole Meter (m)</td><td><code>bed:measuredDepth</code></td><td>14.0 m</td></tr>
+          <tr><td>Coupling</td><td><code>bed:coupling</code></td><td>Sanded, a vocabulary concept</td></tr>
+          <tr><td>Installation environment</td><td><code>bed:environment</code></td><td>Borehole, a vocabulary concept</td></tr>
+          <tr><td>Deployed by</td><td><code>bed:deployedBy</code></td><td>Person 1, Person 2 (names replaced)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="cap"><code>ssn:</code> terms come from the W3C sensor ontology, <code>bed:</code> terms from the Bedretto ontology. Each field's term is stored in openBIS as an annotation. Links point to other openBIS objects; vocabulary values point to concepts that have a definition.</p>
     </div>
   </section>
 
@@ -236,102 +210,8 @@ assignment,SENSOR_INSTAL,SENSOR,<span class="t-p">ssn:deployedSystem</span>,stan
           <g class="box nodata"><title>bed:SensorPosition</title><rect x="620" y="485" width="150" height="40" rx="6"/><text class="name" x="695" y="510">Sensor position</text></g>
         </svg>
       </div>
-      <figcaption>Arrows point from the class that states the link. Dashed boxes have openBIS types but no objects in the local copy yet. Not drawn: deployments, logging runs, cores and sensors also link to people (deployed by, removed by, operated by, responsible). Experiments come from <code>mapping/collections.csv</code> into <code>gr:experiments</code>, since openBIS has no experiment object. Core logs, core samples and lab analyses have shapes but no openBIS types.</figcaption>
+      <figcaption>Arrows go from subject to object. Dashed boxes: the openBIS type exists, but the local instance has no objects of it yet. Not drawn: links to people from deployments, logging runs, cores and sensors (deployed by, removed by, operated by, responsible). openBIS has no experiment object, so experiments come from a short list of the collections that belong to each one. Core logs, core samples and lab analyses have shapes but no openBIS types.</figcaption>
     </figure>
-    <div class="examples">
-      <div class="eyebrow">Examples from the converted fixture</div>
-      <details class="ex"><summary><span class="ex-name">Collection record</span><code class="ex-where">gr:provenance</code></summary><pre><code><span class="t-p">gr:provenance</span> {
-    <span class="t-i">&lt;https://example.org/bedretto/graph/09_FEAR/06_FEAR2/F2_INSTALLATION&gt;</span> <span class="t-k">a</span> <span class="t-p">prov:Bundle</span> ;
-        <span class="t-p">prov:generatedAtTime</span> <span class="t-s">"2026-10-15T14:26:20+00:00"^^xsd:dateTime</span> ;
-        <span class="t-p">prov:wasAttributedTo</span> <span class="t-i">&lt;https://example.org/bedretto/id/user/admin&gt;</span> ;
-        <span class="t-p">schema:name</span> <span class="t-s">"FEAR-2 sensor installations"</span> .
-
-    …
-}</code></pre></details>
-      <details class="ex"><summary><span class="ex-name">Deployment</span><code class="ex-where">gr:09_FEAR/06_FEAR2/F2_INSTALLATION</code></summary><pre><code><span class="t-p">gr:09_FEAR</span>/06_FEAR2/F2_INSTALLATION {
-    <span class="t-p">bdr:20261015142338008-182</span> <span class="t-k">a</span> <span class="t-p">ssn:Deployment</span> ;
-        <span class="t-p">ssn:deployedOnPlatform</span> <span class="t-p">bdr:20261015142338008-88</span> ;
-        <span class="t-p">ssn:deployedSystem</span> <span class="t-p">bdr:20261015142338008-177</span> ;
-        <span class="t-p">bed:acquisitionDevice</span> <span class="t-p">bdr:20261015142338008-189</span> ;
-        <span class="t-p">bed:cableLength</span> [ <span class="t-k">a</span> <span class="t-p">qudt:QuantityValue</span> ;
-                <span class="t-p">qudt:hasUnit</span> <span class="t-p">unit:M</span> ;
-                <span class="t-p">qudt:numericValue</span> <span class="t-n">30.0</span> ] ;
-        <span class="t-p">bed:coupling</span> <span class="t-p">bedv:coupling-sanded</span> ;
-        <span class="t-p">bed:deployedBy</span> <span class="t-p">bdr:20261015142437636-197</span>,
-            <span class="t-p">bdr:20261015142437636-198</span> ;
-        <span class="t-p">bed:deployedOn</span> <span class="t-s">"2025-11-25"^^xsd:date</span> ;
-        <span class="t-p">bed:deploymentType</span> <span class="t-p">bedv:deployment-type-temporary</span> ;
-        <span class="t-p">bed:environment</span> <span class="t-p">bedv:environment-borehole</span> ;
-        <span class="t-p">bed:measuredDepth</span> [ <span class="t-k">a</span> <span class="t-p">qudt:QuantityValue</span> ;
-                <span class="t-p">qudt:hasUnit</span> <span class="t-p">unit:M</span> ;
-                <span class="t-p">qudt:numericValue</span> <span class="t-n">14.0</span> ] ;
-        <span class="t-p">bed:project</span> <span class="t-s">"FEAR"</span> ;
-        <span class="t-p">bed:sensorStatus</span> <span class="t-p">bedv:sensor-status-deployed</span> ;
-        <span class="t-p">bed:servesExperiment</span> <span class="t-i">&lt;https://example.org/bedretto/id/experiment/FEAR-2&gt;</span> ;
-        <span class="t-p">bed:testedOn</span> <span class="t-s">"2025-11-25"^^xsd:date</span> ;
-        <span class="t-p">schema:name</span> <span class="t-s">"BFE_D_31_TILT1_4"</span> .
-
-    …
-}</code></pre></details>
-      <details class="ex"><summary><span class="ex-name">Sensor</span><code class="ex-where">gr:EQUIPMENT/SENSOR_CATALOG/TILTMETERS</code></summary><pre><code><span class="t-p">gr:EQUIPMENT</span>/SENSOR_CATALOG/TILTMETERS {
-    <span class="t-p">bdr:20261015142338008-177</span> <span class="t-k">a</span> <span class="t-p">sosa:Sensor</span> ;
-        <span class="t-p">bed:availability</span> <span class="t-p">bedv:availability-in-use</span> ;
-        <span class="t-p">bed:coupling</span> <span class="t-p">bedv:coupling-sanded</span> ;
-        <span class="t-p">bed:domain</span> <span class="t-s">"GEOMECH"</span> ;
-        <span class="t-p">bed:sensorKind</span> <span class="t-p">bedv:sensor-type-tilt-meter</span> ;
-        <span class="t-p">schema:manufacturer</span> <span class="t-s">"Jewells Instruments / CSIRO"</span> ;
-        <span class="t-p">schema:name</span> <span class="t-s">"TILT4"</span> ;
-        <span class="t-p">schema:serialNumber</span> <span class="t-s">"LY1123"</span> .
-
-    …
-}</code></pre></details>
-      <details class="ex"><summary><span class="ex-name">Borehole</span><code class="ex-where">gr:INFRASTRUCTURE/BOREHOLES/BOREHOLES</code></summary><pre><code><span class="t-p">gr:INFRASTRUCTURE</span>/BOREHOLES/BOREHOLES {
-    <span class="t-p">bdr:20261015142338008-88</span> <span class="t-k">a</span> <span class="t-p">bed:Borehole</span> ;
-        <span class="t-p">rdfs:comment</span> <span class="t-s">"Technical failure, abandoned. Easting, Northing, Elevation, Azimuth, and Dip from Flotron survey 20251104. Borehole length correspond to drilling length from drilling-diary.xlsx."</span> ;
-        <span class="t-p">bed:boreholeDiameter</span> [ <span class="t-k">a</span> <span class="t-p">qudt:QuantityValue</span> ;
-                <span class="t-p">qudt:hasUnit</span> <span class="t-p">unit:MilliM</span> ;
-                <span class="t-p">qudt:numericValue</span> <span class="t-n">96.0</span> ] ;
-        <span class="t-p">bed:boreholeGeometry</span> <span class="t-p">bedv:borehole-geometry-vertical</span> ;
-        <span class="t-p">bed:boreholeStatus</span> <span class="t-p">bedv:borehole-status-open</span> ;
-        <span class="t-p">bed:drillingEnd</span> <span class="t-s">"2025-09-01"^^xsd:date</span> ;
-        <span class="t-p">bed:drillingStart</span> <span class="t-s">"2025-09-01"^^xsd:date</span> ;
-        <span class="t-p">bed:drillingStyle</span> <span class="t-p">bedv:drilling-style-not-cored</span> ;
-        <span class="t-p">bed:hasTestBed</span> <span class="t-p">bdr:20261015142455627-205</span> ;
-        <span class="t-p">bed:nickname</span> <span class="t-s">"vertical5a"</span> ;
-        <span class="t-p">bed:project</span> <span class="t-s">"FEAR"</span> ;
-        <span class="t-p">bed:purpose</span> <span class="t-s">"tilt0560"</span> ;
-        <span class="t-p">bed:totalLength</span> [ <span class="t-k">a</span> <span class="t-p">qudt:QuantityValue</span> ;
-                <span class="t-p">qudt:hasUnit</span> <span class="t-p">unit:M</span> ;
-                <span class="t-p">qudt:numericValue</span> <span class="t-n">12.0</span> ] ;
-        <span class="t-p">bed:tunnelSection</span> <span class="t-p">bedv:tunnel-section-fear-tunnel</span> ;
-        <span class="t-p">schema:name</span> <span class="t-s">"BFE_D_31"</span> .
-
-    …
-}</code></pre></details>
-      <details class="ex"><summary><span class="ex-name">Borehole mouth survey</span><code class="ex-where">gr:INFRASTRUCTURE/BOREHOLES/BOREHOLE_MOUTH_SURVEYS</code></summary><pre><code><span class="t-p">gr:INFRASTRUCTURE</span>/BOREHOLES/BOREHOLE_MOUTH_SURVEYS {
-    <span class="t-p">bdr:20261015142523972-241</span> <span class="t-k">a</span> <span class="t-p">bed:CollarSurvey</span> ;
-        <span class="t-p">dcterms:source</span> <span class="t-s">"Flotron survey"</span> ;
-        <span class="t-p">bed:azimuth</span> [ <span class="t-k">a</span> <span class="t-p">qudt:QuantityValue</span> ;
-                <span class="t-p">qudt:hasUnit</span> <span class="t-p">unit:DEG</span> ;
-                <span class="t-p">qudt:numericValue</span> <span class="t-n">0.0</span> ] ;
-        <span class="t-p">bed:coordinateSystem</span> <span class="t-p">bedv:crs-bedretto-local-v1</span> ;
-        <span class="t-p">bed:dip</span> [ <span class="t-k">a</span> <span class="t-p">qudt:QuantityValue</span> ;
-                <span class="t-p">qudt:hasUnit</span> <span class="t-p">unit:DEG</span> ;
-                <span class="t-p">qudt:numericValue</span> <span class="t-n">90.0</span> ] ;
-        <span class="t-p">bed:dipConvention</span> <span class="t-s">"negative downward; positive upward"</span> ;
-        <span class="t-p">bed:easting</span> <span class="t-n">-386.154</span> ;
-        <span class="t-p">bed:elevation</span> <span class="t-n">1489.46</span> ;
-        <span class="t-p">bed:northing</span> <span class="t-n">247.251</span> ;
-        <span class="t-p">bed:ofBorehole</span> <span class="t-p">bdr:20261015142338008-88</span> ;
-        <span class="t-p">bed:surveyDate</span> <span class="t-s">"2024-09-08"^^xsd:date</span> ;
-        <span class="t-p">bed:surveyType</span> <span class="t-p">bedv:location-type-staked-out</span> ;
-        <span class="t-p">bed:surveyedBy</span> <span class="t-p">bdr:20261015142523972-209</span> ;
-        <span class="t-p">schema:name</span> <span class="t-s">"BFE_D_31_STAKED_OUT_20240908"</span> .
-
-    …
-}</code></pre></details>
-      <p class="cap">The examples follow one thread: tilt meter TILT4 is installed in borehole BFE_D_31, whose mouth was staked out on 8 September 2024. Each openBIS collection is a graph, and objects link across collections by permId: the deployment names <code>None</code>, and the tilt-meter collection describes that same IRI as TILT4. People's names are replaced in the fixture.</p>
-    </div>
   </section>
 
   <section aria-labelledby="h-vocab">
@@ -347,125 +227,27 @@ assignment,SENSOR_INSTAL,SENSOR,<span class="t-p">ssn:deployedSystem</span>,stan
       <li><span class="cls">Core sample</span><span class="pills"><span class="pill">Subsample type <i>4</i></span></span></li>
       <li><span class="cls">Lab analysis</span><span class="pills"><span class="pill">Rock property <i>8</i></span><span class="pill">Analysis method <i>5</i></span></span></li>
     </ul>
-    <p class="cap">Numbers are concept counts. openBIS vocabulary terms map to these concepts through <code>mapping/openbis-terms.csv</code>; change 06 turned free-text fields into vocabularies made from them. Hidden labels keep the spellings of the lab's exports, so <em>Campled</em> still maps to Clamped.</p>
-    <div class="examples">
-      <div class="eyebrow">Examples from bedretto-vocab.ttl</div>
-      <details class="ex"><summary><span class="ex-name">Clamped</span><code class="ex-where">bedv:coupling</code></summary><pre><code><span class="t-p">bedv:coupling-clamped</span> <span class="t-k">a</span> <span class="t-p">skos:Concept</span> ;
-    <span class="t-p">skos:inScheme</span> <span class="t-p">bedv:coupling</span> ;
-    <span class="t-p">skos:prefLabel</span> <span class="t-s">"Clamped"@en</span> ;
-    <span class="t-p">skos:hiddenLabel</span> <span class="t-s">"Campled"@en</span> ;
-    <span class="t-p">skos:definition</span> <span class="t-s">"Sensor pressed against the borehole wall or the rock by a mechanical clamp."@en</span> .</code></pre></details>
-      <details class="ex"><summary><span class="ex-name">Tilt meter</span><code class="ex-where">bedv:sensor-type</code></summary><pre><code><span class="t-p">bedv:sensor-type-tilt-meter</span> <span class="t-k">a</span> <span class="t-p">skos:Concept</span> ;
-    <span class="t-p">skos:inScheme</span> <span class="t-p">bedv:sensor-type</span> ;
-    <span class="t-p">skos:broader</span> <span class="t-p">bedv:sensor-type-hydromechanical</span> ;
-    <span class="t-p">skos:prefLabel</span> <span class="t-s">"Tilt meter"@en</span> ;
-    <span class="t-p">skos:altLabel</span> <span class="t-s">"Tiltmeter"@en</span> ;
-    <span class="t-p">skos:hiddenLabel</span> <span class="t-s">"Tilt Meter"@en</span> ;
-    <span class="t-p">skos:definition</span> <span class="t-s">"Records changes in the inclination of the ground or of a borehole."@en</span> .</code></pre></details>
-      <details class="ex"><summary><span class="ex-name">Bedretto local grid</span><code class="ex-where">bedv:crs</code></summary><pre><code><span class="t-p">bedv:crs-bedretto-local-v1</span> <span class="t-k">a</span> <span class="t-p">skos:Concept</span>, <span class="t-p">bed:CoordinateReferenceSystem</span> ;
-    <span class="t-p">skos:inScheme</span> <span class="t-p">bedv:crs</span> ;
-    <span class="t-p">skos:prefLabel</span> <span class="t-s">"Bedretto local grid"@en</span> ;
-    <span class="t-p">skos:altLabel</span> <span class="t-s">"global-local"@en</span> ;
-    <span class="t-p">skos:definition</span> <span class="t-s">"The laboratory's local grid, in metres, with its zero point at tunnel meter TM2000, which lies at E 2679720.696, N 1151600.128 in LV95. Eastings and northings are LV95 coordinates less those of the zero point; elevations are LV95 heights, since the zero point is at height 0. The laboratory calls it global-local."@en</span> ;
-    <span class="t-p">skos:related</span> <span class="t-i">&lt;http://www.opengis.net/def/crs/EPSG/0/2056&gt;</span> .</code></pre></details>
-    </div>
+    <p class="cap">Numbers are concept counts. A mapping table links each openBIS vocabulary term to one of these concepts, and the vocabularies change (06) builds openBIS vocabularies from them for fields that are free text today. Hidden labels hold the spellings found in the lab's exports, so <em>Campled</em> maps to Clamped.</p>
   </section>
 
   <section aria-labelledby="h-questions">
     <h2 id="h-questions">Example questions</h2>
-    <div class="examples">
-      <details class="ex"><summary><span class="ex-name">Which hydromechanical sensors serve FEAR-2, and how were they installed?</span><code class="ex-where">just query hydromechanical-deployments</code></summary><p class="ex-note">Data and the vocabulary&#x27;s sensor-type hierarchy. The query asks for hydromechanical sensors and never names tilt meters.</p><pre><code><span class="t-k">SELECT</span> <span class="t-v">?sensor</span> <span class="t-v">?kind</span> <span class="t-v">?serial</span> <span class="t-v">?borehole</span> <span class="t-v">?depth_m</span> <span class="t-v">?coupling</span> <span class="t-v">?installed</span>
-<span class="t-k">WHERE</span> {
-    <span class="t-k">GRAPH</span> <span class="t-p">gr:vocab</span> {
-        <span class="t-v">?type</span> <span class="t-p">skos:broader</span>* <span class="t-p">bedv:sensor-type-hydromechanical</span> ;
-              <span class="t-p">skos:prefLabel</span> <span class="t-v">?kind</span> .
-    }
-    <span class="t-k">GRAPH</span> <span class="t-v">?sg</span> {
-        <span class="t-v">?s</span> <span class="t-p">bed:sensorKind</span>    <span class="t-v">?type</span> ;
-           <span class="t-p">schema:name</span>       <span class="t-v">?sensor</span> ;
-           <span class="t-p">schema:serialNumber</span> <span class="t-v">?serial</span> .
-    }
-    <span class="t-k">GRAPH</span> <span class="t-v">?g</span> {
-        <span class="t-v">?depl</span> <span class="t-k">a</span> <span class="t-p">ssn:Deployment</span> ;
-              <span class="t-p">ssn:deployedSystem</span>     <span class="t-v">?s</span> ;
-              <span class="t-p">ssn:deployedOnPlatform</span> <span class="t-v">?bh</span> ;
-              <span class="t-p">bed:servesExperiment</span>   <span class="t-v">?exp</span> ;
-              <span class="t-p">bed:coupling</span>           <span class="t-v">?coup</span> .
-        <span class="t-k">OPTIONAL</span> { <span class="t-v">?depl</span> <span class="t-p">bed:measuredDepth</span> [ <span class="t-p">qudt:numericValue</span> <span class="t-v">?depth_m</span> ] }
-        <span class="t-k">OPTIONAL</span> { <span class="t-v">?depl</span> <span class="t-p">bed:deployedOn</span> <span class="t-v">?installed</span> }
-    }
-    <span class="t-k">GRAPH</span> <span class="t-v">?eg</span> { <span class="t-v">?exp</span> <span class="t-k">a</span> <span class="t-p">bed:Experiment</span> ; <span class="t-p">schema:name</span> <span class="t-s">"FEAR-2"</span> }
-    <span class="t-k">GRAPH</span> <span class="t-v">?bg</span> { <span class="t-v">?bh</span> <span class="t-k">a</span> <span class="t-p">bed:Borehole</span> ; <span class="t-p">schema:name</span> <span class="t-v">?borehole</span> }
-    <span class="t-k">GRAPH</span> <span class="t-p">gr:vocab</span> { <span class="t-v">?coup</span> <span class="t-p">skos:prefLabel</span> <span class="t-v">?coupling</span> }
-}
-<span class="t-k">ORDER</span> <span class="t-k">BY</span> <span class="t-v">?sensor</span></code></pre><div class="eyebrow">Result</div><div class="result"><table><thead><tr><th>sensor</th><th>kind</th><th>serial</th><th>borehole</th><th class="num">depth_m</th><th>coupling</th><th>installed</th></tr></thead><tbody><tr><td>LY1066</td><td>Tilt meter</td><td>LY1066</td><td>BFE_C_23</td><td class="num">19.0</td><td>Sanded</td><td>2025-11-26</td></tr><tr><td>TILT1</td><td>Tilt meter</td><td>LY5020</td><td>BFE_C_19</td><td class="num">18.0</td><td>Sanded</td><td>2025-11-26</td></tr><tr><td>TILT3</td><td>Tilt meter</td><td>LY1127</td><td>BFE_D_27</td><td class="num">20.0</td><td>Sanded</td><td>2025-11-25</td></tr><tr><td>TILT4</td><td>Tilt meter</td><td>LY1123</td><td>BFE_D_31</td><td class="num">14.0</td><td>Sanded</td><td>2025-11-25</td></tr></tbody></table></div></details>
-      <details class="ex"><summary><span class="ex-name">What do we know about BFE_D_31?</span><code class="ex-where">just query describe-borehole</code></summary><p class="ex-note">Data, ontology labels and vocabulary labels. Each property is named by its ontology label, and each concept value by its vocabulary label.</p><pre><code><span class="t-k">SELECT</span> <span class="t-v">?property</span> <span class="t-v">?value</span>
-<span class="t-k">WHERE</span> {
-    <span class="t-k">GRAPH</span> <span class="t-v">?g</span> { <span class="t-v">?bh</span> <span class="t-k">a</span> <span class="t-p">bed:Borehole</span> ; <span class="t-p">schema:name</span> <span class="t-s">"BFE_D_31"</span> ; <span class="t-v">?p</span> <span class="t-v">?o</span> }
-    <span class="t-k">GRAPH</span> <span class="t-p">gr:ontology</span> { <span class="t-v">?p</span> <span class="t-p">rdfs:label</span> <span class="t-v">?property</span> }
-
-    <span class="t-k">OPTIONAL</span> { <span class="t-k">GRAPH</span> <span class="t-p">gr:vocab</span> { <span class="t-v">?o</span> <span class="t-p">skos:prefLabel</span> <span class="t-v">?concept</span> } }
-    <span class="t-k">OPTIONAL</span> { <span class="t-k">GRAPH</span> <span class="t-v">?tg</span> { <span class="t-v">?o</span> <span class="t-k">a</span> <span class="t-p">bed:TestBed</span> ; <span class="t-p">schema:name</span> <span class="t-v">?testBed</span> } }
-    <span class="t-k">OPTIONAL</span> {
-        <span class="t-k">GRAPH</span> <span class="t-v">?g</span> { <span class="t-v">?o</span> <span class="t-p">qudt:numericValue</span> <span class="t-v">?num</span> ; <span class="t-p">qudt:hasUnit</span> <span class="t-v">?unit</span> }
-        <span class="t-k">BIND</span> (<span class="t-k">CONCAT</span>(<span class="t-k">STR</span>(<span class="t-v">?num</span>), <span class="t-s">" "</span>, <span class="t-k">REPLACE</span>(<span class="t-k">STR</span>(<span class="t-v">?unit</span>), <span class="t-s">"^.*/"</span>, <span class="t-s">""</span>)) <span class="t-k">AS</span> <span class="t-v">?quantity</span>)
-    }
-    <span class="t-k">BIND</span> (<span class="t-k">COALESCE</span>(<span class="t-v">?concept</span>, <span class="t-v">?testBed</span>, <span class="t-v">?quantity</span>, <span class="t-v">?o</span>) <span class="t-k">AS</span> <span class="t-v">?value</span>)
-}
-<span class="t-k">ORDER</span> <span class="t-k">BY</span> <span class="t-v">?property</span></code></pre><div class="eyebrow">Result</div><div class="result"><table><thead><tr><th>property</th><th>value</th></tr></thead><tbody><tr><td>borehole diameter</td><td>96.0 MilliM</td></tr><tr><td>borehole geometry</td><td>Vertical</td></tr><tr><td>borehole status</td><td>Open</td></tr><tr><td>drilling end</td><td>2025-09-01</td></tr><tr><td>drilling start</td><td>2025-09-01</td></tr><tr><td>drilling style</td><td>Not cored</td></tr><tr><td>has test bed</td><td>Earthquake Physics</td></tr><tr><td>nickname</td><td>vertical5a</td></tr><tr><td>project</td><td>FEAR</td></tr><tr><td>purpose</td><td>tilt0560</td></tr><tr><td>total length</td><td>12.0 M</td></tr><tr><td>tunnel section</td><td>FEAR tunnel</td></tr></tbody></table></div></details>
-      <details class="ex"><summary><span class="ex-name">Where is the mouth of BFE_A_01 now?</span><code class="ex-where">just query current-collar-position</code></summary><p class="ex-note">Its latest survey: BFE_A_01 was planned, then staked out two weeks later. Each survey keeps its own date and surveyor, so the history stays.</p><pre><code><span class="t-k">SELECT</span> <span class="t-v">?borehole</span> <span class="t-v">?surveyType</span> <span class="t-v">?easting</span> <span class="t-v">?northing</span> <span class="t-v">?elevation</span> <span class="t-v">?surveyed</span>
-       (<span class="t-k">GROUP_CONCAT</span>(<span class="t-v">?name</span> ; separator=<span class="t-s">", "</span>) <span class="t-k">AS</span> <span class="t-v">?by</span>)
-<span class="t-k">WHERE</span> {
-    <span class="t-k">GRAPH</span> <span class="t-v">?g</span> {
-        <span class="t-v">?survey</span> <span class="t-k">a</span> <span class="t-p">bed:CollarSurvey</span> ;
-                <span class="t-p">bed:ofBorehole</span>  <span class="t-v">?bh</span> ;
-                <span class="t-p">bed:surveyType</span>  <span class="t-v">?type</span> ;
-                <span class="t-p">bed:surveyDate</span>  <span class="t-v">?surveyed</span> ;
-                <span class="t-p">bed:easting</span>     <span class="t-v">?easting</span> ;
-                <span class="t-p">bed:northing</span>    <span class="t-v">?northing</span> ;
-                <span class="t-p">bed:elevation</span>   <span class="t-v">?elevation</span> .
-        <span class="t-k">OPTIONAL</span> { <span class="t-v">?survey</span> <span class="t-p">bed:surveyedBy</span> <span class="t-v">?agent</span> }
-    }
-    <span class="t-k">GRAPH</span> <span class="t-v">?bg</span> { <span class="t-v">?bh</span> <span class="t-k">a</span> <span class="t-p">bed:Borehole</span> ; <span class="t-p">schema:name</span> <span class="t-v">?borehole</span> }
-    <span class="t-k">GRAPH</span> <span class="t-p">gr:vocab</span> { <span class="t-v">?type</span> <span class="t-p">skos:prefLabel</span> <span class="t-v">?surveyType</span> }
-    <span class="t-k">OPTIONAL</span> { <span class="t-k">GRAPH</span> <span class="t-v">?ag</span> { <span class="t-v">?agent</span> <span class="t-p">schema:name</span> <span class="t-v">?name</span> } }
-
-    <span class="t-k">FILTER</span> (<span class="t-v">?borehole</span> = <span class="t-s">"BFE_A_01"</span>)
-
-    <span class="t-k">FILTER</span> <span class="t-k">NOT</span> <span class="t-k">EXISTS</span> {
-        <span class="t-k">GRAPH</span> <span class="t-v">?later</span> { <span class="t-v">?other</span> <span class="t-k">a</span> <span class="t-p">bed:CollarSurvey</span> ; <span class="t-p">bed:ofBorehole</span> <span class="t-v">?bh</span> ; <span class="t-p">bed:surveyDate</span> <span class="t-v">?laterDate</span> }
-        <span class="t-k">FILTER</span> (<span class="t-v">?laterDate</span> &gt; <span class="t-v">?surveyed</span>)
-    }
-}
-<span class="t-k">GROUP</span> <span class="t-k">BY</span> <span class="t-v">?borehole</span> <span class="t-v">?surveyType</span> <span class="t-v">?easting</span> <span class="t-v">?northing</span> <span class="t-v">?elevation</span> <span class="t-v">?surveyed</span></code></pre><div class="eyebrow">Result</div><div class="result"><table><thead><tr><th>borehole</th><th>surveyType</th><th class="num">easting</th><th class="num">northing</th><th class="num">elevation</th><th>surveyed</th><th>by</th></tr></thead><tbody><tr><td>BFE_A_01</td><td>Staked out</td><td class="num">-415.64</td><td class="num">447.7</td><td class="num">1490.133</td><td>2024-01-18</td><td>Person 5</td></tr></tbody></table></div></details>
-    </div>
-  </section>
-
-  <section aria-labelledby="h-files">
-    <h2 id="h-files">Files</h2>
-    <dl class="files">
-      <div><dt><span>ontology/bedretto/</span>bedretto-ontology.ttl</dt><dd>19 classes, 104 properties</dd></div>
-      <div><dt><span>ontology/bedretto/</span>bedretto-vocab.ttl</dt><dd>19 concept schemes, 114 concepts</dd></div>
-      <div><dt><span>ontology/bedretto/</span>bedretto-shapes.ttl</dt><dd>Checks the converted data</dd></div>
-      <div><dt><span>ontology/skos/</span>skos-shapes.ttl</dt><dd>Checks the vocabulary</dd></div>
-      <div><dt><span>ontology/crate/</span>crate-shapes.ttl</dt><dd>Checks the exported crate</dd></div>
-      <div><dt><span>mapping/</span>openbis-annotations.csv</dt><dd>17 openBIS types and their fields, 217 of them with a term</dd></div>
-      <div><dt><span>mapping/</span>openbis-terms.csv</dt><dd>85 openBIS vocabulary terms and their concepts</dd></div>
-      <div><dt><span>tests/fixtures/</span>openbis-export.json</dt><dd>A dump of the local openBIS: 41 objects, people's names replaced</dd></div>
-      <div><dt><span>out/</span>bedretto.trig</dt><dd>The converted dump: 11 named graphs, empty default graph</dd></div>
-      <div><dt><span>openbis/</span></dt><dd>The local openBIS 7.0, its seed, and notes for the openBIS administrator</dd></div>
-    </dl>
+    <ul class="notes">
+      <li><b>Which hydromechanical sensors serve FEAR-2, and how were they installed?</b> Uses the sensor-type hierarchy in the vocabulary, so tilt meters count as hydromechanical sensors. Needs the borehole and sensor links of the object-links change (05).</li>
+      <li><b>What do we know about borehole BFE_D_31?</b> Lists every field with its label from the ontology, and every vocabulary value with its label. Without the test-bed change (02) and the vocabularies change (06) it lists fewer fields: no test bed, tunnel section, geometry, drilling style or status.</li>
+      <li><b>Where is the mouth of BFE_A_01 now?</b> Takes the latest mouth survey, with its date and surveyor. Needs the survey objects of the mouth-surveys change (03).</li>
+    </ul>
   </section>
 
   <section aria-labelledby="h-todo">
     <h2 id="h-todo">Still open</h2>
     <ul class="notes">
-      <li><b>Production.</b> The openBIS administrator applies changes 01–07 and the annotations. The annotations wait for the final address of the ontology, since an import cannot change one once it is there.</li>
-      <li><b>Ontology version in annotations.</b> An annotation keeps the version it was made with. Whether annotations should carry a version at all is still to be decided.</li>
-      <li><b>Answers from the lab.</b> The collection that holds the boreholes, full exports of the 12 types, and whether tilt meter LY1066 is LY1166.</li>
+      <li><b>Production.</b> Changes 01–06 and the annotations are not applied yet; the openBIS administrator does that. The annotations need the final ontology base IRI first, because an import cannot change an annotation once it exists.</li>
+      <li><b>Ontology version in annotations.</b> Each annotation stores the ontology version it was made with. Not decided yet whether annotations should carry a version at all.</li>
+      <li><b>Answers from the lab.</b> Which collection holds the boreholes, full exports of the 12 types, and whether tilt meter LY1066 is LY1166.</li>
       <li><b>Cores and laboratory work.</b> Core logs, core samples and lab analyses have shapes but no openBIS types.</li>
     </ul>
   </section>
 
-  <p class="foot">Built from the working tree on 15 October 2026. The base address of the ontology, the crate profile and the licence are placeholders.</p>
+  <p class="foot">Last updated 20 October 2026. The ontology's web address is still a placeholder.</p>
 </div>

@@ -1,8 +1,5 @@
 import argparse
-import json
 import sys
-import urllib.parse
-import urllib.request
 from pathlib import Path
 
 from rdflib import Dataset, URIRef
@@ -13,8 +10,6 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "out" / "bedretto.trig"
 BEDRETTO = ROOT / "ontology" / "bedretto"
 GRAPH_NS = config.GRAPH
-# endpoint/compose.yaml
-ENDPOINT = "http://localhost:7878"
 
 # loaded as named graphs next to the data, so queries can join terms, labels and shapes. Data graphs are
 # openBIS collections, whose paths differ between instances, so queries find records by class.
@@ -197,48 +192,17 @@ def shorten(value: object) -> str:
     return str(value).replace(GRAPH_NS, "gr:")
 
 
-def send(url: str, body: bytes, content_type: str, method: str = "POST") -> bytes:
-    req = urllib.request.Request(
-        url,
-        data=body,
-        method=method,
-        headers={
-            "Content-Type": content_type,
-            "Accept": "application/sparql-results+json",
-        },
-    )
-    with urllib.request.urlopen(req) as resp:
-        return resp.read()
-
-
-def load_endpoint(url: str, path: Path) -> None:
-    # replace the store with the data, graphs kept, then add ontology, vocabulary and shapes as graphs
-    send(f"{url}/store", path.read_bytes(), "application/trig", "PUT")
-    for name, static in STATIC_GRAPHS.items():
-        graph = urllib.parse.quote(GRAPH_NS + name, safe="")
-        send(f"{url}/store?graph={graph}", static.read_bytes(), "text/turtle", "PUT")
-
-
-def select(source: Dataset | str, name: str) -> tuple[list[str], list[list[str]]]:
-    # source is the in-memory dataset or a SPARQL endpoint's URL
-    if isinstance(source, str):
-        result = json.loads(
-            send(f"{source}/query", QUERIES[name].encode(), "application/sparql-query")
-        )
-        headers = result["head"]["vars"]
-        rows = [[shorten(b[h]["value"]) if h in b else "" for h in headers]
-                for b in result["results"]["bindings"]]  # fmt: skip
-        return headers, rows
-    result = source.query(QUERIES[name])
+def select(ds: Dataset, name: str) -> tuple[list[str], list[list[str]]]:
+    result = ds.query(QUERIES[name])
     headers = [str(v) for v in result.vars]
     return headers, [
         [shorten(r[h]) if r[h] is not None else "" for h in headers] for r in result
     ]
 
 
-def run_one(source: Dataset | str, name: str) -> int:
+def run_one(ds: Dataset, name: str) -> int:
     print(f"\n{name}")
-    headers, table = select(source, name)
+    headers, table = select(ds, name)
     if not table:
         print("  (no rows)")
         return 1
@@ -257,18 +221,6 @@ def run_one(source: Dataset | str, name: str) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", type=Path, default=DATA)
-    ap.add_argument(
-        "--endpoint",
-        nargs="?",
-        const=ENDPOINT,
-        metavar="URL",
-        help=f"query a SPARQL endpoint instead of --data in memory (default {ENDPOINT})",
-    )
-    ap.add_argument(
-        "--load",
-        action="store_true",
-        help="with --endpoint: replace its content with --data first",
-    )
     ap.add_argument("--list", action="store_true", help="list the queries")
     ap.add_argument("--run", metavar="NAME", help="run one query")
     ap.add_argument("--all", action="store_true", help="run every query")
@@ -276,12 +228,6 @@ def main() -> int:
         "--show", metavar="NAME", help="print the SPARQL without running it"
     )
     args = ap.parse_args()
-
-    if args.load:
-        load_endpoint(args.endpoint or ENDPOINT, args.data)
-        print(f"loaded {args.data} into {args.endpoint or ENDPOINT}")
-        if not (args.run or args.all):
-            return 0
 
     if args.list or not (args.run or args.all or args.show):
         print("\n".join(QUERIES))
@@ -291,7 +237,7 @@ def main() -> int:
         print(QUERIES[args.show])
         return 0
 
-    ds = args.endpoint or load(args.data)
+    ds = load(args.data)
     if args.all:
         return max(run_one(ds, n) for n in QUERIES)
 

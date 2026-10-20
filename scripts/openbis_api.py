@@ -5,7 +5,6 @@ import itertools
 import json
 import os
 import sys
-import time
 import urllib.error
 import urllib.request
 import uuid
@@ -16,7 +15,6 @@ from urllib.parse import urlparse
 import config
 
 V3 = "/openbis/openbis/rmi-application-server-v3.json"
-RO_CRATE = "/ro-crate-server"
 # the only hosts scripts may write to; production changes go through the collaborator
 LOCAL_HOSTS = {
     "local.openbis.ch",
@@ -438,51 +436,10 @@ class Openbis:
             }  # fmt: skip
         return out
 
-    def export_crate(
-        self, identifiers: list[str], fmt: str = "application/ld+json", **options: bool
-    ) -> bytes:
-        # fmt is application/ld+json (the manifest) or application/zip; options are openBIS export
-        # flags, e.g. with_levels_below=True -> openbis.with-levels-below: true. The export runs as a job.
-        base = self.url + RO_CRATE
-        headers = {
-            "api-key": self.token,
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        }
-        flags = {"openbis.send-email": "false"}
-        for name, value in options.items():
-            flags[
-                "openbis." + name.replace("_", "-").replace("datasets", "dataSets")
-            ] = str(value).lower()
-        body = json.dumps(identifiers).encode()
-        job = json.loads(
-            request(base + "/export", {**headers, **flags, "Export": fmt}, body)
-        )["jobId"]
-        while (status := json.loads(request(f"{base}/status/{job}", headers)))[
-            "status"
-        ] == "RUNNING":
-            time.sleep(1)
-        if status["status"] != "COMPLETED":
-            raise RuntimeError(
-                f"RO-Crate export {status['status']}: {status['errors']}"
-            )
-        return request(
-            base + "/download", {"api-key": self.token, "jobid": job, "Accept": "*/*"}
-        )
-
 
 def main() -> int:
     ap = argparse.ArgumentParser(
         description="Log in to openBIS (OPENBIS_URL/USER/PASSWORD) and print what it holds"
-    )
-    ap.add_argument(
-        "--export",
-        nargs="+",
-        metavar="IDENTIFIER",
-        help="export these objects as an RO-Crate manifest",
-    )
-    ap.add_argument(
-        "--out", type=Path, help="where to write the export (default: stdout)"
     )
     ap.add_argument(
         "--masterdata",
@@ -520,16 +477,6 @@ def main() -> int:
         return 0
     if args.masterdata:
         print(o.export_masterdata(config.ANNOTATED_TYPES, args.masterdata))
-        return 0
-    if args.export:
-        crate = o.export_crate(
-            args.export, with_levels_below=True, with_objects_and_datasets_parents=True
-        )
-        if args.out:
-            args.out.parent.mkdir(parents=True, exist_ok=True)
-            args.out.write_bytes(crate)
-        else:
-            sys.stdout.buffer.write(crate)
         return 0
 
     info = o.call("getServerInformation")

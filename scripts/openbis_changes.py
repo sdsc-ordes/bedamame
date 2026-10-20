@@ -88,7 +88,6 @@ class Change:
     sections: list[wb.Section]
     note: list[str]
     review: dict[str, list[list]] = field(default_factory=dict)
-    scripts: dict[str, str] = field(default_factory=dict)
     terms: list[dict] = field(default_factory=list)
 
 
@@ -837,40 +836,6 @@ def vocabularies(export: Export, **_) -> Change:
                   review={"values": review}, terms=all_terms)  # fmt: skip
 
 
-# change 07: a validation script for cores that checks what CORES has
-DEPTH_SCRIPT = """def getRenderedProperty(entity, property):
-    value = entity.property(property)
-    if value is not None:
-        return value.renderedValue()
-
-def validate(entity, isNew):
-    top = getRenderedProperty(entity, "CORES.TOP")
-    bottom = getRenderedProperty(entity, "CORES.BOTTOM")
-    if top and bottom and float(top) > float(bottom):
-        return "Top depth cannot be below bottom depth!"
-"""
-
-
-def core_validation(export: Export, **_) -> Change:
-    cores = type_row(export, "CORES", [])
-    cores.entity.set(
-        cores.entity.rows[0], "Validation script", "depth_range_validation.py"
-    )
-    note = [
-        "Replaces the validation script of CORES. The current one is the ELN's date-range check "
-        "for START_DATE and END_DATE, fields CORES does not have, so it never fires. The new one "
-        "checks that the top depth is not below the bottom depth.",
-        "",
-        "Importing a validation script needs a user listed in `code-plugins.allowed-editing-users` "
-        "in the application server's `service.properties`.",
-        "",
-        "The old script stays as an unused plugin; delete it in the admin UI under **Tools → Entity "
-        "Validation Plugins** if nothing else uses it.",
-    ]
-    return Change("07-core-validation", "Core validation", [cores], note,
-                  scripts={"depth_range_validation.py": DEPTH_SCRIPT})  # fmt: skip
-
-
 CHANGES = {
     "01": people,
     "02": testbeds,
@@ -878,12 +843,11 @@ CHANGES = {
     "04": sensor_positions,
     "05": object_links,
     "06": vocabularies,
-    "07": core_validation,
 }
 
 
 def annotate(change: Change, export: Export) -> None:
-    mapping = am.load_mapping()
+    mapping = config.load_mapping()
     for s in change.sections:
         if s.kind != "SAMPLE_TYPE":
             continue
@@ -899,7 +863,7 @@ def annotate(change: Change, export: Export) -> None:
 
 def referenced_scripts(change: Change, export: Export) -> dict[str, str]:
     # a type row copied from the export names its validation script; the zip has to carry it
-    scripts = dict(change.scripts)
+    scripts = {}
     for s in change.sections:
         if s.kind == "SAMPLE_TYPE":
             name = s.entity.get(s.entity.rows[0], "Validation script")
@@ -915,12 +879,11 @@ def write(change: Change, export: Export, out: Path, review: Path) -> Path:
     sheet = out / f"{change.name}.xlsx"
     wb.write(change.sections, sheet)
     target = sheet
-    change.scripts = referenced_scripts(change, export)
-    if change.scripts:
+    if scripts := referenced_scripts(change, export):
         target = out / f"{change.name}.zip"
         with zipfile.ZipFile(target, "w") as z:
             z.write(sheet, sheet.name)
-            for name, text in change.scripts.items():
+            for name, text in scripts.items():
                 z.writestr(f"scripts/{name}", text)
     if change.review:
         review.mkdir(parents=True, exist_ok=True)

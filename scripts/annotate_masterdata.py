@@ -1,5 +1,4 @@
 import argparse
-import csv
 import datetime
 import shutil
 import sys
@@ -14,15 +13,9 @@ import validate as v
 from openbis_api import Openbis
 
 ROOT = Path(__file__).resolve().parent.parent
-MAPPING = ROOT / "mapping" / "openbis-annotations.csv"
 OUT = ROOT / "out" / "openbis" / "annotated"
 COLUMNS = ["Ontology Id", "Ontology Version", "Ontology Annotation Id"]
 PLACEHOLDER = "https://example.org/"
-
-
-def load_mapping(path: Path = MAPPING) -> dict[tuple[str, str], dict]:
-    with path.open() as f:
-        return {(r["object_type"], r["property_code"]): r for r in csv.DictReader(f)}
 
 
 def annotation(term: str) -> tuple[str, str, str]:
@@ -73,7 +66,7 @@ def annotate(sections: list[wb.Section], mapping: dict) -> tuple[list, list[dict
         for table, row, code in rows:
             m = mapping.get((s.code, code.removeprefix("$")))
             if m is None:
-                raise SystemExit(f"no row in {MAPPING.name} for {s.code} {code}")
+                raise SystemExit(f"no row in {config.MAPPING.name} for {s.code} {code}")
             have = present(table, row)
             want = annotation(m["term"]) if m["term"] else None
             # the same term counts as present whatever its Ontology Id and Version: openBIS 7.0's own
@@ -325,13 +318,13 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.check:
-        problems = check(Openbis(), load_mapping())
+        problems = check(Openbis(), config.load_mapping())
         print("\n".join(problems) or "annotations agree with the mapping")
         return 1 if problems else 0
     if not args.export:
         ap.error("give an export, or --check")
 
-    types, items = annotate(wb.read(args.export), load_mapping())
+    types, items = annotate(wb.read(args.export), config.load_mapping())
     renamed = unprefix_scripts(types)
     if args.out.exists():
         shutil.rmtree(args.out)

@@ -11,17 +11,15 @@
 @prefix sosa:    <http://www.w3.org/ns/sosa/> .
 @prefix ssn:     <http://www.w3.org/ns/ssn/> .
 @prefix prov:    <http://www.w3.org/ns/prov#> .
-@prefix geo:     <http://www.opengis.net/ont/geosparql#> .
 @prefix qudt:    <http://qudt.org/schema/qudt/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix time:    <http://www.w3.org/2006/time#> .
 
 <https://example.org/bedretto/shapes> a owl:Ontology ;
     dcterms:title "Bedretto shapes"@en ;
     dcterms:description "SHACL shapes for the Bedretto metadata store, validated over the union of all named graphs together with the Bedretto ontology and vocabularies. A property that takes a controlled value must point to a concept in the scheme named here, so the values themselves are listed only in the vocabulary."@en ;
     dcterms:creator "Robin Franken" ;
     dcterms:created "2026-10-05"^^xsd:date ;
-    dcterms:modified "2026-10-15"^^xsd:date ;
+    dcterms:modified "2026-10-20"^^xsd:date ;
     owl:versionInfo "0.4.0" ;
     owl:versionIRI <https://example.org/bedretto/shapes/0.4.0> ;
     rdfs:seeAlso <https://example.org/bedretto/terms>, <https://example.org/bedretto/vocab> .
@@ -198,21 +196,6 @@ bedsh:CollarSurveyShape a sh:NodeShape ;
     sh:property [
         sh:path        bed:dipConvention ;
         sh:minCount    1 ;
-    ] ;
-
-    sh:property [
-        sh:path        geo:hasGeometry ;
-        sh:maxCount    1 ;
-        sh:node        bedsh:GeometryShape ;
-    ] .
-
-bedsh:GeometryShape a sh:NodeShape ;
-    sh:property [
-        sh:path        geo:asWKT ;
-        sh:minCount    1 ;
-        sh:maxCount    1 ;
-        sh:datatype    geo:wktLiteral ;
-        sh:pattern     "^<[^>]+>\\s" ;
     ] .
 
 bedsh:DepthIntervalShape a sh:NodeShape ;
@@ -559,15 +542,4 @@ bedsh:BundleShape a sh:NodeShape ;
         sh:minCount    1 ;
         sh:maxCount    1 ;
         sh:datatype    xsd:dateTime ;
-    ] ;
-
-    sh:property [
-        sh:path        dcterms:contributor ;
-        sh:class       prov:Agent ;
-    ] ;
-
-    sh:property [
-        sh:path        dcterms:temporal ;
-        sh:maxCount    1 ;
-        sh:class       time:Interval ;
     ] .

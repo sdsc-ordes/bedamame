@@ -154,7 +154,7 @@ def test_collections_name_an_experiment():
 
 
 def test_annotating_changes_only_the_ontology_columns(tmp_path):
-    types, items = am.annotate(wb.read(MASTERDATA), am.load_mapping())
+    types, items = am.annotate(wb.read(MASTERDATA), config.load_mapping())
     wb.write(types, tmp_path / "masterdata.xlsx")
     after = {s.code: s for s in wb.read(tmp_path / "masterdata.xlsx")}
     before = {

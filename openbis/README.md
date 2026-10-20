@@ -8,7 +8,7 @@ A local copy of openBIS for rehearsing master-data changes before the collaborat
 just openbis-up            # https://local.openbis.ch, first start takes a few minutes
 just openbis-masterdata    # the lab's 12 object types, cleaned for 7.0
 just openbis-seed          # boreholes, sensors, installations, stubs
-just openbis-changes       # rehearse the master-data changes 01-07
+just openbis-changes       # rehearse the master-data changes 01-06
 just openbis-annotate      # annotate from mapping/ and check
 just openbis-reset         # drop everything (volumes included)
 ```
@@ -17,12 +17,7 @@ just openbis-reset         # drop everything (volumes included)
 
 ## What differs from the 7.x Docker quickstart
 
-| File | Why |
-|---|---|
-| `ingress/haproxy.cfg` | Copy of the `openbis-local` config plus a `/ro-crate-server` route to the RO-Crate server on port 8086 (the stock ingress has none). |
-| `compose.yaml`: alias `local.openbis.ch` on the ingress | The RO-Crate server downloads its own export from `https://local.openbis.ch`; inside the container network that name must reach the ingress, not 127.0.0.1. |
-| `ro-crate/service.properties` | The image's start script points the RO-Crate workspace at the AS session workspace, so the RO-Crate server truncates the export it is about to download (every crate failed with an empty file). Mounted read-only with a separate workspace. |
-| `as/openbis.conf` | Adds `-Das.code-plugins.allowed-editing-users=system,admin`. 7.0 lets only `system` import validation scripts; the lab's CORES type has one. |
+`as/openbis.conf` adds `-Das.code-plugins.allowed-editing-users=system,admin`. 7.0 lets only `system` import validation scripts; the lab's CORES type has one.
 
 `openbis-local` only publishes `latest`, so it is pinned by digest.
 
@@ -46,7 +41,7 @@ Observed while importing:
 
 ## Annotations
 
-`just openbis-annotate` does what the collaborator will do in production: a fresh master-data export of the Bedretto types, including those changes 01–07 add (`scripts/openbis_api.py --masterdata`), annotated from `mapping/openbis-annotations.csv` (`scripts/annotate_masterdata.py`), imported with "Update if exists", then checked against the mapping (`--check`, read-only). `out/openbis/annotated/` holds the zip to import and `annotations-changes.md`, the note for the collaborator.
+`just openbis-annotate` does what the collaborator will do in production: a fresh master-data export of the Bedretto types, including those changes 01–06 add (`scripts/openbis_api.py --masterdata`), annotated from `mapping/openbis-annotations.csv` (`scripts/annotate_masterdata.py`), imported with "Update if exists", then checked against the mapping (`--check`, read-only). `out/openbis/annotated/` holds the zip to import and `annotations-changes.md`, the note for the collaborator.
 
 What the 7.0 import does with the three ontology columns (tested locally):
 
@@ -70,7 +65,7 @@ The collection for boreholes is a stand-in, `/INFRASTRUCTURE/BOREHOLES/BOREHOLES
 
 ## Master-data changes
 
-`just openbis-changes` rehearses the seven changes in order. For each, it exports the master data of the Bedretto types and their objects, builds the change from that export, and imports it with "Update if exists". `out/openbis/changes/` then holds the file to import (`NN-name.xlsx`, or a zip when it carries validation scripts) and `NN-name.md`, the note for the collaborator. `out/openbis/review/` holds the review sheets, which contain names.
+`just openbis-changes` rehearses the six changes in order. For each, it exports the master data of the Bedretto types and their objects, builds the change from that export, and imports it with "Update if exists". `out/openbis/changes/` then holds the file to import (`NN-name.xlsx`, or a zip when it carries validation scripts) and `NN-name.md`, the note for the collaborator. `out/openbis/review/` holds the review sheets, which contain names.
 
 For production, the collaborator's exports go in instead: `uv run scripts/openbis_changes.py 01 --masterdata DIR/object-types.xlsx --objects OBJECTS.xlsx`. `--annotate` also fills the ontology columns of new types and fields; leave it out until the final domain is set.
 
@@ -82,7 +77,6 @@ For production, the collaborator's exports go in instead: `uv run scripts/openbi
 | `04-sensor-positions` | SENSOR_POSITION type, linked to the installation; installations with coordinates get one (none locally). |
 | `05-object-links` | BOREHOLE and SENSOR links on installations, logging runs and cores, from the parents or from the borehole name and serial number. |
 | `06-vocabularies` | Free-text and yes/no fields become vocabulary fields (`*_TERM`, INSTALLATION_ENVIRONMENT), with vocabularies made from `ontology/bedretto/bedretto-vocab.ttl`. |
-| `07-core-validation` | CORES's validation script checks top ≤ bottom depth instead of dates CORES does not have. |
 
 New fields get new codes; the old fields stay until the collaborator retires them. New vocabulary terms are added to `mapping/openbis-terms.csv`.
 
@@ -110,21 +104,4 @@ What the 7.0 import does (tested locally):
 
 ## RO-Crate export
 
-`uv run scripts/openbis_api.py --export IDENTIFIER... [--out PATH]` runs the RO-Crate export: `POST /ro-crate-server/export` with `Accept: application/json` and `Export: application/ld+json` (or `application/zip`) starts a job; poll `GET /status/<job>` until `COMPLETED`; `GET /download` with a `jobid` header returns the manifest. The body is a JSON array of identifiers or permIds.
-
-What a crate contains (checked on a PUBLICATION, PERSON, ORGANIZATION and a tilt meter):
-
-- **Context:** RO-Crate 1.1 plus `schema` → `https://schema.org` (no trailing slash), `owl`, and `openBIS` → `www.openbis.ch`, which is not an IRI. Read it as plain JSON, not JSON-LD.
-- **Objects:** `@id` is the identifier (`/PUBLICATIONS/PUBLIC_REPOSITORIES/PUB_SPIKE`), `@type` the type code; properties are `openBIS:has<CODE>`; links are `{"@id": "<identifier>"}`; vocabulary values are term codes; TIMESTAMPs are `2026-01-01T00:00:00Z`. Space, project and collection are nodes.
-- **Types and properties:** `rdfs:Class` with `owl:equivalentClass` from the type's annotation; `rdf:Property` with `owl:equivalentProperty`. A property shared by several types gets one node with a list of equivalent properties, so per-assignment annotations cannot be told apart. Cardinality is `owl:Restriction` (max 0 means multi-valued).
-- **Missing:** permId, registrator, modifier, registration and modification dates. The root dataset's name, description, licence and date are placeholders.
-
-**It fails for 11 of the 12 Bedretto types on 7.0.0**, so the converter reads a V3 export instead (plan Phase 4). The RO-Crate server rebuilds each crate from openBIS's own Excel export and stops on:
-
-| Error | Cause | Types |
-|---|---|---|
-| `Text '2025-11-25' could not be parsed at index 10` | any DATE property with a value | 9 |
-| `Repeated headers are not allowed` | property labels "Project"/"Experiment", equal to the attribute headers | 5 |
-| `NullPointerException … PropertyType.getMetaData()` | MULTILINE_VARCHAR with a value and no metadata (`ImageExtractor.isRichText`) | 7 |
-
-DATALOGGER is the only type without any of these. Relabelling and adding metadata got past the last two locally; the DATE error would need new TIMESTAMP properties. Exports with `with-objects-and-dataSets-parents` on the installations also hit the RO-Crate server's 30 s timeout (`openBISTimeout`) once, before the errors above.
+openBIS 7.0.0's own RO-Crate export fails for 11 of the 12 Bedretto types: on any DATE value, on the property labels "Project" and "Experiment", and on multi-line text without widget metadata. The converter therefore reads a V3 dump.

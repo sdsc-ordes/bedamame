@@ -10,7 +10,6 @@ from pathlib import Path
 from rdflib import BNode, Dataset, Graph, Literal, Namespace, URIRef
 from rdflib.namespace import RDF, SH, SKOS, XSD
 
-import annotate_masterdata as am
 import config
 import validate as v
 
@@ -69,7 +68,7 @@ def literal(text: str, datatype: URIRef | None) -> Literal:
 class Converter:
     def __init__(self, export: dict):
         self.export = export
-        self.mapping = am.load_mapping()
+        self.mapping = config.load_mapping()
         with TERMS.open() as f:
             self.terms = {
                 (r["vocabulary_code"], r["term_code"]): r["concept"]
@@ -166,7 +165,7 @@ class Converter:
         for code, raw in o["properties"].items():
             m = self.mapping.get((o["type"], code))
             if m is None:
-                self.problems.append(f"{o['type']} {code}: not in {am.MAPPING.name}")
+                self.problems.append(f"{o['type']} {code}: not in {config.MAPPING.name}")
                 continue
             if not m["term"]:
                 continue

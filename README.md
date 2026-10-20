@@ -1,11 +1,14 @@
 # bedamame
 
-The semantic layer for the Bedretto Underground Laboratory's openBIS. openBIS is
-where the lab records boreholes, sensors, installations, cores and logging runs.
-This repository holds the ontology, vocabulary and shapes that say what those
-records mean. It also prepares the openBIS changes that make the records fit
-them, and converts openBIS exports to RDF named graphs. The RDF is validated
-with SHACL, queried with SPARQL and packaged as an RO-Crate.
+Ontology, SKOS vocabulary and SHACL shapes for the openBIS of the Bedretto
+Underground Laboratory, where the lab records boreholes, sensors, installations,
+cores and logging runs. The repository also:
+
+- generates the openBIS master-data changes and the annotations that link
+  openBIS types and fields to ontology terms;
+- converts openBIS dumps to RDF, one named graph per collection;
+- validates the RDF with SHACL, runs SPARQL queries on it and exports an
+  RO-Crate.
 
 ## How it fits together
 
@@ -24,8 +27,8 @@ dump.json ── convert ──▶ out/bedretto.trig ── validate (SHACL) ─
    `sosa:Sensor`, otherwise a `bed:` term aligned to the nearest standard.
    `mapping/openbis-annotations.csv` is the source; `annotate_masterdata.py`
    writes it into a master-data export for import.
-2. **Master-data changes.** Seven changes make the openBIS records fit the
-   ontology: people, organisations and test beds as objects; borehole mouth
+2. **Master-data changes.** Six changes to the openBIS master data so the
+   records map onto the ontology: people, organisations and test beds as objects; borehole mouth
    surveys and sensor positions with their history; links instead of names
    typed as text; vocabularies instead of free text
    (`scripts/openbis_changes.py`, see `openbis/README.md`).
@@ -53,15 +56,17 @@ the local openBIS with people's names replaced. With the local openBIS
 
 ```bash
 just openbis-up openbis-masterdata openbis-seed   # openBIS 7.0 with the lab's types and objects
-just openbis-changes                              # rehearse the master-data changes 01-07
+just openbis-changes                              # rehearse the master-data changes 01-06
 just openbis-annotate                             # annotate from mapping/ and check
 just export                                       # dump → convert → validate → queries
-just load                                         # SPARQL endpoint at http://localhost:7878
 ```
 
-`uv run scripts/queries.py --endpoint --all` runs the queries against the
-endpoint instead of in memory; Oxigraph writes numbers and times in canonical
-form (`19` for `19.0`), otherwise the results are the same.
+The queries run in memory with rdflib. Any SPARQL 1.1 store that reads TriG
+can take its place, for example [Oxigraph](https://github.com/oxigraph/oxigraph),
+[Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) or
+[GraphDB](https://graphdb.ontotext.com/): load `out/bedretto.trig`, and the
+ontology, vocabulary and shapes as the graphs `gr:ontology`, `gr:vocab` and
+`gr:shapes` (see Graphs below).
 
 ## Working with the openBIS administrator
 
@@ -103,8 +108,7 @@ URL, because an import cannot change or remove an annotation once it is there.
 | `mapping/collections.csv` | openBIS project or collection → experiment, campaign |
 | `openbis/` | The local openBIS 7.0, its seed, notes and requests for the collaborator |
 | `scripts/` | Annotation, changes, dump, conversion, validation, queries, crate |
-| `endpoint/` | A local Oxigraph SPARQL endpoint |
-| `tests/fixtures/` | The openBIS dump and master-data export the tests use; `handwritten.trig`, the hand-written prototype data, for the shape tests |
+| `tests/fixtures/` | The openBIS dump and master-data export the tests use |
 
 ## Ontology
 
@@ -114,7 +118,7 @@ combines classes and shapes in one file and lists controlled values as strings.
 Here they are split three ways:
 
 - The ontology defines what each class and property means. It aligns to SOSA/SSN,
-  PROV-O, GeoSPARQL, OWL-Time and QUDT where they fit, for example a core is a
+  PROV-O, GeoSPARQL and QUDT where they fit, for example a core is a
   `sosa:Sample`.
 - The vocabulary holds every controlled value as a SKOS concept. Hidden labels
   record the spellings found in the lab's exports, e.g. `Campled` for
