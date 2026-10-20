@@ -1,6 +1,6 @@
 # Architecture
 
-For the openBIS administrator. Nothing here needs Python.
+For the openBIS administrator.
 
 - [index.html](index.html): the architecture on one page (pipeline, data model, vocabularies, example questions, what is still open). Open it in a browser.
 - [changes.md](changes.md): the six proposed changes to the openBIS master data.
