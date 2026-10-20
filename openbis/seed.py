@@ -34,7 +34,7 @@ PROJECTS = [
     "/09_FEAR/06_FEAR2",
     "/EQUIPMENT/SENSOR_CATALOG",
 ]
-# the lab's borehole collection is unknown (see collaborator-requests.md); BOREHOLES stands in for it
+# the lab's borehole collection is unknown (see architecture/collaborator-requests.md); BOREHOLES stands in for it
 COLLECTIONS = {
     "/INFRASTRUCTURE/BOREHOLES/BOREHOLES": "Boreholes",
     "/INFRASTRUCTURE/BOREHOLES/04_ROCK_PROPERTIES_EXP_3": "Rock properties experiment 3",

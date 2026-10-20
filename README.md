@@ -10,6 +10,10 @@ cores and logging runs. The repository also:
 - validates the RDF with SHACL, runs SPARQL queries on it and exports an
   RO-Crate.
 
+`architecture/` is for the openBIS administrator: the design on one page, the
+proposed openBIS changes and what we need from them. Everything else is a
+minimal implementation of that design.
+
 ## How it fits together
 
 ```
@@ -31,7 +35,7 @@ dump.json ── convert ──▶ out/bedretto.trig ── validate (SHACL) ─
    records map onto the ontology: people, organisations and test beds as objects; borehole mouth
    surveys and sensor positions with their history; links instead of names
    typed as text; vocabularies instead of free text
-   (`scripts/openbis_changes.py`, see `openbis/README.md`).
+   (`scripts/openbis_changes.py`, see `architecture/changes.md`).
 3. **Export and conversion.** The converter reads a dump made through the
    openBIS V3 API (openBIS 7.0's RO-Crate export fails on the lab's types).
    It takes each field's term from the mapping, turns vocabulary terms into
@@ -48,6 +52,7 @@ just convert       # tests/fixtures/openbis-export.json → out/bedretto.trig, v
 just test          # shapes, ontology, mapping, converter
 just crate         # out/ro-crate-metadata.json, checked against the crate shapes and RO-Crate 1.2
 just docs          # HTML documentation of the ontology and vocabularies in site/
+just page-counts   # update the counts on architecture/index.html
 ```
 
 `just convert` needs no openBIS: it converts the committed fixture, a dump of
@@ -84,7 +89,7 @@ Nothing here writes to the production openBIS; scripts refuse any host but
 Annotations go the same way: `annotated.zip` and `annotations-changes.md`.
 openBIS will not let an import annotate its built-in PERSON and ORGANIZATION
 fields, so the note lists those few for the collaborator to add by hand. What
-we need from them is in `openbis/collaborator-requests.md`.
+we need from them is in `architecture/collaborator-requests.md`.
 
 ## Base IRI
 
@@ -106,8 +111,9 @@ URL, because an import cannot change or remove an annotation once it is there.
 | `mapping/openbis-annotations.csv` | openBIS type and field → term, unit, scheme |
 | `mapping/openbis-terms.csv` | openBIS vocabulary term → SKOS concept |
 | `mapping/collections.csv` | openBIS project or collection → experiment, campaign |
-| `openbis/` | The local openBIS 7.0, its seed, notes and requests for the collaborator |
-| `scripts/` | Annotation, changes, dump, conversion, validation, queries, crate |
+| `architecture/` | For the collaborator: the architecture page, the proposed changes, our requests |
+| `openbis/` | The local openBIS 7.0, its seed and notes |
+| `scripts/` | Annotation, changes, dump, conversion, validation, queries, crate, page counts |
 | `tests/fixtures/` | The openBIS dump and master-data export the tests use |
 
 ## Ontology
@@ -127,6 +133,12 @@ Here they are split three ways:
 - The shapes say which properties each class takes and how often. A property
   with a controlled value must point to a concept in a named scheme, so a new
   value is added to the vocabulary only.
+
+Two shapes compare objects with each other: a sensor installed deeper than its
+borehole is long, and a borehole mouth "staked out" after drilling started.
+They report warnings rather than errors, because the data fits the model but
+contradicts itself; the lab has to say which value is right. `just validate`
+lists them and still succeeds.
 
 The SKOS shapes check the vocabulary itself: labels, schemes and hierarchy.
 Nothing in them is specific to Bedretto, so they sit apart from the Bedretto

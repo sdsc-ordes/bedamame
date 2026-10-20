@@ -10,7 +10,7 @@ from rdflib import RDFS, Graph, URIRef
 import config
 import openbis_workbook as wb
 import validate as v
-from openbis_api import Openbis
+from openbis_api import Openbis, fetch
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "out" / "openbis" / "annotated"
@@ -224,25 +224,15 @@ def create(o: Openbis, items: list[dict]) -> None:
 
 def live(o: Openbis) -> dict[tuple[str, str], list[tuple]]:
     # the annotations in openBIS, keyed like the mapping: (type, property code), "" for the type itself
-    fetch = {
-        "entityType": {
-            "@type": "as.dto.entitytype.fetchoptions.EntityTypeFetchOptions"
-        },
-        "propertyType": {
-            "@type": "as.dto.property.fetchoptions.PropertyTypeFetchOptions"
-        },
-        "propertyAssignment": {
-            "@type": "as.dto.property.fetchoptions.PropertyAssignmentFetchOptions",
-            "entityType": {
-                "@type": "as.dto.entitytype.fetchoptions.EntityTypeFetchOptions"
-            },
-            "propertyType": {
-                "@type": "as.dto.property.fetchoptions.PropertyTypeFetchOptions"
-            },
-        },
-    }
+    entity_type, property_type = fetch("EntityType", "entitytype"), fetch("PropertyType", "property")
+    options = {
+        "entityType": entity_type,
+        "propertyType": property_type,
+        "propertyAssignment": fetch("PropertyAssignment", "property", entityType=entity_type,
+                                    propertyType=property_type),
+    }  # fmt: skip
     out: dict[tuple[str, str], list[tuple]] = {}
-    for a in o.search("semanticannotation", fetch=fetch):
+    for a in o.search("semanticannotation", fetch=options):
         if a.get("entityType"):
             key = (a["entityType"]["code"], "")
         elif a.get("propertyAssignment"):
@@ -259,17 +249,13 @@ def live(o: Openbis) -> dict[tuple[str, str], list[tuple]]:
 
 def assignments(o: Openbis) -> dict[str, set[str]]:
     # the sample types in openBIS and their property codes
-    fetch = {
-        "propertyAssignments": {
-            "@type": "as.dto.property.fetchoptions.PropertyAssignmentFetchOptions",
-            "propertyType": {
-                "@type": "as.dto.property.fetchoptions.PropertyTypeFetchOptions"
-            },
-        }
-    }
+    options = {
+        "propertyAssignments": fetch("PropertyAssignment", "property",
+                                     propertyType=fetch("PropertyType", "property"))
+    }  # fmt: skip
     return {
         t["code"]: {pa["propertyType"]["code"] for pa in t["propertyAssignments"]}
-        for t in o.search("sampletype", fetch=fetch)
+        for t in o.search("sampletype", fetch=options)
     }
 
 

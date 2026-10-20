@@ -69,14 +69,7 @@ The collection for boreholes is a stand-in, `/INFRASTRUCTURE/BOREHOLES/BOREHOLES
 
 For production, the collaborator's exports go in instead: `uv run scripts/openbis_changes.py 01 --masterdata DIR/object-types.xlsx --objects OBJECTS.xlsx`. `--annotate` also fills the ontology columns of new types and fields; leave it out until the final domain is set.
 
-| Change | What it does |
-|---|---|
-| `01-people` | PERSON gets Email and Affiliation. Free-text name fields become PERSON (or ORGANIZATION) objects, linked through DEPLOYED_BY, REMOVED_BY, OPERATED_BY, REQUESTED_BY and RESPONSIBLE. |
-| `02-testbeds` | The TESTBED vocabulary becomes TESTBED objects; boreholes link to them through TEST_BED. |
-| `03-borehole-mouth-surveys` | BOREHOLE_MOUTH_SURVEY type and the SURVEY_TYPE and COORDINATE_SYSTEM vocabularies; one survey per row of `borehole_mouth_coord.csv`, compared with the position fields on BOREHOLES. |
-| `04-sensor-positions` | SENSOR_POSITION type, linked to the installation; installations with coordinates get one (none locally). |
-| `05-object-links` | BOREHOLE and SENSOR links on installations, logging runs and cores, from the parents or from the borehole name and serial number. |
-| `06-vocabularies` | Free-text and yes/no fields become vocabulary fields (`*_TERM`, INSTALLATION_ENVIRONMENT), with vocabularies made from `ontology/bedretto/bedretto-vocab.ttl`. |
+What each change does, for the collaborator: [architecture/changes.md](../architecture/changes.md).
 
 New fields get new codes; the old fields stay until the collaborator retires them. New vocabulary terms are added to `mapping/openbis-terms.csv`.
 

@@ -23,13 +23,13 @@ test:
 docs:
     uv run scripts/docs.py
 
+# Update the counts on architecture/index.html from the ontology, vocabulary, mapping and changes
+page-counts:
+    uv run scripts/page_counts.py
+
 # Replace the base IRI (placeholder https://example.org/bedretto/) in ontology, data and fixtures
 set-base URL:
     uv run scripts/set_base.py {{URL}}
-
-# Validate with one survey's CRS removed; expects a violation
-demo-failure:
-    uv run scripts/validate.py --demo-failure
 
 # List the example queries
 list-queries:
@@ -48,10 +48,6 @@ queries:
 crate:
     uv run scripts/make_crate.py
     uv run rocrate-validator -y --disable-color validate -p ro-crate-1.2 out/
-
-# Report the RECOMMENDED rules of the RO-Crate 1.2 base profile too; informational
-crate-lint: crate
-    -uv run rocrate-validator -y --disable-color validate -p ro-crate-1.2 -l recommended -v --no-paging out/
 
 # Convert the committed openBIS dump to out/bedretto.trig, validate it and run the queries; needs no Docker
 convert:

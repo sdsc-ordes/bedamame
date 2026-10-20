@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&display=swap">
 <style>
 /* Layout: a single drawing sheet. Short header, then two hand-drawn figures (pipeline, data model),
-   a compact list of vocabularies, example questions and a short list of what is still open. */
+   a compact list of vocabularies, example questions and the proposed openBIS changes. */
 :root {
   --bg: #EEF0ED;
   --surface: #FCFCFB;
@@ -50,6 +50,8 @@ h1 { margin: 0; font: 600 46px/0.95 var(--font-display); text-wrap: balance; }
 .lede { margin: 0; max-width: 64ch; font-size: 15px; }
 .facts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 4px 0 0; padding: 0; list-style: none; font: 400 12px/1.4 var(--font-mono); color: var(--muted); }
 .facts b { font-weight: 500; color: var(--ink); }
+a { color: var(--accent-ink); text-underline-offset: 2px; }
+.facts a { color: inherit; }
 
 section { display: grid; gap: 14px; min-width: 0; }
 h2 { margin: 0; font: 600 26px/1 var(--font-display); text-wrap: balance; }
@@ -111,12 +113,12 @@ figcaption, .cap { margin: 0; font-size: 13px; color: var(--muted); max-width: 7
     <h1>Bedamame architecture</h1>
     <p class="lede">Ontology, vocabulary and SHACL shapes for the lab's openBIS, where boreholes, sensors and installations are recorded. Each openBIS object type and field is annotated with an ontology term. A dump made through the openBIS V3 API is converted to RDF, one named graph per collection, validated with SHACL, and then queried with SPARQL or exported as an RO-Crate.</p>
     <ul class="facts">
-      <li>Ontology <b>0.4.0</b></li>
-      <li><b>19</b> classes</li>
-      <li><b>19</b> vocabularies</li>
-      <li><b>17</b> openBIS types</li>
-      <li><b>217</b> annotations</li>
-      <li><b>6</b> master-data changes</li>
+      <li>Ontology <b data-count="version">0.4.0</b></li>
+      <li><b data-count="classes">19</b> classes</li>
+      <li><b data-count="vocabularies">19</b> vocabularies</li>
+      <li><b data-count="types">17</b> openBIS types</li>
+      <li><b data-count="annotations">217</b> annotations</li>
+      <li><a href="#h-changes"><b data-count="changes">6</b> master-data changes</a></li>
     </ul>
   </header>
 
@@ -146,7 +148,7 @@ figcaption, .cap { margin: 0; font-size: 13px; color: var(--muted); max-width: 7
           <g class="box"><rect x="950" y="170" width="170" height="60" rx="6"/><text class="name" x="1035" y="196">RO-Crate</text><text class="sub" x="1035" y="215">for publication</text></g>
         </svg>
       </div>
-      <figcaption>The mapping gives each openBIS type and field an ontology term. It is imported into openBIS as annotations, and the converter uses the same list. The lab keeps entering data in openBIS; everything to its right is generated from a dump.</figcaption>
+      <figcaption>The mapping gives each openBIS type and field an ontology term. It is imported into openBIS as annotations, and the converter uses the same list. The lab keeps entering data in openBIS; everything to its right is generated from a dump. Validation also compares objects with each other, for example a sensor's depth with its borehole's length, and lists contradictions as warnings for the lab to resolve.</figcaption>
     </figure>
     <div class="example">
       <div class="eyebrow">Example: one sensor installation, after the proposed changes</div>
@@ -217,15 +219,15 @@ figcaption, .cap { margin: 0; font-size: 13px; color: var(--muted); max-width: 7
   <section aria-labelledby="h-vocab">
     <h2 id="h-vocab">Vocabularies</h2>
     <ul class="vocab">
-      <li><span class="cls">Borehole</span><span class="pills"><span class="pill">Tunnel section <i>5</i></span><span class="pill">Borehole geometry <i>6</i></span><span class="pill">Drilling style <i>4</i></span><span class="pill">Borehole status <i>8</i></span></span></li>
-      <li><span class="cls">Mouth survey</span><span class="pills"><span class="pill">Survey type <i>3</i></span><span class="pill">Coordinate system <i>2</i></span></span></li>
-      <li><span class="cls">Sensor</span><span class="pills"><span class="pill">Sensor type <i>29</i></span><span class="pill">Coupling <i>6</i></span><span class="pill">Availability <i>4</i></span><span class="pill">Sensor feature <i>3</i></span></span></li>
-      <li><span class="cls">Deployment</span><span class="pills"><span class="pill">Coupling <i>6</i></span><span class="pill">Installation environment <i>5</i></span><span class="pill">Sensor status <i>5</i></span><span class="pill">Tunnel section <i>5</i></span><span class="pill">Deployment type <i>2</i></span></span></li>
-      <li><span class="cls">Sensor position</span><span class="pills"><span class="pill">Coordinate system <i>2</i></span></span></li>
-      <li><span class="cls">Logging run</span><span class="pills"><span class="pill">Logging tool <i>10</i></span><span class="pill">Logging direction <i>2</i></span></span></li>
-      <li><span class="cls">Core log</span><span class="pills"><span class="pill">Rock class <i>3</i></span></span></li>
-      <li><span class="cls">Core sample</span><span class="pills"><span class="pill">Subsample type <i>4</i></span></span></li>
-      <li><span class="cls">Lab analysis</span><span class="pills"><span class="pill">Rock property <i>8</i></span><span class="pill">Analysis method <i>5</i></span></span></li>
+      <li><span class="cls">Borehole</span><span class="pills"><span class="pill">Tunnel section <i data-count="tunnel-section">5</i></span><span class="pill">Borehole geometry <i data-count="borehole-geometry">6</i></span><span class="pill">Drilling style <i data-count="drilling-style">4</i></span><span class="pill">Borehole status <i data-count="borehole-status">8</i></span></span></li>
+      <li><span class="cls">Mouth survey</span><span class="pills"><span class="pill">Survey type <i data-count="location-type">3</i></span><span class="pill">Coordinate system <i data-count="crs">2</i></span></span></li>
+      <li><span class="cls">Sensor</span><span class="pills"><span class="pill">Sensor type <i data-count="sensor-type">29</i></span><span class="pill">Coupling <i data-count="coupling">6</i></span><span class="pill">Availability <i data-count="availability">4</i></span><span class="pill">Sensor feature <i data-count="sensor-feature">3</i></span></span></li>
+      <li><span class="cls">Deployment</span><span class="pills"><span class="pill">Coupling <i data-count="coupling">6</i></span><span class="pill">Installation environment <i data-count="environment">5</i></span><span class="pill">Sensor status <i data-count="sensor-status">5</i></span><span class="pill">Tunnel section <i data-count="tunnel-section">5</i></span><span class="pill">Deployment type <i data-count="deployment-type">2</i></span></span></li>
+      <li><span class="cls">Sensor position</span><span class="pills"><span class="pill">Coordinate system <i data-count="crs">2</i></span></span></li>
+      <li><span class="cls">Logging run</span><span class="pills"><span class="pill">Logging tool <i data-count="logging-tool">10</i></span><span class="pill">Logging direction <i data-count="logging-direction">2</i></span></span></li>
+      <li><span class="cls">Core log</span><span class="pills"><span class="pill">Rock class <i data-count="rock-class">3</i></span></span></li>
+      <li><span class="cls">Core sample</span><span class="pills"><span class="pill">Subsample type <i data-count="subsample-type">4</i></span></span></li>
+      <li><span class="cls">Lab analysis</span><span class="pills"><span class="pill">Rock property <i data-count="rock-property">8</i></span><span class="pill">Analysis method <i data-count="analysis-method">5</i></span></span></li>
     </ul>
     <p class="cap">Numbers are concept counts. A mapping table links each openBIS vocabulary term to one of these concepts, and the vocabularies change (06) builds openBIS vocabularies from them for fields that are free text today. Hidden labels hold the spellings found in the lab's exports, so <em>Campled</em> maps to Clamped.</p>
   </section>
@@ -239,13 +241,16 @@ figcaption, .cap { margin: 0; font-size: 13px; color: var(--muted); max-width: 7
     </ul>
   </section>
 
-  <section aria-labelledby="h-todo">
-    <h2 id="h-todo">Still open</h2>
+  <section aria-labelledby="h-changes">
+    <h2 id="h-changes">The proposed openBIS changes</h2>
+    <p class="cap">The <b data-count="changes">6</b> changes add fields and object types to the lab's openBIS and remove nothing: the old fields stay until the administrator retires them. Each change comes as a file to import, with a note on what it does to the data. More detail in <a href="changes.md">changes.md</a>.</p>
     <ul class="notes">
-      <li><b>Production.</b> Changes 01–06 and the annotations are not applied yet; the openBIS administrator does that. The annotations need the final ontology base IRI first, because an import cannot change an annotation once it exists.</li>
-      <li><b>Ontology version in annotations.</b> Each annotation stores the ontology version it was made with. Not decided yet whether annotations should carry a version at all.</li>
-      <li><b>Answers from the lab.</b> Which collection holds the boreholes, full exports of the 12 types, and whether tilt meter LY1066 is LY1166.</li>
-      <li><b>Cores and laboratory work.</b> Core logs, core samples and lab analyses have shapes but no openBIS types.</li>
+      <li><b>01 People.</b> Names typed as text, such as "deployed by" or "operated by", become links to a list of people and organisations. Each person is entered once and can be found from everything they worked on.</li>
+      <li><b>02 Test beds.</b> Test beds are now a fixed list of names. They become records of their own, so a test bed can have a description, and boreholes link to their test bed.</li>
+      <li><b>03 Borehole mouth surveys.</b> Each planned or measured position of a borehole mouth becomes a record of its own, with its date, source and surveyor, so a new survey no longer overwrites the old one.</li>
+      <li><b>04 Sensor positions.</b> The same for the position of an installed sensor. None of the current installations has coordinates, so this starts empty.</li>
+      <li><b>05 Object links.</b> Installations, logging runs and cores point to their borehole, and installations to their sensor, instead of naming them in a text field. A link cannot be misspelt.</li>
+      <li><b>06 Vocabularies.</b> Text fields that only ever hold a few values, such as tunnel section or drilling style, become fields where you choose from a list, so each value is spelt one way. The five yes/no fields about where a sensor is installed become one such list.</li>
     </ul>
   </section>
 

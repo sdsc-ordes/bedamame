@@ -163,6 +163,17 @@ bdr:bad18 a bed:SensorPosition ; schema:name "bad18" ; bed:easting 1.0 .
 bdr:bad19 a sosa:Sensor ; schema:name "bad19" ; schema:serialNumber "LY1123" ;
     bed:sensorKind bedv:sensor-type-tilt-meter .
 """),
+    "sensor deeper than its borehole": ("bdr:bad20", "SPARQLConstraintComponent", """
+bdr:bad20 a ssn:Deployment ; schema:name "bad20" ;
+    ssn:deployedSystem {sensor} ; ssn:deployedOnPlatform {borehole} ; bed:environment bedv:environment-borehole ;
+    bed:measuredDepth [ a qudt:QuantityValue ; qudt:numericValue 1000 ; qudt:hasUnit unit:M ] .
+"""),
+    "staked out after drilling started": ("bdr:bad21", "SPARQLConstraintComponent", """
+bdr:bad21 a bed:CollarSurvey ; schema:name "bad21" ; bed:ofBorehole {borehole} ;
+    bed:surveyType bedv:location-type-staked-out ; bed:surveyDate "2099-01-01"^^xsd:date ;
+    bed:coordinateSystem bedv:crs-bedretto-local-v1 ;
+    bed:easting 1.0 ; bed:northing 2.0 ; bed:elevation 3.0 ; bed:dipConvention "negative downward" .
+"""),
 }  # fmt: skip
 
 SKOS_INVALID = {
@@ -185,6 +196,7 @@ def results(data: Graph, shapes: Path) -> tuple[bool, set[tuple[URIRef, str]]]:
         shacl_graph=Graph().parse(shapes, format="turtle"),
         advanced=True,
         inference="none",
+        allow_warnings=True,
     )
     found = {
         (

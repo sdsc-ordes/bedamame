@@ -29,7 +29,9 @@ bedsh:Prefixes
     sh:declare [ sh:prefix "schema" ; sh:namespace "https://schema.org/"^^xsd:anyURI ] ;
     sh:declare [ sh:prefix "sosa"   ; sh:namespace "http://www.w3.org/ns/sosa/"^^xsd:anyURI ] ;
     sh:declare [ sh:prefix "qudt"   ; sh:namespace "http://qudt.org/schema/qudt/"^^xsd:anyURI ] ;
-    sh:declare [ sh:prefix "skos"   ; sh:namespace "http://www.w3.org/2004/02/skos/core#"^^xsd:anyURI ] .
+    sh:declare [ sh:prefix "skos"   ; sh:namespace "http://www.w3.org/2004/02/skos/core#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "ssn"    ; sh:namespace "http://www.w3.org/ns/ssn/"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "bedv"   ; sh:namespace "https://example.org/bedretto/vocab/"^^xsd:anyURI ] .
 
 bedsh:InSchemeConstraintComponent a sh:ConstraintComponent ;
     rdfs:label "In scheme" ;
@@ -542,4 +544,48 @@ bedsh:BundleShape a sh:NodeShape ;
         sh:minCount    1 ;
         sh:maxCount    1 ;
         sh:datatype    xsd:dateTime ;
+    ] .
+
+# Checks across objects. They report warnings: values that contradict each other and need an answer
+# from the lab, rather than data that does not fit the model.
+
+bedsh:SensorWithinBoreholeShape a sh:NodeShape ;
+    sh:targetClass ssn:Deployment ;
+    rdfs:label "Sensor within its borehole" ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message     "{?name}: sensor at {?value}, but the borehole is {?length} long" ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?value ?length ?name
+            WHERE {
+                $this schema:name ?name ;
+                      ssn:deployedOnPlatform ?borehole ;
+                      bed:measuredDepth [ qudt:numericValue ?value ; qudt:hasUnit ?unit ] .
+                ?borehole bed:totalLength [ qudt:numericValue ?length ; qudt:hasUnit ?unit ] .
+                FILTER (?value > ?length)
+            }
+        """ ;
+    ] .
+
+bedsh:StakedOutBeforeDrillingShape a sh:NodeShape ;
+    sh:targetClass bed:CollarSurvey ;
+    rdfs:label "Staked out before drilling" ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message     "{?name}: staked out on {?value}, after drilling started on {?start}" ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?value ?start ?name
+            WHERE {
+                $this bed:surveyType bedv:location-type-staked-out ;
+                      bed:surveyDate ?value ;
+                      bed:ofBorehole ?borehole .
+                ?borehole bed:drillingStart ?start ;
+                          schema:name ?name .
+                FILTER (?value > ?start)
+            }
+        """ ;
     ] .

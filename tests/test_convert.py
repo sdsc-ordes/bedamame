@@ -55,7 +55,7 @@ def test_converts_without_problems(converted):
 
 
 def test_conforms(union):
-    conforms, text = v.run(union, v.SHAPES)
+    conforms, text, _ = v.run(union, v.SHAPES)
     assert conforms, text
 
 
