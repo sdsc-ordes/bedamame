@@ -1,0 +1,591 @@
+@prefix bedsh:   <https://example.org/bedretto/shapes#> .
+@prefix bed:     <https://example.org/bedretto/terms#> .
+@prefix bedv:    <https://example.org/bedretto/vocab/> .
+
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix schema:  <https://schema.org/> .
+@prefix sosa:    <http://www.w3.org/ns/sosa/> .
+@prefix ssn:     <http://www.w3.org/ns/ssn/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix qudt:    <http://qudt.org/schema/qudt/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://example.org/bedretto/shapes> a owl:Ontology ;
+    dcterms:title "Bedretto shapes"@en ;
+    dcterms:description "SHACL shapes for the Bedretto metadata store, validated over the union of all named graphs together with the Bedretto ontology and vocabularies. A property that takes a controlled value must point to a concept in the scheme named here, so the values themselves are listed only in the vocabulary."@en ;
+    dcterms:creator "Robin Franken" ;
+    dcterms:created "2026-10-05"^^xsd:date ;
+    dcterms:modified "2026-10-20"^^xsd:date ;
+    owl:versionInfo "0.4.0" ;
+    owl:versionIRI <https://example.org/bedretto/shapes/0.4.0> ;
+    rdfs:seeAlso <https://example.org/bedretto/terms>, <https://example.org/bedretto/vocab> .
+
+bedsh:Prefixes
+    sh:declare [ sh:prefix "bed"    ; sh:namespace "https://example.org/bedretto/terms#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "schema" ; sh:namespace "https://schema.org/"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "sosa"   ; sh:namespace "http://www.w3.org/ns/sosa/"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "qudt"   ; sh:namespace "http://qudt.org/schema/qudt/"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "skos"   ; sh:namespace "http://www.w3.org/2004/02/skos/core#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "ssn"    ; sh:namespace "http://www.w3.org/ns/ssn/"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "bedv"   ; sh:namespace "https://example.org/bedretto/vocab/"^^xsd:anyURI ] .
+
+bedsh:InSchemeConstraintComponent a sh:ConstraintComponent ;
+    rdfs:label "In scheme" ;
+    rdfs:comment "Every value must be a concept in the given scheme. Use as bedsh:inScheme <scheme> on a shape."@en ;
+    sh:parameter [ sh:path bedsh:inScheme ; sh:nodeKind sh:IRI ] ;
+    sh:validator [
+        a sh:SPARQLAskValidator ;
+        sh:message     "Value is not a concept in {$inScheme}" ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:ask         "ASK { $value skos:inScheme $inScheme }" ;
+    ] .
+
+bedsh:NamedEntityShape a sh:NodeShape ;
+    rdfs:label "Named entity" ;
+    sh:target [
+        a sh:SPARQLTarget ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT DISTINCT ?this
+            WHERE {
+                ?this ?p ?o .
+                FILTER (isIRI(?this) && STRSTARTS(STR(?this), "https://example.org/bedretto/id/"))
+            }
+        """ ;
+    ] ;
+
+    sh:property [
+        sh:path        schema:name ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:datatype    xsd:string ;
+    ] .
+
+bedsh:QuantityValueShape a sh:NodeShape ;
+    sh:targetClass qudt:QuantityValue ;
+    rdfs:label "Quantity value" ;
+
+    sh:property [
+        sh:path        qudt:numericValue ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:nodeKind    sh:Literal ;
+    ] ;
+
+    sh:property [
+        sh:path        qudt:hasUnit ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:nodeKind    sh:IRI ;
+    ] .
+
+bedsh:TunnelSectionProperty a sh:PropertyShape ;
+    sh:path        bed:tunnelSection ;
+    sh:maxCount    1 ;
+    bedsh:inScheme bedv:tunnel-section .
+
+bedsh:TunnelMeterProperty a sh:PropertyShape ;
+    sh:path        bed:tunnelMeter ;
+    sh:maxCount    1 ;
+    sh:datatype    xsd:string ;
+    sh:pattern     "^F?TM[0-9]+$" .
+
+bedsh:BoreholeShape a sh:NodeShape ;
+    sh:targetClass bed:Borehole ;
+    rdfs:label "Borehole" ;
+
+    sh:property bedsh:TunnelSectionProperty, bedsh:TunnelMeterProperty ;
+
+    sh:property [
+        sh:path        bed:nickname ;
+        sh:maxCount    1 ;
+        sh:datatype    xsd:string ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:fdsnCode ;
+        sh:maxCount    1 ;
+        sh:datatype    xsd:string ;
+        sh:pattern     "^[A-Z0-9]{1,5}$" ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:hasTestBed ;
+        sh:class       bed:TestBed ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:boreholeGeometry ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:borehole-geometry ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:drillingStyle ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:drilling-style ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:boreholeStatus ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:borehole-status ;
+    ] ;
+
+    sh:property [ sh:path bed:totalLength      ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:boreholeDiameter ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:coreDiameter     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:coreLength       ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:drillingStart    ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:drillingEnd      ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?name ?other
+            WHERE {
+                $this  schema:name ?name .
+                ?other a bed:Borehole ; schema:name ?name .
+                FILTER (?other != $this)
+            }
+        """ ;
+    ] .
+
+bedsh:CollarSurveyShape a sh:NodeShape ;
+    sh:targetClass bed:CollarSurvey ;
+    rdfs:label "Collar survey" ;
+
+    sh:property [
+        sh:path        bed:coordinateSystem ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       bed:CoordinateReferenceSystem ;
+        bedsh:inScheme bedv:crs ;
+        sh:severity    sh:Violation ;
+        sh:name        "coordinate system" ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:ofBorehole ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       bed:Borehole ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:surveyType ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:location-type ;
+    ] ;
+
+    sh:property [ sh:path bed:surveyDate ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:surveyedBy ; sh:class prov:Agent ] ;
+    sh:property [ sh:path dcterms:source  ; sh:datatype xsd:string ] ;
+
+    sh:property [ sh:path bed:easting   ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path bed:northing  ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path bed:elevation ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+
+    sh:property [ sh:path bed:azimuth ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:dip     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+
+    sh:property [
+        sh:path        bed:dipConvention ;
+        sh:minCount    1 ;
+    ] .
+
+bedsh:DepthIntervalShape a sh:NodeShape ;
+    sh:targetSubjectsOf bed:topDepth, bed:bottomDepth ;
+    rdfs:label "Depth interval" ;
+
+    sh:property [ sh:path bed:topDepth    ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:bottomDepth ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?top ?bottom
+            WHERE {
+                $this bed:topDepth    [ qudt:numericValue ?top    ; qudt:hasUnit ?unit ] ;
+                      bed:bottomDepth [ qudt:numericValue ?bottom ; qudt:hasUnit ?unit ] .
+                FILTER (?top > ?bottom)
+            }
+        """ ;
+    ] .
+
+bedsh:CoreShape a sh:NodeShape ;
+    sh:targetClass bed:Core ;
+    rdfs:label "Core" ;
+
+    sh:property [
+        sh:path        bed:ofBorehole ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       bed:Borehole ;
+    ] ;
+
+    sh:property [ sh:path bed:topDepth     ; sh:minCount 1 ] ;
+    sh:property [ sh:path bed:bottomDepth  ; sh:minCount 1 ] ;
+    sh:property [ sh:path bed:coreDiameter ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:mass         ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+
+    sh:property [ sh:path bed:chargeNumber    ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:storageLocation ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:coreBoxNumber   ; sh:maxCount 1 ; sh:datatype xsd:integer ] ;
+    sh:property [ sh:path bed:storedOn        ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:forRequest      ; sh:class bed:CoreRequest ] ;
+    sh:property [ sh:path bed:responsible     ; sh:class prov:Agent ] .
+
+bedsh:CoreRequestShape a sh:NodeShape ;
+    sh:targetClass bed:CoreRequest ;
+    rdfs:label "Core request" ;
+
+    sh:property [ sh:path bed:requestedBy       ; sh:class prov:Agent ] ;
+    sh:property [ sh:path bed:purpose           ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:startDate         ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:endDate           ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:sampleDestroyed   ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+    sh:property [ sh:path bed:returnedToStorage ; sh:maxCount 1 ; sh:datatype xsd:boolean ] .
+
+bedsh:CoreLogShape a sh:NodeShape ;
+    sh:targetClass bed:CoreLog ;
+    rdfs:label "Core log" ;
+
+    sh:property [
+        sh:path        bed:ofCore ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       bed:Core ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:rockClass ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:rock-class ;
+    ] ;
+
+    sh:property [ sh:path bed:rockType       ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:colour         ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:texture        ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:grainSize      ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:geologicalUnit ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+bedsh:CoreSampleShape a sh:NodeShape ;
+    sh:targetClass bed:CoreSample ;
+    rdfs:label "Core sample" ;
+
+    sh:property [
+        sh:path        sosa:isSampleOf ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       bed:Core ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:subsampleType ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:subsample-type ;
+    ] ;
+
+    sh:property [ sh:path bed:purpose     ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:requestedBy ; sh:class prov:Agent ] ;
+    sh:property [ sh:path bed:forRequest  ; sh:class bed:CoreRequest ] .
+
+bedsh:LabAnalysisShape a sh:NodeShape ;
+    sh:targetClass bed:LabAnalysis ;
+    rdfs:label "Laboratory analysis" ;
+
+    sh:property [
+        sh:path        sosa:hasFeatureOfInterest ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:or          ( [ sh:class bed:Core ] [ sh:class bed:CoreSample ] ) ;
+    ] ;
+
+    sh:property [
+        sh:path        sosa:observedProperty ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:rock-property ;
+    ] ;
+
+    sh:property [
+        sh:path        sosa:usedProcedure ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:analysis-method ;
+    ] ;
+
+    sh:property [ sh:path sosa:resultTime         ; sh:maxCount 1 ; sh:datatype xsd:dateTime ] ;
+    sh:property [ sh:path prov:wasAssociatedWith ; sh:class prov:Agent ] .
+
+bedsh:LoggingRunShape a sh:NodeShape ;
+    sh:targetClass bed:LoggingRun ;
+    rdfs:label "Downhole logging run" ;
+
+    sh:property [
+        sh:path        bed:loggedBorehole ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       bed:Borehole ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:tool ;
+        sh:minCount    1 ;
+        bedsh:inScheme bedv:logging-tool ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:loggingDirection ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:logging-direction ;
+    ] ;
+
+    sh:property [ sh:path bed:startDate            ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:endDate              ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:centralised          ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+    sh:property [ sh:path bed:fileFormat           ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:samplingInterval     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:timeSamplingInterval ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:depthCorrection      ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:magneticInclination  ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:magneticDeclination  ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:operatedBy           ; sh:class prov:Agent ] ;
+    sh:property [ sh:path prov:wasAssociatedWith   ; sh:class prov:Agent ] .
+
+bedsh:SensorShape a sh:NodeShape ;
+    sh:targetClass sosa:Sensor ;
+    rdfs:label "Sensor" ;
+
+    sh:property [
+        sh:path        schema:serialNumber ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:datatype    xsd:string ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:sensorKind ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:sensor-type ;
+    ] ;
+
+    sh:property [ sh:path bed:inventoryLabel      ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:retrievable         ; sh:maxCount 1 ; sh:datatype xsd:boolean ] ;
+    sh:property [ sh:path bed:purchasedOn         ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:samplingRate        ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:minimumFrequency    ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:maximumFrequency    ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:coupling            ; sh:maxCount 1 ; bedsh:inScheme bedv:coupling ] ;
+    sh:property [ sh:path bed:availability        ; sh:maxCount 1 ; bedsh:inScheme bedv:availability ] ;
+    sh:property [ sh:path bed:sensorFeature       ; bedsh:inScheme bedv:sensor-feature ] ;
+    sh:property [ sh:path bed:responsible         ; sh:class prov:Agent ] ;
+    sh:property [ sh:path bed:fdsnBandCode        ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z]$" ] ;
+    sh:property [ sh:path bed:fdsnSourceCode      ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z]$" ] ;
+    sh:property [ sh:path bed:fdsnOrientationCode ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z0-9]$" ] ;
+    sh:property [ sh:path bed:fdsnChannelCode     ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?serial ?other
+            WHERE {
+                $this  schema:serialNumber ?serial .
+                ?other a sosa:Sensor ; schema:serialNumber ?serial .
+                FILTER (?other != $this)
+            }
+        """ ;
+    ] .
+
+bedsh:DeploymentShape a sh:NodeShape ;
+    sh:targetClass ssn:Deployment ;
+    rdfs:label "Deployment" ;
+
+    sh:property bedsh:TunnelSectionProperty, bedsh:TunnelMeterProperty ;
+
+    sh:property [
+        sh:path        ssn:deployedSystem ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       sosa:Sensor ;
+    ] ;
+
+    sh:property [
+        sh:path        ssn:deployedOnPlatform ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       sosa:Platform ;
+    ] ;
+
+    sh:property [ sh:path bed:deployedOn        ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:testedOn          ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:acquisitionDevice ; sh:or ( [ sh:class bed:Equipment ] [ sh:class bed:DataLogger ] ) ] ;
+    sh:property [ sh:path bed:removedOn         ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:deployedBy        ; sh:class prov:Agent ] ;
+    sh:property [ sh:path bed:removedBy         ; sh:class prov:Agent ] ;
+
+    sh:property [
+        sh:path        bed:deploymentType ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:deployment-type ;
+    ] ;
+
+    sh:property [ sh:path bed:measuredDepth     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorTopDepth    ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorCentreDepth ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorBottomDepth ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorAzimuth     ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:sensorDip         ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:depthDatum        ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path bed:cableLength       ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] ;
+    sh:property [ sh:path bed:cableLabel        ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+
+    sh:property [
+        sh:path        bed:coupling ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:coupling ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:environment ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:environment ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:sensorStatus ;
+        sh:maxCount    1 ;
+        bedsh:inScheme bedv:sensor-status ;
+    ] ;
+
+    sh:property [
+        sh:path        bed:servesExperiment ;
+        sh:class       bed:Experiment ;
+    ] .
+
+bedsh:DataLoggerShape a sh:NodeShape ;
+    sh:targetClass bed:DataLogger ;
+    rdfs:label "Data logger" ;
+
+    sh:property [ sh:path bed:samplingRate ; sh:maxCount 1 ; sh:node bedsh:QuantityValueShape ] .
+
+bedsh:SensorPositionShape a sh:NodeShape ;
+    sh:targetClass bed:SensorPosition ;
+    rdfs:label "Sensor position" ;
+
+    sh:property [
+        sh:path        bed:ofDeployment ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       ssn:Deployment ;
+    ] ;
+
+    sh:property [ sh:path bed:coordinateSystem ; sh:maxCount 1 ; sh:class bed:CoordinateReferenceSystem ; bedsh:inScheme bedv:crs ] ;
+    sh:property [ sh:path bed:easting          ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path bed:northing         ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path bed:elevation        ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path schema:latitude      ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path schema:longitude     ; sh:maxCount 1 ; sh:datatype xsd:decimal ] ;
+    sh:property [ sh:path bed:computedOn       ; sh:maxCount 1 ; sh:datatype xsd:date ] ;
+    sh:property [ sh:path bed:coordinatesBy    ; sh:class prov:Agent ] .
+
+bedsh:TestBedShape a sh:NodeShape ;
+    sh:targetClass bed:TestBed ;
+    rdfs:label "Test bed" ;
+
+    sh:property [ sh:path schema:identifier  ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path schema:description ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+bedsh:PersonShape a sh:NodeShape ;
+    sh:targetClass schema:Person ;
+    rdfs:label "Person" ;
+
+    sh:property [
+        sh:path        schema:identifier ;
+        sh:maxCount    1 ;
+        sh:datatype    xsd:string ;
+        sh:pattern     "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$" ;
+        sh:name        "ORCID" ;
+    ] ;
+
+    sh:property [ sh:path schema:givenName   ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path schema:familyName  ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path schema:affiliation ; sh:class schema:Organization ] ;
+    sh:property [ sh:path schema:email       ; sh:datatype xsd:string ; sh:pattern "^[^@\\s]+@[^@\\s]+$" ] .
+
+bedsh:OrganizationShape a sh:NodeShape ;
+    sh:targetClass schema:Organization ;
+    rdfs:label "Organisation" ;
+
+    sh:property [ sh:path schema:identifier ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+bedsh:BundleShape a sh:NodeShape ;
+    sh:targetClass prov:Bundle ;
+    rdfs:label "Assertion graph" ;
+
+    sh:property [
+        sh:path        prov:wasAttributedTo ;
+        sh:minCount    1 ;
+    ] ;
+
+    sh:property [
+        sh:path        prov:generatedAtTime ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:datatype    xsd:dateTime ;
+    ] .
+
+# Checks across objects. They report warnings: values that contradict each other and need an answer
+# from the lab, rather than data that does not fit the model.
+
+bedsh:SensorWithinBoreholeShape a sh:NodeShape ;
+    sh:targetClass ssn:Deployment ;
+    rdfs:label "Sensor within its borehole" ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message     "{?name}: sensor at {?value}, but the borehole is {?length} long" ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?value ?length ?name
+            WHERE {
+                $this schema:name ?name ;
+                      ssn:deployedOnPlatform ?borehole ;
+                      bed:measuredDepth [ qudt:numericValue ?value ; qudt:hasUnit ?unit ] .
+                ?borehole bed:totalLength [ qudt:numericValue ?length ; qudt:hasUnit ?unit ] .
+                FILTER (?value > ?length)
+            }
+        """ ;
+    ] .
+
+bedsh:StakedOutBeforeDrillingShape a sh:NodeShape ;
+    sh:targetClass bed:CollarSurvey ;
+    rdfs:label "Staked out before drilling" ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message     "{?name}: staked out on {?value}, after drilling started on {?start}" ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?value ?start ?name
+            WHERE {
+                $this bed:surveyType bedv:location-type-staked-out ;
+                      bed:surveyDate ?value ;
+                      bed:ofBorehole ?borehole .
+                ?borehole bed:drillingStart ?start ;
+                          schema:name ?name .
+                FILTER (?value > ?start)
+            }
+        """ ;
+    ] .

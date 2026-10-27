@@ -1,0 +1,112 @@
+@prefix bedsh:   <https://example.org/bedretto/shapes#> .
+
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bedsh:ConceptSchemeShape a sh:NodeShape ;
+    sh:targetClass skos:ConceptScheme ;
+    rdfs:label "Concept scheme" ;
+
+    sh:property [
+        sh:path        skos:prefLabel ;
+        sh:minCount    1 ;
+        sh:datatype    rdf:langString ;
+        sh:languageIn  ( "en" ) ;
+        sh:uniqueLang  true ;
+    ] ;
+
+    sh:property [
+        sh:path        dcterms:description ;
+        sh:datatype    rdf:langString ;
+        sh:uniqueLang  true ;
+    ] .
+
+bedsh:ConceptShape a sh:NodeShape ;
+    sh:targetClass skos:Concept ;
+    rdfs:label "Concept" ;
+
+    sh:property [
+        sh:path        skos:inScheme ;
+        sh:minCount    1 ;
+        sh:maxCount    1 ;
+        sh:class       skos:ConceptScheme ;
+    ] ;
+
+    sh:property [
+        sh:path        skos:broader ;
+        sh:class       skos:Concept ;
+    ] ;
+
+    sh:property [
+        sh:path        skos:prefLabel ;
+        sh:minCount    1 ;
+        sh:datatype    rdf:langString ;
+        sh:languageIn  ( "en" ) ;
+        sh:uniqueLang  true ;
+        sh:disjoint    skos:altLabel, skos:hiddenLabel ;
+    ] ;
+
+    sh:property [
+        sh:path        skos:altLabel ;
+        sh:datatype    rdf:langString ;
+        sh:languageIn  ( "en" ) ;
+        sh:disjoint    skos:hiddenLabel ;
+    ] ;
+
+    sh:property [
+        sh:path        skos:hiddenLabel ;
+        sh:datatype    rdf:langString ;
+        sh:languageIn  ( "en" ) ;
+    ] ;
+
+    sh:property [
+        sh:path        skos:definition ;
+        sh:datatype    rdf:langString ;
+        sh:uniqueLang  true ;
+    ] ;
+
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?label ?other
+            WHERE {
+                $this  skos:inScheme ?scheme ;
+                       skos:prefLabel|skos:altLabel|skos:hiddenLabel ?label .
+                ?other skos:inScheme ?scheme ;
+                       skos:prefLabel|skos:altLabel|skos:hiddenLabel ?otherLabel .
+                FILTER (?other != $this && LCASE(STR(?label)) = LCASE(STR(?otherLabel)))
+            }
+        """ ;
+    ] ;
+
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this ?broader
+            WHERE {
+                $this skos:broader ?broader ;
+                      skos:inScheme ?scheme .
+                FILTER NOT EXISTS { ?broader skos:inScheme ?scheme }
+            }
+        """ ;
+    ] ;
+
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:prefixes    bedsh:Prefixes ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this skos:broader+ $this .
+            }
+        """ ;
+    ] .
+
+bedsh:Prefixes
+    sh:declare [ sh:prefix "skos" ; sh:namespace "http://www.w3.org/2004/02/skos/core#"^^xsd:anyURI ] .
