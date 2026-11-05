@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # a fresh master-data export of the Bedretto types from the local openBIS 7.0, after changes 01-07 and
 # before annotation
 MASTERDATA = ROOT / "tests" / "fixtures" / "openbis-masterdata.xlsx"
-MAPPING = ROOT / "mapping"
+MAPPING = ROOT / "src" / "mapping"
 # standard vocabularies whose terms are used as they are
 EXTERNAL = {"schema", "rdfs", "sosa", "ssn", "dcterms"}
 

@@ -1,5 +1,5 @@
 # Local openBIS 7.0.0 for rehearsing master-data changes; mirrors the 7.x Docker quickstart.
-# https://local.openbis.ch (resolves to 127.0.0.1). Passwords come from openbis/.env.
+# https://local.openbis.ch (resolves to 127.0.0.1). Passwords come from tools/openbis/.env.
 name: bedamame-openbis
 
 services:

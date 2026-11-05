@@ -17,12 +17,12 @@ import openbis_workbook as wb
 import validate as v
 from openbis_api import Openbis
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "out" / "openbis" / "changes"
 REVIEW = ROOT / "out" / "openbis" / "review"
 EXPORT = ROOT / "out" / "openbis" / "export"
 CSV_DIR = ROOT / "drive-files" / "CSV"
-TERMS = ROOT / "mapping" / "openbis-terms.csv"
+TERMS = ROOT / "src" / "mapping" / "openbis-terms.csv"
 
 PEOPLE = "/REGISTERS/PEOPLE/PEOPLE_COLLECTION"
 ORGANIZATIONS = "/REGISTERS/ORGANIZATIONS/ORGANIZATIONS_COLLECTION"

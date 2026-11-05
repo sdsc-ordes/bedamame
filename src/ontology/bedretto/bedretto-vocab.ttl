@@ -9,7 +9,7 @@
 
 <https://example.org/bedretto/vocab> a owl:Ontology ;
     dcterms:title "Bedretto vocabularies"@en ;
-    dcterms:description "SKOS concept schemes for the controlled values in Bedretto Underground Laboratory metadata. Each scheme holds the values of one property of the Bedretto ontology. Hidden labels record spellings found in the laboratory's spreadsheets and free-text openBIS fields, so that source values can be mapped to concepts; matching ignores case and extra spaces. openBIS vocabulary terms are mapped to concepts by code, in mapping/openbis-terms.csv."@en ;
+    dcterms:description "SKOS concept schemes for the controlled values in Bedretto Underground Laboratory metadata. Each scheme holds the values of one property of the Bedretto ontology. Hidden labels record spellings found in the laboratory's spreadsheets and free-text openBIS fields, so that source values can be mapped to concepts; matching ignores case and extra spaces. openBIS vocabulary terms are mapped to concepts by code, in src/mapping/openbis-terms.csv."@en ;
     dcterms:creator "Robin Franken" ;
     dcterms:source <https://github.com/sdsc-ordes/bedretto-ontology> ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;

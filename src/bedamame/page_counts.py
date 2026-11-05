@@ -9,7 +9,7 @@ import config
 import openbis_changes
 import validate as v
 
-PAGE = Path(__file__).resolve().parent.parent / "architecture" / "index.html"
+PAGE = Path(__file__).resolve().parents[2] / "docs" / "architecture" / "index.html"
 # an element of the page whose text is a count: <b data-count="classes">19</b>. The key is one of
 # counts() below, or the local name of a concept scheme, for the number of its concepts.
 COUNT = re.compile(r'(data-count="([^"]+)">)[^<]*(<)')

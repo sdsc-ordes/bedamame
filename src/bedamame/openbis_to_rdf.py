@@ -13,11 +13,11 @@ from rdflib.namespace import RDF, SH, SKOS, XSD
 import config
 import validate as v
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 EXPORT = ROOT / "tests" / "fixtures" / "openbis-export.json"
 OUT = ROOT / "out" / "bedretto.trig"
-TERMS = ROOT / "mapping" / "openbis-terms.csv"
-COLLECTIONS = ROOT / "mapping" / "collections.csv"
+TERMS = ROOT / "src" / "mapping" / "openbis-terms.csv"
+COLLECTIONS = ROOT / "src" / "mapping" / "collections.csv"
 
 BED = Namespace(config.TERMS)
 GR = Namespace(config.GRAPH)

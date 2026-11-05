@@ -5,9 +5,9 @@ from pathlib import Path
 
 import config
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 # every file that spells out the base, in prefixes and in literals (sh:namespace, STRSTARTS, WKT)
-FOLDERS = ["ontology", "tests/fixtures"]
+FOLDERS = ["src/ontology", "tests/fixtures"]
 SUFFIXES = {".ttl", ".trig", ".json", ".jsonld"}
 
 

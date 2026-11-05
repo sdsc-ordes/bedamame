@@ -11,9 +11,9 @@ from rdflib.namespace import RDF
 
 import config
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "out" / "bedretto.trig"
-CRATE_SHAPES = ROOT / "ontology" / "crate" / "crate-shapes.ttl"
+CRATE_SHAPES = ROOT / "src" / "ontology" / "crate" / "crate-shapes.ttl"
 OUT_DIR = ROOT / "out"
 
 ID = config.ID

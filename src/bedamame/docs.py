@@ -10,7 +10,7 @@ from rdflib.namespace import DCTERMS, SKOS
 import config
 import validate as v
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 SITE = ROOT / "site"
 # pyLODE 3.6.0 breaks with kurra >= 3.1; run apart from the project so its rdflib needs don't clash
 PYLODE = ["uvx", "--from", "pylode==3.6.0", "--with", "kurra==3.0.5", "pylode"]

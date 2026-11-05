@@ -185,7 +185,7 @@ assignment,SEIS_SENSOR,RESPONSIBLE,bed:responsible,bed,,,links to PERSON or ORGA
 type,SEIS_SENSOR_INSTAL,,ssn:Deployment,standard,,,
 assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_START,bed:deployedOn,bed,,,
 assignment,SEIS_SENSOR_INSTAL,PROJECT,bed:project,bed,,,
-assignment,SEIS_SENSOR_INSTAL,EXPERIMENT,,skip,,,"the experiment comes from the collection, via mapping/collections.csv"
+assignment,SEIS_SENSOR_INSTAL,EXPERIMENT,,skip,,,"the experiment comes from the collection, via src/mapping/collections.csv"
 assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_TYPE,,skip,,,free text; replaced by the vocabulary field DEPLOYMENT_TYPE_TERM in change 06-vocabularies
 assignment,SEIS_SENSOR_INSTAL,DEPLOYMENT_USER,,skip,,,free-text names; replaced by a link to PERSON objects in change 01-people
 assignment,SEIS_SENSOR_INSTAL,SENSOR_BOREHOLE,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
@@ -264,7 +264,7 @@ assignment,SENSOR_INSTAL,DEPLOYMENT_TYPE,,skip,,,free text; replaced by the voca
 assignment,SENSOR_INSTAL,DEPLOYMENT_START,bed:deployedOn,bed,,,
 assignment,SENSOR_INSTAL,DEPLOYMENT_USER,,skip,,,free-text names; replaced by a link to PERSON objects in change 01-people
 assignment,SENSOR_INSTAL,PROJECT,bed:project,bed,,,
-assignment,SENSOR_INSTAL,EXPERIMENT,,skip,,,"the experiment comes from the collection, via mapping/collections.csv"
+assignment,SENSOR_INSTAL,EXPERIMENT,,skip,,,"the experiment comes from the collection, via src/mapping/collections.csv"
 assignment,SENSOR_INSTAL,SENSOR_BOREHOLE,,skip,,,replaced by the installation environment vocabulary in change 06-vocabularies
 assignment,SENSOR_INSTAL,BOREHOLE_NAME,,skip,,,text reference; replaced by a borehole link in change 05-object-links
 assignment,SENSOR_INSTAL,BOREHOLE_NICKNAME,,skip,,,text reference; replaced by a borehole link in change 05-object-links

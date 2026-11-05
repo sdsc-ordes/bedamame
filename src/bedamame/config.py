@@ -53,7 +53,7 @@ NAMESPACES = {
 }
 
 # openBIS type and field -> term, unit and scheme; read by the converter and the annotation generator
-MAPPING = Path(__file__).resolve().parent.parent / "mapping" / "openbis-annotations.csv"
+MAPPING = Path(__file__).resolve().parents[2] / "src" / "mapping" / "openbis-annotations.csv"
 
 # openBIS semantic annotations: Ontology Id and Ontology Version per prefix; the Ontology Annotation Id
 # is the full term IRI. schema.org as on openBIS 7.0's own PUBLICATION type; RDFS, SOSA, SSN and Dublin

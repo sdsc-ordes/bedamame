@@ -12,7 +12,7 @@ import openbis_workbook as wb
 import validate as v
 from openbis_api import Openbis, fetch
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "out" / "openbis" / "annotated"
 COLUMNS = ["Ontology Id", "Ontology Version", "Ontology Annotation Id"]
 PLACEHOLDER = "https://example.org/"

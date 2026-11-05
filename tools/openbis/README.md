@@ -1,6 +1,6 @@
 # Local openBIS 7.0.0
 
-A local copy of openBIS for rehearsing master-data changes before the collaborator applies them in production. Nothing in this repository writes to production: scripts refuse any host other than `local.openbis.ch` (`LOCAL_HOSTS` in `scripts/openbis_api.py`).
+A local copy of openBIS for rehearsing master-data changes before the collaborator applies them in production. Nothing in this repository writes to production: scripts refuse any host other than `local.openbis.ch` (`LOCAL_HOSTS` in `src/bedamame/openbis_api.py`).
 
 ## Start
 
@@ -9,11 +9,11 @@ just openbis-up            # https://local.openbis.ch, first start takes a few m
 just openbis-masterdata    # the lab's 12 object types, cleaned for 7.0
 just openbis-seed          # boreholes, sensors, installations, stubs
 just openbis-changes       # rehearse the master-data changes 01-06
-just openbis-annotate      # annotate from mapping/ and check
+just openbis-annotate      # annotate from src/mapping/ and check
 just openbis-reset         # drop everything (volumes included)
 ```
 
-`local.openbis.ch` resolves to 127.0.0.1 and the ingress certificate is valid for it. Credentials are local-only and live in `openbis/.env` (copied from `.env.example` on first start; direnv loads it). Log in to the ELN as `admin` with `OPENBIS_PASSWORD`.
+`local.openbis.ch` resolves to 127.0.0.1 and the ingress certificate is valid for it. Credentials are local-only and live in `tools/openbis/.env` (copied from `.env.example` on first start; direnv loads it). Log in to the ELN as `admin` with `OPENBIS_PASSWORD`.
 
 ## What differs from the 7.x Docker quickstart
 
@@ -23,7 +23,7 @@ just openbis-reset         # drop everything (volumes included)
 
 ## Importing master data the way the collaborator will
 
-`uv run scripts/openbis_workbook.py EXPORT` writes `out/openbis/masterdata-import/` and a zip of it: `masterdata.xlsx` plus the `scripts/` folder its validation scripts come from.
+`uv run src/bedamame/openbis_workbook.py EXPORT` writes `out/openbis/masterdata-import/` and a zip of it: `masterdata.xlsx` plus the `scripts/` folder its validation scripts come from.
 
 In the admin UI: **Tools → Import → All**, drop the zip, **Mode: Update if exists**, **Import**. `--import` (what `just openbis-masterdata` runs) does the same through the API: upload to the session workspace, then `executeImport`.
 
@@ -41,7 +41,7 @@ Observed while importing:
 
 ## Annotations
 
-`just openbis-annotate` does what the collaborator will do in production: a fresh master-data export of the Bedretto types, including those changes 01–06 add (`scripts/openbis_api.py --masterdata`), annotated from `mapping/openbis-annotations.csv` (`scripts/annotate_masterdata.py`), imported with "Update if exists", then checked against the mapping (`--check`, read-only). `out/openbis/annotated/` holds the zip to import and `annotations-changes.md`, the note for the collaborator.
+`just openbis-annotate` does what the collaborator will do in production: a fresh master-data export of the Bedretto types, including those changes 01–06 add (`src/bedamame/openbis_api.py --masterdata`), annotated from `src/mapping/openbis-annotations.csv` (`src/bedamame/annotate_masterdata.py`), imported with "Update if exists", then checked against the mapping (`--check`, read-only). `out/openbis/annotated/` holds the zip to import and `annotations-changes.md`, the note for the collaborator.
 
 What the 7.0 import does with the three ontology columns (tested locally):
 
@@ -51,7 +51,7 @@ What the 7.0 import does with the three ontology columns (tested locally):
 - It cannot annotate any field of the built-in PERSON and ORGANIZATION types, not even one a change added: admin gets "Internal property assignments can be managed only by the system user". V3 `createSemanticAnnotations` works as admin, so the note lists those annotations for the collaborator to add in the admin UI, and `--import` creates them through V3 locally.
 - A validation script `X.py` becomes plugin `TYPE.X`, and the export writes `TYPE.X.py`, so re-importing an export unchanged adds a plugin `TYPE.TYPE.X` each time. The generator drops one `TYPE.` prefix so the existing plugin is kept.
 
-Ontology Id and Version per prefix are in `scripts/config.py` (`ANNOTATION_SOURCES`). The generator counts an annotation with the same term IRI as present, whatever its Ontology Id and Version, and leaves it as it is: 7.0's own PERSON annotations use `https://schema.org` without the slash. So a new ontology version adds no second annotation, but annotations keep the version they were made with. Decide before the first production import whether the version should be part of the annotation.
+Ontology Id and Version per prefix are in `src/bedamame/config.py` (`ANNOTATION_SOURCES`). The generator counts an annotation with the same term IRI as present, whatever its Ontology Id and Version, and leaves it as it is: 7.0's own PERSON annotations use `https://schema.org` without the slash. So a new ontology version adds no second annotation, but annotations keep the version they were made with. Decide before the first production import whether the version should be part of the annotation.
 
 ## Seed
 
@@ -67,11 +67,11 @@ The collection for boreholes is a stand-in, `/INFRASTRUCTURE/BOREHOLES/BOREHOLES
 
 `just openbis-changes` rehearses the six changes in order. For each, it exports the master data of the Bedretto types and their objects, builds the change from that export, and imports it with "Update if exists". `out/openbis/changes/` then holds the file to import (`NN-name.xlsx`, or a zip when it carries validation scripts) and `NN-name.md`, the note for the collaborator. `out/openbis/review/` holds the review sheets, which contain names.
 
-For production, the collaborator's exports go in instead: `uv run scripts/openbis_changes.py 01 --masterdata DIR/object-types.xlsx --objects OBJECTS.xlsx`. `--annotate` also fills the ontology columns of new types and fields; leave it out until the final domain is set.
+For production, the collaborator's exports go in instead: `uv run src/bedamame/openbis_changes.py 01 --masterdata DIR/object-types.xlsx --objects OBJECTS.xlsx`. `--annotate` also fills the ontology columns of new types and fields; leave it out until the final domain is set.
 
-What each change does, for the collaborator: [architecture/changes.md](../architecture/changes.md).
+What each change does, for the collaborator: [docs/architecture/changes.md](../../docs/architecture/changes.md).
 
-New fields get new codes; the old fields stay until the collaborator retires them. New vocabulary terms are added to `mapping/openbis-terms.csv`.
+New fields get new codes; the old fields stay until the collaborator retires them. New vocabulary terms are added to `src/mapping/openbis-terms.csv`.
 
 What the 7.0 import does (tested locally):
 
@@ -85,7 +85,7 @@ What the 7.0 import does (tested locally):
 
 ## API
 
-`scripts/openbis_api.py` is a small V3 JSON-RPC client; `uv run scripts/openbis_api.py` logs in and lists the spaces.
+`src/bedamame/openbis_api.py` is a small V3 JSON-RPC client; `uv run src/bedamame/openbis_api.py` logs in and lists the spaces.
 
 - pyBIS 1.37.5 cannot search 7.0.0: the server rejects a JSON object whose only key is `@type`, which pyBIS sends for empty criteria and fetch options. The client gives every typed object an `@id`.
 - Responses send an object once, then refer to it by its `@id`; the client puts the objects back.
@@ -93,7 +93,7 @@ What the 7.0 import does (tested locally):
 - V3 returns DATE values as `yyyy-MM-dd` and TIMESTAMPs as `yyyy-MM-dd HH:mm:ss Z`; a year alone is rejected.
 - Object properties come back by code: links as permIds (a list when multi-valued), vocabulary values as term codes, booleans as `true`/`false`. Registration and modification dates are milliseconds since 1970.
 
-`uv run scripts/openbis_api.py --dump FILE` writes what the converter (`scripts/openbis_to_rdf.py`) reads: every object of the Bedretto types with its properties, registrator, modifier and dates; the types' data types and annotations; the collections' names. `--select IDENTIFIER...` keeps only those collections and objects, what they link to, and the surveys and sensor positions that describe them. `--anonymise` drops the fields without an annotation (the free-text names among them) and replaces people's and users' names. `just openbis-fixture` uses both to write `tests/fixtures/openbis-export.json`.
+`uv run src/bedamame/openbis_api.py --dump FILE` writes what the converter (`src/bedamame/openbis_to_rdf.py`) reads: every object of the Bedretto types with its properties, registrator, modifier and dates; the types' data types and annotations; the collections' names. `--select IDENTIFIER...` keeps only those collections and objects, what they link to, and the surveys and sensor positions that describe them. `--anonymise` drops the fields without an annotation (the free-text names among them) and replaces people's and users' names. `just openbis-fixture` uses both to write `tests/fixtures/openbis-export.json`.
 
 ## RO-Crate export
 

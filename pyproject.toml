@@ -26,5 +26,5 @@ default-groups = ["dev", "openbis"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["scripts"]
+pythonpath = ["src/bedamame"]
 filterwarnings = ["ignore::DeprecationWarning:rdflib", "ignore::UserWarning:openpyxl"]

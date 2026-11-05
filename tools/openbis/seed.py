@@ -4,8 +4,8 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src" / "bedamame"))
 import config  # noqa: E402
 import openbis_workbook as wb  # noqa: E402
 from openbis_api import Openbis  # noqa: E402
@@ -34,7 +34,7 @@ PROJECTS = [
     "/09_FEAR/06_FEAR2",
     "/EQUIPMENT/SENSOR_CATALOG",
 ]
-# the lab's borehole collection is unknown (see architecture/collaborator-requests.md); BOREHOLES stands in for it
+# the lab's borehole collection is unknown (see docs/architecture/collaborator-requests.md); BOREHOLES stands in for it
 COLLECTIONS = {
     "/INFRASTRUCTURE/BOREHOLES/BOREHOLES": "Boreholes",
     "/INFRASTRUCTURE/BOREHOLES/04_ROCK_PROPERTIES_EXP_3": "Rock properties experiment 3",

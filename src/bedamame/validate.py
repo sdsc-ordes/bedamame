@@ -6,14 +6,14 @@ from pyshacl import validate
 from rdflib import Dataset, Graph
 from rdflib.namespace import SH
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 # converted from openBIS by openbis_to_rdf.py
 DATA = ROOT / "out" / "bedretto.trig"
-BEDRETTO = ROOT / "ontology" / "bedretto"
+BEDRETTO = ROOT / "src" / "ontology" / "bedretto"
 ONTOLOGY = BEDRETTO / "bedretto-ontology.ttl"
 VOCAB = BEDRETTO / "bedretto-vocab.ttl"
 SHAPES = BEDRETTO / "bedretto-shapes.ttl"
-VOCAB_SHAPES = ROOT / "ontology" / "skos" / "skos-shapes.ttl"
+VOCAB_SHAPES = ROOT / "src" / "ontology" / "skos" / "skos-shapes.ttl"
 
 
 def load_dataset(path: Path = DATA) -> Dataset:

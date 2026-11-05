@@ -11,7 +11,7 @@ import openbis_to_rdf as convert
 import validate as v
 
 ROOT = Path(__file__).resolve().parent.parent
-CRATE_SHAPES = ROOT / "ontology" / "crate" / "crate-shapes.ttl"
+CRATE_SHAPES = ROOT / "src" / "ontology" / "crate" / "crate-shapes.ttl"
 # objects of the converted fixture that the snippets below link to, by name
 LINKED = {"borehole": "BFE_A_01", "sensor": "TILT4", "person": "Person 2"}
 

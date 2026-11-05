@@ -6,9 +6,9 @@ from rdflib import Dataset, URIRef
 
 import config
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "out" / "bedretto.trig"
-BEDRETTO = ROOT / "ontology" / "bedretto"
+BEDRETTO = ROOT / "src" / "ontology" / "bedretto"
 GRAPH_NS = config.GRAPH
 
 # loaded as named graphs next to the data, so queries can join terms, labels and shapes. Data graphs are

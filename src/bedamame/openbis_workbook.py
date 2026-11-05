@@ -13,7 +13,7 @@ from openbis_api import Openbis
 
 warnings.filterwarnings("ignore", module="openpyxl")
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "out" / "openbis" / "masterdata-import"
 
 # sections with one entity row followed by a table of terms, property assignments or objects

@@ -97,12 +97,12 @@ extended to cover everything the lab keeps in openBIS.
 
 | For | Look at |
 |---|---|
-| The reasoning, in plain words | `report.docx` |
-| The whole design on one page, with diagrams and examples | `architecture/index.html` (open it in a browser) |
-| The six openBIS changes and why each is needed | `architecture/changes.md` |
-| Open questions and data issues for the lab | `architecture/collaborator-requests.md` |
-| The dictionary, vocabularies and rules | `ontology/bedretto/` |
-| Which openBIS field means what | `mapping/openbis-annotations.csv` (opens as a spreadsheet) |
+| The reasoning, in plain words | `docs/report.docx` |
+| The whole design on one page, with diagrams and examples | `docs/architecture/index.html` (open it in a browser) |
+| The six openBIS changes and why each is needed | `docs/architecture/changes.md` |
+| Open questions and data issues for the lab | `docs/architecture/collaborator-requests.md` |
+| The dictionary, vocabularies and rules | `src/ontology/bedretto/` |
+| Which openBIS field means what | `src/mapping/openbis-annotations.csv` (opens as a spreadsheet) |
 
 ## Glossary
 
@@ -136,18 +136,18 @@ just convert       # tests/fixtures/openbis-export.json → out/bedretto.trig, v
 just test          # shapes, ontology, mapping, converter
 just crate         # out/ro-crate-metadata.json, checked against the crate shapes and RO-Crate 1.2
 just docs          # HTML documentation of the ontology and vocabularies in site/
-just page-counts   # update the counts on architecture/index.html
+just page-counts   # update the counts on docs/architecture/index.html
 just               # list all recipes
 ```
 
 `just convert` needs no openBIS: it converts the committed fixture, a dump of
 the local openBIS with people's names replaced. With the local openBIS
-(`openbis/README.md`):
+(`tools/openbis/README.md`):
 
 ```bash
 just openbis-up openbis-masterdata openbis-seed   # openBIS 7.0 with the lab's types and objects
 just openbis-changes                              # rehearse the master-data changes 01-06
-just openbis-annotate                             # annotate from mapping/ and check
+just openbis-annotate                             # annotate from src/mapping/ and check
 just export                                       # dump → convert → validate → queries
 ```
 
@@ -156,10 +156,10 @@ just export                                       # dump → convert → validat
 ```
 openBIS ── annotations: each object type and field names its ontology term
    │
-   │  V3 API dump            scripts/openbis_api.py --dump
+   │  V3 API dump            src/bedamame/openbis_api.py --dump
    ▼
 dump.json ── convert ──▶ out/bedretto.trig ── validate (SHACL) ──▶ query (SPARQL), crate
-             scripts/openbis_to_rdf.py, terms from mapping/openbis-annotations.csv
+             src/bedamame/openbis_to_rdf.py, terms from src/mapping/openbis-annotations.csv
 ```
 
 The converter reads a dump made through the openBIS V3 API, because openBIS
@@ -181,21 +181,22 @@ if exists". Review sheets with people's names stay in the git-ignored `out/`.
 
 Everything uses the placeholder `https://example.org/bedretto/`.
 `just set-base URL` replaces it in the ontology, vocabulary, shapes, fixtures
-and `scripts/config.py`. Production annotations wait for the final URL,
+and `src/bedamame/config.py`. Production annotations wait for the final URL,
 because an openBIS import cannot change or remove an annotation once it is
-there. The crate's profile IRI and licence in `scripts/make_crate.py` are
+there. The crate's profile IRI and licence in `src/bedamame/make_crate.py` are
 placeholders too.
 
 ### Layout
 
 | Path | Contents |
 |---|---|
-| `ontology/bedretto/` | Ontology, SKOS vocabulary and SHACL shapes |
-| `ontology/crate/`, `ontology/skos/` | Shapes for the exported crate and for any SKOS vocabulary |
-| `mapping/` | openBIS type and field → term; vocabulary term → concept; collection → experiment |
-| `architecture/` | For the openBIS administrator: design page, proposed changes, requests |
-| `openbis/` | The local openBIS 7.0, its seed and notes |
-| `scripts/` | Annotation, changes, dump, conversion, validation, queries, crate, page counts |
+| `src/ontology/bedretto/` | Ontology, SKOS vocabulary and SHACL shapes |
+| `src/ontology/crate/`, `src/ontology/skos/` | Shapes for the exported crate and for any SKOS vocabulary |
+| `src/mapping/` | openBIS type and field → term; vocabulary term → concept; collection → experiment |
+| `src/bedamame/` | Annotation, changes, dump, conversion, validation, queries, crate, page counts |
+| `docs/` | The report; in `architecture/`, for the openBIS administrator: design page, proposed changes, requests |
+| `tools/nix/` | Nix flake for the dev shell (direnv loads it) |
+| `tools/openbis/` | The local openBIS 7.0, its seed and notes |
 | `tests/fixtures/` | The openBIS dump and master-data export the tests use |
 
 </details>
