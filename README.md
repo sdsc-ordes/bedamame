@@ -200,3 +200,9 @@ placeholders too.
 | `tests/fixtures/` | The openBIS dump and master-data export the tests use |
 
 </details>
+
+## Licence
+
+This repository is licensed under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). See
+[`LICENSE`](LICENSE) for the full text.

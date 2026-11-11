@@ -10,3 +10,4 @@ site/
 drive-files/
 
 tools/openbis/.env
+.vscode/settings.json

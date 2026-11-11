@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Example metadata store for the Bedretto Underground Laboratory"
 authors = [{ name = "Robin Franken", email = "robin.franken@epfl.ch" }]
 readme = "README.md"
+license = "CC-BY-SA-4.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.13"
 
 dependencies = [
